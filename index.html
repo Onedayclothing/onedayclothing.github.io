@@ -333,14 +333,14 @@
         <div class="cover-slider" id="coverSlider" onscroll="updateCoverDots()">
             <div class="cover-slide-item">
                 <div class="cover-image-box">
-                    <video autoplay loop muted playsinline preload="metadata" controlslist="nodownload" oncontextmenu="return false;">
+                    <video loop muted playsinline webkit-playsinline preload="none" controlslist="nodownload" disablepictureinpicture oncontextmenu="return false;">
                         <source src="videos/VID_20260905221119531.mp4" type="video/mp4">
                     </video>
                 </div>
             </div>
             <div class="cover-slide-item">
                 <div class="cover-image-box">
-                    <video autoplay loop muted playsinline preload="metadata" controlslist="nodownload" oncontextmenu="return false;">
+                    <video loop muted playsinline webkit-playsinline preload="none" controlslist="nodownload" disablepictureinpicture oncontextmenu="return false;">
                         <source src="videos/gemini_generated_video_1CCC7921.mp4" type="video/mp4">
                     </video>
                 </div>
@@ -381,7 +381,7 @@
         <div class="card" id="prod-1" data-gender="men" data-type="tops">
             <span class="badge">Ref: 1</span>
             <div class="img-box">
-                <video autoplay loop muted playsinline preload="metadata" controlslist="nodownload" oncontextmenu="return false;">
+                <video loop muted playsinline webkit-playsinline preload="none" controlslist="nodownload" disablepictureinpicture oncontextmenu="return false;">
                     <source src="videos/Man_walking_in_fashion_studio_202608272139.mp4" type="video/mp4">
                 </video>
             </div>
@@ -410,7 +410,7 @@
         <div class="card" id="prod-4" data-gender="men" data-type="tops">
             <span class="badge">Ref: 2</span>
             <div class="img-box">
-                <video autoplay loop muted playsinline preload="metadata" controlslist="nodownload" oncontextmenu="return false;">
+                <video loop muted playsinline webkit-playsinline preload="none" controlslist="nodownload" disablepictureinpicture oncontextmenu="return false;">
                     <source src="videos/Model_walking_in_fashion_studio_202608272237.mp4" type="video/mp4">
                 </video>
             </div>
@@ -439,7 +439,7 @@
         <div class="card" id="prod-2" data-gender="men" data-type="tops">
             <span class="badge">Ref: 3</span>
             <div class="img-box">
-                <video autoplay loop muted playsinline preload="metadata" controlslist="nodownload" oncontextmenu="return false;">
+                <video loop muted playsinline webkit-playsinline preload="none" controlslist="nodownload" disablepictureinpicture oncontextmenu="return false;">
                     <source src="videos/Male_model_walking_in_studio_202608271814.mp4" type="video/mp4">
                 </video>
             </div>
@@ -468,7 +468,7 @@
         <div class="card" id="prod-5" data-gender="women" data-type="tops">
             <span class="badge">Ref: 4</span>
             <div class="img-box">
-                <video autoplay loop muted playsinline preload="metadata" controlslist="nodownload" oncontextmenu="return false;">
+                <video loop muted playsinline webkit-playsinline preload="none" controlslist="nodownload" disablepictureinpicture oncontextmenu="return false;">
                     <source src="videos/Woman_modeling_shirt_360_rotation_202609061421.mp4" type="video/mp4">
                 </video>
             </div>
@@ -732,6 +732,23 @@
                 toast_added: "已成功加入购物车！"
             }
         };
+
+        // Video Lazy Loading Observer
+        function setupVideoObserver() {
+            const videos = document.querySelectorAll('video');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    const video = entry.target;
+                    if (entry.isIntersecting) {
+                        video.play().catch(() => {});
+                    } else {
+                        video.pause();
+                    }
+                });
+            }, { threshold: 0.25 });
+
+            videos.forEach(video => observer.observe(video));
+        }
 
         function checkAutoTheme() {
             let options = { timeZone: 'Asia/Phnom_Penh', hour: 'numeric', hour12: false };
@@ -1007,6 +1024,7 @@
         document.addEventListener('DOMContentLoaded', async function() {
             checkAutoTheme();
             filterProducts();
+            setupVideoObserver();
             await loadCSVData();
             fetchLiveStock('prod-1', 'Ref: 1', 'M');
             fetchLiveStock('prod-4', 'Ref: 2', 'M');
