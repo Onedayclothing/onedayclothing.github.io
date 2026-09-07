@@ -925,9 +925,10 @@
             }
         }
 
+        // ប្ដូរទម្រង់ជា 11.544660, 104.900068
         function confirmFreeLocation() {
-            let mapUrl = `https://www.openstreetmap.org/?mlat=${currentPos.lat.toFixed(6)}&mlon=${currentPos.lng.toFixed(6)}#map=16/${currentPos.lat.toFixed(6)}/${currentPos.lng.toFixed(6)}`;
-            document.getElementById('custMapUrl').value = mapUrl;
+            let coordsText = `${currentPos.lat.toFixed(6)}, ${currentPos.lng.toFixed(6)}`;
+            document.getElementById('custMapUrl').value = coordsText;
             closeModal('mapPickerModal');
         }
 
@@ -1285,7 +1286,9 @@
             message += `• លេខទូរស័ព្ទ: ${phone}\n`;
             message += `• អាសយដ្ឋាន: ${address}\n`;
             if (mapUrl) {
+                let cleanCoords = mapUrl.replace(/\s+/g, '');
                 message += `• ទីតាំង Map: ${mapUrl}\n`;
+                message += `• Link Google Maps: https://www.google.com/maps?q=${cleanCoords}\n`;
             }
             message += "\n📦 ទំនិញ\n";
 
