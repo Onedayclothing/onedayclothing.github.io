@@ -7,8 +7,9 @@
     
     <link href="https://fonts.googleapis.com/css2?family=Content:wght@400;700&family=Kantumruy+Pro:wght@400;600;700;800&display=swap" rel="stylesheet">
     
-    <!-- Google Maps JS API ជាមួយ API Key របស់អ្នក -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA8QJX6uyTI5wD3avgSpCXFtlv8Izd1RXQ&callback=initMap" async defer></script>
+    <!-- OpenStreetMap (Leaflet.js) CSS & JS - Free ឥតបង់លុយ និងឥតប្រើ API Key -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
     <style>
         :root {
@@ -576,13 +577,13 @@
                     <input type="text" id="custAddress" class="form-input" placeholder="បំពេញអាសយដ្ឋាន (ឧ. ផ្ទះ..., ផ្លូវ...)" oninput="clearError(this)">
                 </div>
 
-                <!-- Column 2: ទីតាំងលើ Map (Google Maps Link - Optional) -->
+                <!-- Column 2: ទីតាំងលើ Map (OpenStreetMap Link - Free) -->
                 <div class="form-group">
                     <label class="form-label">ទីតាំងលើ Map (Optional)</label>
                     <div style="display: flex; gap: 6px;">
                         <input type="text" id="custMapUrl" class="form-input" placeholder="ជ្រើសរើសទីតាំងលើ Map (បើមាន)..." readonly style="cursor: pointer;" onclick="openMapModal()">
                         <button type="button" onclick="openMapModal()" style="background: var(--accent-light); color: var(--accent); border: 1px solid var(--border-color); padding: 0 10px; border-radius: 10px; font-weight:800; font-size:11px; cursor:pointer; white-space:nowrap; display:flex; align-items:center; gap:4px;">
-                            🗺️ Google Map
+                            🗺️ Select Map
                         </button>
                     </div>
                 </div>
@@ -604,22 +605,22 @@
         </div>
     </div>
 
-    <!-- Modal Google Maps Direct Picker -->
+    <!-- Modal OpenStreetMap Picker (Free, No API Key, No Fee) -->
     <div class="modal-overlay" id="mapPickerModal" style="z-index: 300;" onclick="handleModalClick(event, 'mapPickerModal')">
         <div class="modal-content" style="height: 85vh; padding: 16px; display: flex; flex-direction: column;">
             <div class="modal-header">
                 <div class="modal-title">
-                    <span>🗺️ ជ្រើសរើសទីតាំងលើ Google Maps</span>
+                    <span>🗺️ ជ្រើសរើសទីតាំងលើ OpenStreetMap</span>
                 </div>
                 <button class="btn-close" onclick="closeModal('mapPickerModal')">✕</button>
             </div>
             
             <div style="position: relative; flex-grow: 1; border-radius: 16px; overflow: hidden; border: 1px solid var(--border-color);">
-                <div id="googleMap" style="width: 100%; height: 100%;"></div>
+                <div id="freeMap" style="width: 100%; height: 100%;"></div>
             </div>
 
             <div style="margin-top: 12px;">
-                <button onclick="confirmGoogleLocation()" class="btn-modal-telegram">
+                <button onclick="confirmFreeLocation()" class="btn-modal-telegram">
                     បញ្ជាក់ទីតាំងនេះ
                 </button>
             </div>
@@ -636,8 +637,8 @@
         let currentType = 'all';
         const deliveryFee = 2.00;
 
-        let googleMapObj = null;
-        let googleMarker = null;
+        let freeMapObj = null;
+        let freeMarker = null;
         let currentPos = { lat: 11.5564, lng: 104.9282 };
 
         const langFlags = {
@@ -805,62 +806,37 @@
             openModal('checkoutModal');
         }
 
-        /* Google Maps Direct API Functions (Dark Mode Style) */
-        function initMap() {
-            // Google Maps JS API Loaded
-        }
-
+        /* OpenStreetMap Free Map Picker Functions */
         function openMapModal() {
             openModal('mapPickerModal');
             setTimeout(() => {
-                if (!googleMapObj && window.google && window.google.maps) {
-                    const darkMapStyle = [
-                        { elementType: "geometry", stylers: [{ color: "#212121" }] },
-                        { elementType: "labels.icon", stylers: [{ visibility: "off" }] },
-                        { elementType: "labels.text.fill", stylers: [{ color: "#757575" }] },
-                        { elementType: "labels.text.stroke", stylers: [{ color: "#212121" }] },
-                        { featureType: "administrative", elementType: "geometry", stylers: [{ color: "#757575" }] },
-                        { featureType: "administrative.country", elementType: "labels.text.fill", stylers: [{ color: "#9e9e9e" }] },
-                        { featureType: "administrative.locality", elementType: "labels.text.fill", stylers: [{ color: "#bdbdbd" }] },
-                        { featureType: "poi", elementType: "labels.text.fill", stylers: [{ color: "#757575" }] },
-                        { featureType: "road", elementType: "geometry.fill", stylers: [{ color: "#2c2c2c" }] },
-                        { featureType: "road", elementType: "labels.text.fill", stylers: [{ color: "#8a8a8a" }] },
-                        { featureType: "road.arterial", elementType: "geometry", stylers: [{ color: "#373737" }] },
-                        { featureType: "road.highway", elementType: "geometry", stylers: [{ color: "#3c3c3c" }] },
-                        { featureType: "water", elementType: "geometry", stylers: [{ color: "#000000" }] },
-                        { featureType: "water", elementType: "labels.text.fill", stylers: [{ color: "#3d3d3d" }] }
-                    ];
+                if (!freeMapObj && window.L) {
+                    freeMapObj = L.map('freeMap').setView([currentPos.lat, currentPos.lng], 15);
+                    
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        maxZoom: 19,
+                        attribution: '© OpenStreetMap'
+                    }).addTo(freeMapObj);
 
-                    googleMapObj = new google.maps.Map(document.getElementById("googleMap"), {
-                        zoom: 16,
-                        center: currentPos,
-                        zoomControl: true,
-                        streetViewControl: false,
-                        mapTypeControl: false,
-                        styles: darkMapStyle
+                    freeMarker = L.marker([currentPos.lat, currentPos.lng], { draggable: true }).addTo(freeMapObj);
+
+                    freeMapObj.on('click', function(e) {
+                        currentPos = { lat: e.latlng.lat, lng: e.latlng.lng };
+                        freeMarker.setLatLng(e.latlng);
                     });
 
-                    googleMarker = new google.maps.Marker({
-                        position: currentPos,
-                        map: googleMapObj,
-                        draggable: true,
-                        animation: google.maps.Animation.DROP
+                    freeMarker.on('dragend', function(e) {
+                        let position = freeMarker.getLatLng();
+                        currentPos = { lat: position.lat, lng: position.lng };
                     });
-
-                    googleMapObj.addListener("click", (e) => {
-                        currentPos = { lat: e.latLng.lat(), lng: e.latLng.lng() };
-                        googleMarker.setPosition(currentPos);
-                    });
-
-                    googleMarker.addListener("dragend", (e) => {
-                        currentPos = { lat: e.latLng.lat(), lng: e.latLng.lng() };
-                    });
+                } else if (freeMapObj) {
+                    freeMapObj.invalidateSize();
                 }
             }, 300);
         }
 
-        function confirmGoogleLocation() {
-            let mapUrl = `https://maps.google.com/?q=${currentPos.lat.toFixed(6)},${currentPos.lng.toFixed(6)}`;
+        function confirmFreeLocation() {
+            let mapUrl = `https://www.openstreetmap.org/?mlat=${currentPos.lat.toFixed(6)}&mlon=${currentPos.lng.toFixed(6)}#map=16/${currentPos.lat.toFixed(6)}/${currentPos.lng.toFixed(6)}`;
             document.getElementById('custMapUrl').value = mapUrl;
             closeModal('mapPickerModal');
         }
