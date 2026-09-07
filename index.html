@@ -623,18 +623,23 @@
         </div>
     </div>
 
-    <!-- Modal OpenStreetMap Picker -->
+    <!-- Modal OpenStreetMap Picker (Whoo Dark Style) -->
     <div class="modal-overlay" id="mapPickerModal" style="z-index: 300;" onclick="handleModalClick(event, 'mapPickerModal')">
         <div class="modal-content" style="height: 85vh; padding: 16px; display: flex; flex-direction: column;">
             <div class="modal-header">
                 <div class="modal-title">
-                    <span>🗺️ ជ្រើសរើសទីតាំងលើ OpenStreetMap</span>
+                    <span>📍 ជ្រើសរើសទីតាំងរបស់អ្នក</span>
                 </div>
                 <button class="btn-close" onclick="closeModal('mapPickerModal')">✕</button>
             </div>
             
             <div style="position: relative; flex-grow: 1; border-radius: 16px; overflow: hidden; border: 1px solid var(--border-color);">
                 <div id="freeMap" style="width: 100%; height: 100%;"></div>
+                
+                <!-- ប៊ូតុង GPS/Location (Auto Pin) -->
+                <button type="button" onclick="locateUserGPS()" style="position: absolute; bottom: 20px; right: 15px; z-index: 1000; background: #ffffff; color: #0284c7; border: none; width: 44px; height: 44px; border-radius: 50%; box-shadow: 0 4px 12px rgba(0,0,0,0.3); font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+                    🎯
+                </button>
             </div>
 
             <div style="margin-top: 12px;">
@@ -869,12 +874,16 @@
             openModal('mapPickerModal');
             setTimeout(() => {
                 if (!freeMapObj && window.L) {
-                    freeMapObj = L.map('freeMap').setView([currentPos.lat, currentPos.lng], 15);
+                    freeMapObj = L.map('freeMap', { zoomControl: false }).setView([currentPos.lat, currentPos.lng], 15);
                     
-                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    // Whoo Dark Theme Map (CartoDB Dark Matter)
+                    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
                         maxZoom: 19,
-                        attribution: '© OpenStreetMap'
+                        subdomains: 'abcd',
+                        attribution: '&copy; <a href="https://carto.com/">CARTO</a>'
                     }).addTo(freeMapObj);
+
+                    L.control.zoom({ position: 'topleft' }).addTo(freeMapObj);
 
                     freeMarker = L.marker([currentPos.lat, currentPos.lng], { draggable: true }).addTo(freeMapObj);
 
@@ -887,10 +896,33 @@
                         let position = freeMarker.getLatLng();
                         currentPos = { lat: position.lat, lng: position.lng };
                     });
+
+                    // Auto GPS ដំបូង
+                    locateUserGPS();
                 } else if (freeMapObj) {
                     freeMapObj.invalidateSize();
                 }
             }, 300);
+        }
+
+        // Auto Pin GPS Function
+        function locateUserGPS() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition((position) => {
+                    let lat = position.coords.latitude;
+                    let lng = position.coords.longitude;
+                    currentPos = { lat: lat, lng: lng };
+                    
+                    if (freeMapObj && freeMarker) {
+                        freeMapObj.setView([lat, lng], 16);
+                        freeMarker.setLatLng([lat, lng]);
+                    }
+                }, (error) => {
+                    console.log("Geolocation error:", error);
+                }, { enableHighAccuracy: true });
+            } else {
+                alert("ទូរស័ព្ទរបស់អ្នកមិនគាំទ្រ Geolocation ឡើយ!");
+            }
         }
 
         function confirmFreeLocation() {
