@@ -45,8 +45,6 @@
             overflow-x: hidden;
             width: 100%;
             position: relative;
-            -webkit-user-select: none;
-            user-select: none;
         }
 
         * { 
@@ -248,8 +246,9 @@
         .cart-item { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding: 10px 0; }
         .item-info { font-size: 12px; font-weight: 800; color: var(--primary); }
         .item-sub { font-size: 10px; color: var(--text-muted); font-weight: 600; margin-top: 2px; }
-        .qty-controls { display: flex; align-items: center; gap: 8px; }
+        .qty-controls { display: flex; align-items: center; gap: 6px; }
         .btn-qty { background: var(--accent-light); color: var(--accent); border: 1px solid var(--border-color); width: 26px; height: 26px; border-radius: 8px; font-weight: 900; cursor: pointer; }
+        .btn-delete-item { background: #fef2f2; color: #ef4444; border: 1px solid #fca5a5; width: 26px; height: 26px; border-radius: 8px; font-weight: 800; cursor: pointer; margin-left: 4px; display: flex; align-items: center; justify-content: center; font-size: 11px; }
         .empty-msg { text-align: center; color: var(--text-muted); padding: 20px 0; font-size: 12px; }
 
         .summary-box { border-top: 1px solid var(--border-color); padding-top: 10px; padding-bottom: 4px; display: flex; flex-direction: column; gap: 6px; }
@@ -272,13 +271,33 @@
         .btn-modal-telegram { width: 100%; background: linear-gradient(135deg, #0284c7, #0369a1); color: white; border: none; padding: 12px; border-radius: 12px; font-weight: 800; font-size: 13px; text-align: center; cursor: pointer; box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3); display: flex; align-items: center; justify-content: center; gap: 8px; }
 
         .guide-step { font-size: 12px; line-height: 1.8; color: var(--primary); margin-bottom: 8px; font-weight: 600; }
-    </style>
 
-    <script>
-        document.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-        }, false);
-    </script>
+        /* Toast Popup Notification */
+        .toast-notification {
+            position: fixed;
+            bottom: 75px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: rgba(15, 23, 42, 0.9);
+            color: #ffffff;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            z-index: 300;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .toast-notification.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+    </style>
 </head>
 <body>
 
@@ -498,6 +517,7 @@
         </div>
     </div>
 
+    <!-- Modals -->
     <div class="modal-overlay" id="guideModal" onclick="handleModalClick(event, 'guideModal')">
         <div class="modal-content">
             <div class="modal-header">
@@ -564,20 +584,18 @@
             <div class="checkout-form active">
                 <div class="form-group">
                     <label class="form-label" data-key="label_name">ឈ្មោះរបស់អ្នក (Name)</label>
-                    <input type="text" id="custName" class="form-input" placeholder="បំពេញឈ្មោះ..." oninput="clearError(this)">
+                    <input type="text" id="custName" class="form-input" placeholder="បំពេញឈ្មោះ..." oninput="clearError(this); saveUserInfo();">
                 </div>
                 <div class="form-group">
                     <label class="form-label" data-key="label_phone">លេខទូរស័ព្ទ (Phone Number)</label>
-                    <input type="tel" id="custPhone" class="form-input" placeholder="បំពេញលេខទូរស័ព្ទ (ឧ. 012345678)..." oninput="clearError(this)">
+                    <input type="tel" id="custPhone" class="form-input" placeholder="បំពេញលេខទូរស័ព្ទ (ឧ. 012345678)..." oninput="clearError(this); saveUserInfo();">
                 </div>
                 
-                <!-- Column 1: ទីតាំងទទួលទំនិញ (Text Address - Required) -->
                 <div class="form-group">
                     <label class="form-label" data-key="label_address">ទីតាំងទទួលទំនិញ (Delivery Location)</label>
-                    <input type="text" id="custAddress" class="form-input" placeholder="បំពេញអាសយដ្ឋាន (ឧ. ផ្ទះ..., ផ្លូវ...)" oninput="clearError(this)">
+                    <input type="text" id="custAddress" class="form-input" placeholder="បំពេញអាសយដ្ឋាន (ឧ. ផ្ទះ..., ផ្លូវ...)" oninput="clearError(this); saveUserInfo();">
                 </div>
 
-                <!-- Column 2: ទីតាំងលើ Map (OpenStreetMap Link - Free) -->
                 <div class="form-group">
                     <label class="form-label">ទីតាំងលើ Map (Optional)</label>
                     <div style="display: flex; gap: 6px;">
@@ -627,15 +645,23 @@
         </div>
     </div>
 
-    <script>
-        let stockData = {};
-        const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRvkD0AmmidUi0GfyOh0wAz0jdASv2Yt8bGIHznpGTQ3fkTnI7wc6w5D58-BanK0Nb3KAsqnM3He_Xn/pub?output=csv";
+    <!-- Toast Notification Overlay -->
+    <div id="toastNotification" class="toast-notification">
+        <span>🛒</span>
+        <span id="toastMessage">បានដាក់ចូលកន្ត្រក!</span>
+    </div>
 
+    <script>
+        // Global Configuration
+        const TELEGRAM_USERNAME = "OneDayClothingAgent";
+        const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRvkD0AmmidUi0GfyOh0wAz0jdASv2Yt8bGIHznpGTQ3fkTnI7wc6w5D58-BanK0Nb3KAsqnM3He_Xn/pub?output=csv";
+        const deliveryFee = 2.00;
+
+        let stockData = {};
         let currentLang = 'km';
         let cart = {};
         let currentGender = 'men';
         let currentType = 'all';
-        const deliveryFee = 2.00;
 
         let freeMapObj = null;
         let freeMarker = null;
@@ -664,7 +690,8 @@
                 guide_step4: "៤. ចុចបញ្ជូនសារទៅកាន់ Telegram ហាងជាការស្រេច!",
                 label_name: "ឈ្មោះរបស់អ្នក (Name)", label_phone: "លេខទូរស័ព្ទ (Phone Number)", label_address: "ទីតាំងទទួលទំនិញ (Delivery Location)",
                 alert_fill: "សូមបំពេញឈ្មោះ លេខទូរស័ព្ទ និងទីតាំងឱ្យបានត្រឹមត្រូវ!",
-                alert_phone_invalid: "សូមបញ្ចូលលេខទូរស័ព្ទឱ្យបានត្រឹមត្រូវ (យ៉ាងតិច 8ខ្ទង់)!"
+                alert_phone_invalid: "សូមបញ្ចូលលេខទូរស័ព្ទឱ្យបានត្រឹមត្រូវ (យ៉ាងតិច 8ខ្ទង់)!",
+                toast_added: "បានដាក់ចូលកន្ត្រកជោគជ័យ!"
             },
             en: {
                 cover_title: "BUILD YOUR DREAM STYLE", cat_men: "Men", cat_women: "Women", cat_tops: "Tops", cat_pants: "Pants", cat_outerwear: "Outerwear", sub_all: "All",
@@ -682,7 +709,8 @@
                 guide_step4: "4. Send the order message directly to our Telegram!",
                 label_name: "Your Name", label_phone: "Phone Number", label_address: "Delivery Location",
                 alert_fill: "Please fill in your name, phone number, and location!",
-                alert_phone_invalid: "Please enter a valid phone number (at least 8 digits)!"
+                alert_phone_invalid: "Please enter a valid phone number (at least 8 digits)!",
+                toast_added: "Added to cart successfully!"
             },
             zh: {
                 cover_title: "打造您的理想风格", cat_men: "男装", cat_women: "女装", cat_tops: "上衣", cat_pants: "裤子", cat_outerwear: "外套", sub_all: "全部",
@@ -700,7 +728,8 @@
                 guide_step4: "4. 将订单发送至我们的电报客服即可！",
                 label_name: "您的姓名", label_phone: "联系电话", label_address: "收货地址",
                 alert_fill: "请填写您的姓名、电话和收货地址！",
-                alert_phone_invalid: "请输入有效的电话号码（至少8位数）！"
+                alert_phone_invalid: "请输入有效的电话号码（至少8位数）！",
+                toast_added: "已成功加入购物车！"
             }
         };
 
@@ -797,6 +826,18 @@
             }
         }
 
+        function showToast(msg) {
+            const toast = document.getElementById('toastNotification');
+            const toastMsg = document.getElementById('toastMessage');
+            if (toast && toastMsg) {
+                toastMsg.innerText = msg;
+                toast.classList.add('show');
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 2000);
+            }
+        }
+
         function prepareOrder() {
             if (Object.keys(cart).length === 0) {
                 alert(translations[currentLang].empty_cart);
@@ -804,9 +845,9 @@
             }
             closeModal('cartModal');
             openModal('checkoutModal');
+            loadUserInfo();
         }
 
-        /* OpenStreetMap Free Map Picker Functions */
         function openMapModal() {
             openModal('mapPickerModal');
             setTimeout(() => {
@@ -841,7 +882,6 @@
             closeModal('mapPickerModal');
         }
 
-        /* Stock CSV Functions */
         async function loadCSVData() {
             try {
                 let response = await fetch(csvUrl + "&t=" + new Date().getTime());
@@ -972,6 +1012,7 @@
             fetchLiveStock('prod-4', 'Ref: 2', 'M');
             fetchLiveStock('prod-2', 'Ref: 3', 'M');
             fetchLiveStock('prod-5', 'Ref: 4', 'M');
+            loadUserInfo();
         });
 
         function playFlyAnimation(event, cardId) {
@@ -1033,6 +1074,7 @@
             }
 
             renderCart();
+            showToast(translations[currentLang].toast_added || "បានដាក់ចូលកន្ត្រកជោគជ័យ!");
         }
 
         function changeQty(itemKey, delta) {
@@ -1053,8 +1095,35 @@
             renderCart();
         }
 
+        function deleteCartItem(itemKey) {
+            if (cart[itemKey]) {
+                delete cart[itemKey];
+                renderCart();
+            }
+        }
+
         function clearError(inputElement) {
             inputElement.classList.remove('error');
+        }
+
+        function saveUserInfo() {
+            let name = document.getElementById('custName').value.trim();
+            let phone = document.getElementById('custPhone').value.trim();
+            let address = document.getElementById('custAddress').value.trim();
+
+            localStorage.setItem('oneday_cust_name', name);
+            localStorage.setItem('oneday_cust_phone', phone);
+            localStorage.setItem('oneday_cust_address', address);
+        }
+
+        function loadUserInfo() {
+            let name = localStorage.getItem('oneday_cust_name');
+            let phone = localStorage.getItem('oneday_cust_phone');
+            let address = localStorage.getItem('oneday_cust_address');
+
+            if (name) document.getElementById('custName').value = name;
+            if (phone) document.getElementById('custPhone').value = phone;
+            if (address) document.getElementById('custAddress').value = address;
         }
 
         function renderCart() {
@@ -1099,6 +1168,7 @@
                             <button class="btn-qty" onclick="changeQty('${key}', -1)">-</button>
                             <span style="font-weight:800; font-size:12px;">${item.qty}</span>
                             <button class="btn-qty" onclick="changeQty('${key}', 1)">+</button>
+                            <button class="btn-delete-item" onclick="deleteCartItem('${key}')" title="Delete">🗑️</button>
                         </div>
                     </div>
                 `;
@@ -1157,7 +1227,8 @@
                 return;
             }
 
-            let telegramUsername = "OneDayClothingAgent";
+            saveUserInfo();
+
             let message = "🛍️ Oneday Clothing — Order\n\n";
             message += "👤 ព័ត៌មានអតិថិជន\n";
             message += `• ឈ្មោះ: ${name}\n`;
@@ -1200,7 +1271,7 @@
             message += `• ថ្លៃដឹកជញ្ជូន: $${deliveryFee.toFixed(2)}\n`;
             message += `• សរុបទាំងអស់: $${grandTotal.toFixed(2)}`;
 
-            window.location.href = `https://t.me/${telegramUsername}?text=${encodeURIComponent(message)}`;
+            window.location.href = `https://t.me/${TELEGRAM_USERNAME}?text=${encodeURIComponent(message)}`;
         }
     </script>
 </body>
