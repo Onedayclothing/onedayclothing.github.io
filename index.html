@@ -1,1278 +1,4701 @@
 <!DOCTYPE html>
 <html lang="km">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Oneday Clothing | Premium Collection</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Content:wght@400;700&family=Kantumruy+Pro:wght@400;600;700;800&display=swap" rel="stylesheet">
-    
-    <!-- OpenStreetMap (Leaflet.js) CSS & JS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <style>
-        :root {
-            --primary: #0f172a;
-            --accent: #0284c7;
-            --accent-light: #e0f2fe;
-            --bg-color: #f8fafc;
-            --card-bg: #ffffff;
-            --border-color: #cbd5e1;
-            --text-muted: #64748b;
-            --nav-bg: rgba(255, 255, 255, 0.95);
-            --modal-bg: #ffffff;
-            --input-bg: #f8fafc;
-            --nav-font: 'Kantumruy Pro', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        }
+<title>Oneday Clothing | Premium Collection</title>
 
-        body.dark-mode {
-            --primary: #f8fafc;
-            --accent: #38bdf8;
-            --accent-light: #1e293b;
-            --bg-color: #0f172a;
-            --card-bg: #1e293b;
-            --border-color: #334155;
-            --text-muted: #94a3b8;
-            --nav-bg: rgba(15, 23, 42, 0.95);
-            --modal-bg: #1e293b;
-            --input-bg: #0f172a;
-        }
+<link href="https://fonts.googleapis.com/css2?family=Content:wght@400;700&family=Kantumruy+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-        html, body {
-            touch-action: pan-x pan-y;
-            -webkit-text-size-adjust: 100%;
-            overflow-x: hidden;
-            width: 100%;
-            position: relative;
-        }
+<link rel="stylesheet"
+href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
-        * { 
-            box-sizing: border-box; 
-            margin: 0; 
-            padding: 0; 
-            font-family: 'Kantumruy Pro', sans-serif; 
-            -webkit-tap-highlight-color: transparent; 
-        }
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-        body { background-color: var(--bg-color); color: var(--primary); padding-bottom: 120px; transition: background-color 0.3s, color 0.3s; }
+<style>
 
-        input, select, textarea {
-            font-size: 16px !important;
-            -webkit-user-select: text;
-            user-select: text;
-        }
+:root{
+    --primary:#111827;
+    --accent:#0284c7;
+    --accent2:#0ea5e9;
+    --accent-light:#e0f2fe;
+    --bg:#ffffff;
+    --soft:#f8fafc;
+    --border:#e5e7eb;
+    --muted:#64748b;
+    --white:#fff;
+    --nav:#ffffff;
+    --dark:#111827;
+    --danger:#ef4444;
+    --radius:14px;
+}
 
-        nav { 
-            background: var(--nav-bg); 
-            backdrop-filter: blur(12px); 
-            -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--border-color); 
-            padding: 8px 12px; 
-            position: sticky; 
-            top: 0; 
-            z-index: 50; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            box-shadow: 0 2px 10px rgba(0,0,0,0.03); 
-            transition: background 0.3s; 
-        }
+body.dark-mode{
+    --primary:#f8fafc;
+    --accent:#38bdf8;
+    --accent2:#0ea5e9;
+    --accent-light:#1e293b;
+    --bg:#0f172a;
+    --soft:#111827;
+    --border:#334155;
+    --muted:#94a3b8;
+    --nav:#0f172a;
+    --white:#1e293b;
+    --dark:#f8fafc;
+}
 
-        .logo { 
-            font-size: 18px; 
-            font-weight: 800; 
-            letter-spacing: -0.5px; 
-            color: var(--accent); 
-            line-height: 1;
-            font-family: var(--nav-font);
-        }
-        .logo span { color: var(--primary); }
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:'Kantumruy Pro',sans-serif;
+    -webkit-tap-highlight-color:transparent;
+}
 
-        .nav-right { display: flex; align-items: center; gap: 5px; }
-        .nav-icon-img { width: 13px; height: 13px; object-fit: contain; display: inline-block; vertical-align: middle; }
+html{
+    scroll-behavior:smooth;
+}
 
-        .guide-top-btn { 
-            background: var(--accent-light); 
-            border: 1px solid var(--border-color); 
-            color: var(--primary); 
-            padding: 0 8px; 
-            height: 30px;
-            border-radius: 16px; 
-            font-size: 10px; 
-            font-weight: 600; 
-            font-family: var(--nav-font);
-            cursor: pointer; 
-            display: flex; 
-            align-items: center; 
-            gap: 4px; 
-            white-space: nowrap;
-            line-height: 1;
-        }
+body{
+    background:var(--bg);
+    color:var(--primary);
+    transition:.3s;
+    padding-bottom:0;
+    overflow-x:hidden;
+}
 
-        .theme-toggle-btn { 
-            background: var(--accent-light); 
-            border: 1px solid var(--border-color); 
-            color: var(--primary); 
-            width: 30px; 
-            height: 30px; 
-            border-radius: 50%; 
-            cursor: pointer; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            flex-shrink: 0;
-            padding: 0;
-        }
+button,
+input,
+select{
+    font-family:inherit;
+}
 
-        .theme-toggle-btn img { width: 14px; height: 14px; object-fit: contain; }
+button{
+    cursor:pointer;
+}
 
-        .lang-select-wrapper { position: relative; display: flex; align-items: center; }
-        .lang-flag-img { position: absolute; left: 7px; width: 15px; height: 11px; pointer-events: none; z-index: 2; object-fit: cover; border-radius: 2px; box-shadow: 0 0 1px rgba(0,0,0,0.3); }
+/* =========================
+   TOP ANNOUNCEMENT
+========================= */
 
-        .lang-select { 
-            background: var(--accent-light); 
-            border: 1px solid var(--border-color); 
-            color: var(--primary); 
-            padding: 0 16px 0 26px; 
-            height: 30px;
-            border-radius: 16px; 
-            font-size: 10px; 
-            font-weight: 600; 
-            font-family: var(--nav-font);
-            cursor: pointer; 
-            outline: none; 
-            -webkit-appearance: none;
-            appearance: none;
-            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%22//www.w3.org/2000/svg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%230284c7%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 5px center;
-            background-size: 7px auto;
-        }
+.top-bar{
+    height:34px;
+    background:#111827;
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:80px;
+    font-size:11px;
+    letter-spacing:.2px;
+}
 
-        .cart-btn { 
-            background: var(--accent-light); 
-            color: var(--accent); 
-            border: 1px solid var(--border-color); 
-            padding: 0 10px; 
-            height: 30px;
-            border-radius: 16px; 
-            font-size: 10px; 
-            font-weight: 600; 
-            font-family: var(--nav-font);
-            cursor: pointer; 
-            display: flex; 
-            align-items: center; 
-            gap: 4px; 
-            box-shadow: 0 2px 5px rgba(2, 132, 199, 0.1); 
-            position: relative; 
-            white-space: nowrap;
-        }
+.top-item{
+    display:flex;
+    align-items:center;
+    gap:7px;
+}
 
-        .cover-container { width: 100%; background: var(--card-bg); border-bottom: 1px solid var(--border-color); margin-bottom: 16px; position: relative; }
-        .cover-slider { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; -ms-overflow-style: none; }
-        .cover-slider::-webkit-scrollbar { display: none; }
-        .cover-slide-item { flex: 0 0 100%; width: 100%; scroll-snap-align: start; }
-        
-        .cover-image-box { width: 100%; max-height: 220px; background-color: #0f172a; overflow: hidden; position: relative; }
-        .cover-image-box::after { content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 5; background: transparent; }
-        .cover-image-box video { width: 100%; height: 100%; object-fit: contain; opacity: 0.85; pointer-events: none; -webkit-touch-callout: none; }
+/* =========================
+   NAVIGATION
+========================= */
 
-        .cover-dots { display: flex; justify-content: center; gap: 6px; padding: 8px 0; background: var(--card-bg); }
-        .cover-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--border-color); transition: all 0.3s ease; }
-        .cover-dot.active { width: 18px; border-radius: 4px; background: var(--accent); }
+.main-nav{
+    position:sticky;
+    top:0;
+    z-index:100;
+    height:76px;
+    background:rgba(255,255,255,.96);
+    backdrop-filter:blur(15px);
+    border-bottom:1px solid var(--border);
+    display:flex;
+    align-items:center;
+}
 
-        .cover-info { text-align: center; padding: 10px 14px 14px; background: var(--card-bg); }
-        .sub-title { font-size: 10px; font-weight: 800; color: var(--accent); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 4px; }
-        .main-title { font-size: 18px; font-weight: 900; text-transform: uppercase; color: var(--primary); }
+body.dark-mode .main-nav{
+    background:rgba(15,23,42,.96);
+}
 
-        .menu-wrapper { padding: 0 12px 14px; max-width: 480px; margin: 0 auto; }
-        .categories { display: flex; background: var(--accent-light); padding: 4px; border-radius: 24px; gap: 4px; margin-bottom: 8px; border: 1px solid var(--border-color); }
-        .cat-btn { flex: 1; background: transparent; border: none; padding: 8px 0; border-radius: 20px; font-size: 11px; font-weight: 600; font-family: var(--nav-font); color: var(--text-muted); cursor: pointer; text-align: center; transition: all 0.2s; }
-        .cat-btn.active { background: var(--card-bg); color: var(--primary); box-shadow: 0 4px 12px rgba(0,0,0,0.08); font-weight: 700; }
+.nav-inner{
+    width:min(1400px,94%);
+    margin:auto;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:30px;
+}
 
-        .sub-categories { display: none; gap: 6px; overflow-x: auto; scrollbar-width: none; padding: 2px; }
-        .sub-categories.active { display: flex; }
-        .sub-btn { background: var(--card-bg); border: 1px solid var(--border-color); padding: 5px 12px; border-radius: 14px; font-size: 10px; font-weight: 600; font-family: var(--nav-font); white-space: nowrap; cursor: pointer; color: var(--text-muted); }
-        .sub-btn.active { background: var(--accent); color: #ffffff; border-color: var(--accent); font-weight: 700; }
+.logo-area{
+    min-width:190px;
+}
 
-        .container { max-width: 480px; margin: 0 auto; padding: 0 12px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
-        .card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 10px; position: relative; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02); }
-        
-        .img-box { background: var(--input-bg); aspect-ratio: 9/16; border-radius: 10px; display: flex; align-items: center; justify-content: center; overflow: hidden; margin-bottom: 10px; border: 1px solid var(--border-color); position: relative; }
-        .img-box::after { content: ""; position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 5; background: transparent; }
-        .img-box img, .img-box video { width: 100%; height: 100%; object-fit: contain; pointer-events: none; -webkit-touch-callout: none; }
-        
-        .badge { position: absolute; top: 8px; right: 8px; background: rgba(15, 23, 42, 0.9); color: white; font-size: 9px; font-weight: 800; padding: 3px 8px; border-radius: 6px; z-index: 10; }
-        .prod-title { font-size: 12px; font-weight: 700; margin-bottom: 2px; min-height: 30px; line-height: 1.4; color: var(--primary); }
-        .prod-desc { font-size: 10px; color: var(--text-muted); margin-bottom: 6px; min-height: 26px; line-height: 1.4; }
-        
-        .price-box { display: flex; align-items: center; gap: 4px; margin-bottom: 8px; }
-        .price-icon { width: 15px; height: 15px; object-fit: contain; }
-        .price { font-size: 15px; font-weight: 900; color: var(--accent); }
+.logo{
+    font-size:30px;
+    font-weight:800;
+    letter-spacing:-1.5px;
+    color:var(--accent);
+    line-height:.8;
+}
 
-        .size-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
-        .size-label { font-size: 9px; font-weight: 800; color: var(--text-muted); }
-        
-        .size-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 3px; margin-bottom: 8px; }
-        .size-btn { border: 1px solid var(--border-color); background: var(--input-bg); padding: 6px 0; border-radius: 6px; font-size: 10px; font-weight: 700; cursor: pointer; text-align: center; color: var(--primary); }
-        .size-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
+.logo span{
+    color:var(--primary);
+}
 
-        .stock-hint-box { font-size: 10px; color: var(--text-muted); font-weight: 700; text-align: center; margin-bottom: 8px; min-height: 15px; }
-        .stock-hint-box span { color: var(--accent); font-weight: 900; }
+.logo-small{
+    display:block;
+    font-size:8px;
+    letter-spacing:4px;
+    color:var(--primary);
+    margin-left:27px;
+    margin-top:7px;
+    font-weight:700;
+}
 
-        .btn-add { width: 100%; background: var(--primary); color: var(--bg-color); border: none; padding: 10px; border-radius: 8px; font-weight: 700; font-size: 11px; cursor: pointer; transition: background 0.2s; }
-        .btn-add:active { background: var(--accent); }
+.desktop-menu{
+    display:flex;
+    align-items:center;
+    gap:32px;
+    list-style:none;
+}
 
-        .cart-checkout-bar { position: fixed; bottom: 0; left: 0; right: 0; background: var(--nav-bg); backdrop-filter: blur(12px); border-top: 1px solid var(--border-color); padding: 12px 16px; z-index: 100; box-shadow: 0 -4px 15px rgba(0,0,0,0.05); }
-        .bar-content { max-width: 480px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
-        .total-price { font-size: 17px; font-weight: 900; color: var(--primary); display: flex; align-items: center; gap: 4px; }
-        .total-label { font-size: 10px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; }
-        .bar-buttons { display: flex; gap: 8px; }
-        .btn-cart-view { background: var(--accent-light); color: var(--primary); border: 1px solid var(--border-color); padding: 10px 14px; border-radius: 10px; font-weight: 800; font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 5px; }
-        .btn-telegram { background: var(--accent); color: white; border: none; padding: 10px 16px; border-radius: 10px; font-weight: 800; font-size: 12px; cursor: pointer; box-shadow: 0 4px 10px rgba(2, 132, 199, 0.3); display: flex; align-items: center; gap: 6px; }
+.desktop-menu button{
+    background:none;
+    border:0;
+    color:var(--primary);
+    font-size:13px;
+    font-weight:600;
+}
 
-        .btn-order-img { width: 16px; height: 16px; object-fit: contain; }
+.desktop-menu button:hover{
+    color:var(--accent);
+}
 
-        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.6); z-index: 200; display: none; justify-content: flex-end; flex-direction: column; backdrop-filter: blur(4px); pointer-events: none; opacity: 0; transition: opacity 0.2s ease; }
-        .modal-overlay.active { display: flex; pointer-events: auto; opacity: 1; }
-        .modal-content { background: var(--modal-bg); color: var(--primary); border-radius: 24px 24px 0 0; padding: 20px; max-height: 85vh; overflow-y: auto; max-width: 480px; width: 100%; margin: 0 auto; display: flex; flex-direction: column; box-shadow: 0 -10px 25px rgba(0,0,0,0.1); border-top: 1px solid var(--border-color); }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-bottom: 14px; }
-        .modal-title { font-size: 16px; font-weight: 900; color: var(--primary); display: flex; align-items: center; gap: 6px; }
-        .modal-title-img { width: 20px; height: 20px; object-fit: contain; }
-        .btn-close { background: var(--accent-light); border: none; font-size: 14px; width: 28px; height: 28px; border-radius: 50%; cursor: pointer; color: var(--text-muted); }
+.nav-actions{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
 
-        #cart-list { flex-grow: 1; overflow-y: auto; margin-bottom: 10px; max-height: 260px; }
-        .cart-item { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding: 10px 0; }
-        .item-info { font-size: 12px; font-weight: 800; color: var(--primary); }
-        .item-sub { font-size: 10px; color: var(--text-muted); font-weight: 600; margin-top: 2px; }
-        .qty-controls { display: flex; align-items: center; gap: 6px; }
-        .btn-qty { background: var(--accent-light); color: var(--accent); border: 1px solid var(--border-color); width: 26px; height: 26px; border-radius: 8px; font-weight: 900; cursor: pointer; }
-        .btn-delete-item { background: #fef2f2; color: #ef4444; border: 1px solid #fca5a5; width: 26px; height: 26px; border-radius: 8px; font-weight: 800; cursor: pointer; margin-left: 4px; display: flex; align-items: center; justify-content: center; font-size: 11px; }
-        .empty-msg { text-align: center; color: var(--text-muted); padding: 20px 0; font-size: 12px; }
+.nav-action{
+    width:38px;
+    height:38px;
+    border:0;
+    background:transparent;
+    color:var(--primary);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:50%;
+    font-size:18px;
+}
 
-        .summary-box { border-top: 1px solid var(--border-color); padding-top: 10px; padding-bottom: 4px; display: flex; flex-direction: column; gap: 6px; }
-        .summary-row { display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--text-muted); font-weight: 700; }
+.nav-action:hover{
+    background:var(--accent-light);
+}
 
-        .delivery-fee-label { display: flex; align-items: center; gap: 6px; }
-        .delivery-img-icon { height: 18px; object-fit: contain; }
+.cart-nav{
+    position:relative;
+}
 
-        .checkout-form { border-top: 1px solid var(--border-color); padding-top: 12px; display: flex; flex-direction: column; gap: 10px; margin-top: 8px; }
-        .form-group { display: flex; flex-direction: column; gap: 4px; width: 100%; }
-        .form-label { font-size: 11px; font-weight: 800; color: var(--primary); }
-        .form-input { width: 100%; padding: 10px 12px; border: 1px solid var(--border-color); border-radius: 10px; outline: none; background: var(--input-bg); color: var(--primary); }
-        .form-input:focus { border-color: var(--accent); background: var(--card-bg); box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.1); }
-        .form-input.error { border-color: #ef4444; background: #fef2f2; }
+.cart-count{
+    position:absolute;
+    top:-2px;
+    right:-2px;
+    width:17px;
+    height:17px;
+    border-radius:50%;
+    background:var(--accent);
+    color:white;
+    font-size:9px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:800;
+}
 
-        .modal-footer { border-top: 1px solid var(--border-color); padding-top: 12px; display: flex; flex-direction: column; gap: 10px; margin-top: 8px; }
-        .modal-total-row { display: flex; justify-content: space-between; align-items: center; }
-        .modal-total-label { font-size: 12px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; }
-        .modal-total-amount { font-size: 18px; font-weight: 900; color: var(--accent); display: flex; align-items: center; gap: 4px; }
-        .btn-modal-telegram { width: 100%; background: linear-gradient(135deg, #0284c7, #0369a1); color: white; border: none; padding: 12px; border-radius: 12px; font-weight: 800; font-size: 13px; text-align: center; cursor: pointer; box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3); display: flex; align-items: center; justify-content: center; gap: 8px; }
+.mobile-menu{
+    display:none;
+}
 
-        .guide-step { font-size: 12px; line-height: 1.8; color: var(--primary); margin-bottom: 8px; font-weight: 600; }
+/* =========================
+   HERO
+========================= */
 
-        /* Toast Popup Notification */
-        .toast-notification {
-            position: fixed;
-            bottom: 75px;
-            left: 50%;
-            transform: translateX(-50%) translateY(100px);
-            background: rgba(15, 23, 42, 0.9);
-            color: #ffffff;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 700;
-            z-index: 300;
-            opacity: 0;
-            transition: all 0.3s ease;
-            pointer-events: none;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .toast-notification.show {
-            transform: translateX(-50%) translateY(0);
-            opacity: 1;
-        }
-    </style>
+.hero{
+    width:100%;
+    background:#111827;
+    position:relative;
+    overflow:hidden;
+}
+
+.hero-slider{
+    display:flex;
+    overflow-x:auto;
+    scroll-snap-type:x mandatory;
+    scrollbar-width:none;
+}
+
+.hero-slider::-webkit-scrollbar{
+    display:none;
+}
+
+.hero-slide{
+    flex:0 0 100%;
+    height:560px;
+    position:relative;
+    scroll-snap-align:start;
+    overflow:hidden;
+}
+
+.hero-media{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+.hero-overlay{
+    position:absolute;
+    inset:0;
+    background:
+        linear-gradient(
+            90deg,
+            rgba(0,0,0,.48),
+            rgba(0,0,0,.12) 50%,
+            rgba(0,0,0,.3)
+        );
+}
+
+.hero-content{
+    position:absolute;
+    z-index:5;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    width:min(900px,90%);
+    text-align:center;
+    color:white;
+}
+
+.hero-label{
+    font-size:12px;
+    letter-spacing:6px;
+    font-weight:700;
+    margin-bottom:18px;
+}
+
+.hero-title{
+    font-family:Georgia,serif;
+    font-size:70px;
+    line-height:.95;
+    font-weight:400;
+    margin-bottom:22px;
+}
+
+.hero-khmer{
+    font-size:15px;
+    margin-bottom:28px;
+}
+
+.hero-button{
+    border:0;
+    background:white;
+    color:#111827;
+    padding:14px 30px;
+    border-radius:3px;
+    font-size:12px;
+    font-weight:800;
+    transition:.25s;
+}
+
+.hero-button:hover{
+    background:var(--accent);
+    color:white;
+}
+
+.hero-arrows{
+    position:absolute;
+    bottom:25px;
+    left:35px;
+    right:35px;
+    z-index:8;
+    display:flex;
+    justify-content:space-between;
+    pointer-events:none;
+}
+
+.hero-arrow{
+    color:white;
+    background:rgba(0,0,0,.25);
+    border:1px solid rgba(255,255,255,.3);
+    width:35px;
+    height:35px;
+    border-radius:50%;
+    pointer-events:auto;
+}
+
+.hero-dots{
+    position:absolute;
+    bottom:25px;
+    left:50%;
+    transform:translateX(-50%);
+    display:flex;
+    gap:6px;
+    z-index:8;
+}
+
+.hero-dot{
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background:rgba(255,255,255,.5);
+}
+
+.hero-dot.active{
+    width:24px;
+    border-radius:5px;
+    background:white;
+}
+
+/* =========================
+   CATEGORY ICONS
+========================= */
+
+.categories-section{
+    width:min(1250px,92%);
+    margin:0 auto;
+    padding:48px 0 55px;
+}
+
+.category-icons{
+    display:grid;
+    grid-template-columns:repeat(6,1fr);
+    gap:30px;
+}
+
+.category-icon{
+    text-align:center;
+    border:0;
+    background:none;
+    color:var(--primary);
+}
+
+.category-circle{
+    width:82px;
+    height:82px;
+    margin:auto;
+    border-radius:50%;
+    background:#f1f5f9;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:32px;
+    transition:.25s;
+}
+
+body.dark-mode .category-circle{
+    background:#1e293b;
+}
+
+.category-icon:hover .category-circle{
+    transform:translateY(-5px);
+    background:var(--accent-light);
+}
+
+.category-name{
+    margin-top:14px;
+    font-size:13px;
+    font-weight:700;
+}
+
+/* =========================
+   SECTION HEADER
+========================= */
+
+.section{
+    width:min(1250px,92%);
+    margin:auto;
+    padding:10px 0 65px;
+}
+
+.section-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:end;
+    margin-bottom:25px;
+}
+
+.section-label{
+    color:var(--accent);
+    letter-spacing:4px;
+    font-size:11px;
+    font-weight:800;
+    margin-bottom:8px;
+}
+
+.section-title{
+    font-size:38px;
+    line-height:1.1;
+    font-weight:800;
+    letter-spacing:-1px;
+}
+
+.view-all{
+    border:0;
+    background:none;
+    color:var(--primary);
+    font-size:12px;
+    font-weight:700;
+}
+
+/* =========================
+   FILTER
+========================= */
+
+.filter-area{
+    margin-bottom:30px;
+}
+
+.gender-tabs{
+    display:flex;
+    width:350px;
+    background:var(--accent-light);
+    border:1px solid var(--border);
+    padding:4px;
+    border-radius:30px;
+}
+
+.gender-tab{
+    flex:1;
+    padding:10px;
+    border:0;
+    border-radius:25px;
+    background:transparent;
+    color:var(--muted);
+    font-size:13px;
+    font-weight:700;
+}
+
+.gender-tab.active{
+    background:var(--white);
+    color:var(--primary);
+    box-shadow:0 4px 12px rgba(0,0,0,.08);
+}
+
+.sub-categories{
+    display:flex;
+    gap:7px;
+    margin-top:12px;
+    overflow-x:auto;
+    scrollbar-width:none;
+}
+
+.sub-btn{
+    padding:7px 17px;
+    background:var(--white);
+    border:1px solid var(--border);
+    border-radius:20px;
+    color:var(--muted);
+    font-size:11px;
+    font-weight:700;
+    white-space:nowrap;
+}
+
+.sub-btn.active{
+    background:var(--accent);
+    border-color:var(--accent);
+    color:white;
+}
+
+/* =========================
+   PRODUCT GRID
+========================= */
+
+.product-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:20px;
+}
+
+.product-card{
+    position:relative;
+    background:var(--white);
+    min-width:0;
+}
+
+.product-image{
+    position:relative;
+    width:100%;
+    aspect-ratio:3/4;
+    overflow:hidden;
+    background:#f1f5f9;
+}
+
+.product-image video,
+.product-image img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    pointer-events:none;
+}
+
+.product-image::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:transparent;
+}
+
+.product-badge{
+    position:absolute;
+    top:12px;
+    left:12px;
+    z-index:5;
+    padding:5px 10px;
+    border-radius:4px;
+    background:var(--accent);
+    color:white;
+    font-size:9px;
+    font-weight:800;
+}
+
+.product-heart{
+    position:absolute;
+    right:12px;
+    top:12px;
+    z-index:6;
+    width:32px;
+    height:32px;
+    border:0;
+    border-radius:50%;
+    background:rgba(255,255,255,.9);
+    font-size:16px;
+}
+
+.product-info{
+    padding:14px 2px 0;
+}
+
+.product-title{
+    font-size:14px;
+    font-weight:800;
+    line-height:1.4;
+    min-height:40px;
+}
+
+.product-desc{
+    color:var(--muted);
+    font-size:10px;
+    margin-top:3px;
+    min-height:18px;
+}
+
+.price-line{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-top:8px;
+}
+
+.price{
+    color:var(--primary);
+    font-size:16px;
+    font-weight:900;
+}
+
+.old-price{
+    color:#94a3b8;
+    font-size:11px;
+    text-decoration:line-through;
+}
+
+.color-dots{
+    display:flex;
+    gap:6px;
+    margin-top:9px;
+}
+
+.color-dot{
+    width:12px;
+    height:12px;
+    border-radius:50%;
+    border:1px solid #cbd5e1;
+}
+
+.size-grid{
+    display:flex;
+    gap:5px;
+    margin-top:10px;
+}
+
+.size-btn{
+    width:31px;
+    height:27px;
+    border-radius:5px;
+    border:1px solid var(--border);
+    background:var(--white);
+    color:var(--primary);
+    font-size:9px;
+    font-weight:800;
+}
+
+.size-btn.active{
+    background:var(--accent);
+    border-color:var(--accent);
+    color:white;
+}
+
+.stock-hint-box{
+    font-size:9px;
+    color:var(--muted);
+    margin-top:7px;
+    min-height:13px;
+}
+
+.stock-hint-box span:last-child{
+    color:var(--accent);
+    font-weight:800;
+}
+
+.add-btn{
+    margin-top:9px;
+    width:100%;
+    border:1px solid var(--primary);
+    background:var(--primary);
+    color:var(--bg);
+    padding:10px;
+    border-radius:4px;
+    font-size:11px;
+    font-weight:800;
+    transition:.2s;
+}
+
+.add-btn:hover{
+    background:var(--accent);
+    border-color:var(--accent);
+}
+
+/* =========================
+   PROMO BANNERS
+========================= */
+
+.promo-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+    margin-top:5px;
+}
+
+.promo{
+    height:260px;
+    position:relative;
+    overflow:hidden;
+    background:#111827;
+}
+
+.promo img,
+.promo video{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+.promo-overlay{
+    position:absolute;
+    inset:0;
+    background:linear-gradient(90deg,rgba(0,0,0,.65),transparent);
+}
+
+.promo-content{
+    position:absolute;
+    left:30px;
+    top:50%;
+    transform:translateY(-50%);
+    color:white;
+    z-index:3;
+}
+
+.promo-content h3{
+    font-family:Georgia,serif;
+    font-size:31px;
+    line-height:1;
+    font-weight:400;
+    margin-bottom:12px;
+}
+
+.promo-content p{
+    font-size:11px;
+    margin-bottom:17px;
+}
+
+.promo-button{
+    padding:10px 18px;
+    background:white;
+    border:0;
+    font-size:10px;
+    font-weight:800;
+}
+
+/* =========================
+   SERVICE STRIP
+========================= */
+
+.service-strip{
+    background:#f8fafc;
+    border-top:1px solid var(--border);
+    border-bottom:1px solid var(--border);
+    padding:30px 0;
+}
+
+body.dark-mode .service-strip{
+    background:#111827;
+}
+
+.services{
+    width:min(1250px,92%);
+    margin:auto;
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+}
+
+.service{
+    display:flex;
+    align-items:center;
+    gap:15px;
+    justify-content:center;
+    border-right:1px solid var(--border);
+}
+
+.service:last-child{
+    border-right:0;
+}
+
+.service-icon{
+    font-size:28px;
+}
+
+.service-title{
+    font-size:11px;
+    font-weight:800;
+}
+
+.service-text{
+    color:var(--muted);
+    font-size:9px;
+    margin-top:3px;
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+footer{
+    background:#111827;
+    color:white;
+    padding:55px 0 20px;
+}
+
+.footer-inner{
+    width:min(1250px,92%);
+    margin:auto;
+    display:grid;
+    grid-template-columns:1.6fr 1fr 1fr 1.3fr;
+    gap:50px;
+}
+
+.footer-logo{
+    color:#38bdf8;
+    font-size:29px;
+    font-weight:800;
+}
+
+.footer-logo span{
+    color:white;
+}
+
+.footer-small{
+    display:block;
+    font-size:7px;
+    letter-spacing:4px;
+    margin-left:27px;
+    margin-top:4px;
+}
+
+.footer-description{
+    margin-top:15px;
+    color:#cbd5e1;
+    font-size:10px;
+    line-height:1.7;
+    max-width:280px;
+}
+
+.footer-social{
+    display:flex;
+    gap:8px;
+    margin-top:17px;
+}
+
+.social{
+    width:31px;
+    height:31px;
+    border:1px solid #475569;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:white;
+    font-size:12px;
+}
+
+.footer-heading{
+    font-size:12px;
+    font-weight:800;
+    margin-bottom:18px;
+}
+
+.footer-links{
+    list-style:none;
+}
+
+.footer-links li{
+    margin-bottom:9px;
+    color:#cbd5e1;
+    font-size:10px;
+}
+
+.footer-contact{
+    color:#cbd5e1;
+    font-size:10px;
+    line-height:2.2;
+}
+
+.newsletter{
+    margin-top:15px;
+    display:flex;
+    border:1px solid #475569;
+    border-radius:6px;
+    overflow:hidden;
+}
+
+.newsletter input{
+    min-width:0;
+    flex:1;
+    background:transparent;
+    color:white;
+    border:0;
+    outline:0;
+    padding:10px;
+    font-size:10px;
+}
+
+.newsletter button{
+    width:40px;
+    border:0;
+    background:var(--accent);
+    color:white;
+}
+
+.footer-bottom{
+    width:min(1250px,92%);
+    margin:40px auto 0;
+    padding-top:17px;
+    border-top:1px solid #334155;
+    display:flex;
+    justify-content:space-between;
+    color:#94a3b8;
+    font-size:9px;
+}
+
+/* =========================
+   FIXED CART BAR
+========================= */
+
+.cart-checkout-bar{
+    position:fixed;
+    bottom:18px;
+    left:50%;
+    transform:translateX(-50%);
+    z-index:90;
+    width:min(650px,94%);
+    background:rgba(255,255,255,.95);
+    backdrop-filter:blur(15px);
+    border:1px solid var(--border);
+    border-radius:18px;
+    box-shadow:0 12px 40px rgba(0,0,0,.16);
+    padding:10px 13px;
+}
+
+body.dark-mode .cart-checkout-bar{
+    background:rgba(15,23,42,.95);
+}
+
+.bar-content{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:15px;
+}
+
+.total-label{
+    color:var(--muted);
+    font-size:9px;
+    font-weight:700;
+}
+
+.total-price{
+    color:var(--primary);
+    font-size:17px;
+    font-weight:900;
+    margin-top:2px;
+}
+
+.bar-buttons{
+    display:flex;
+    gap:7px;
+}
+
+.btn-cart-view,
+.btn-telegram{
+    height:39px;
+    padding:0 15px;
+    border-radius:9px;
+    font-size:10px;
+    font-weight:800;
+    display:flex;
+    align-items:center;
+    gap:6px;
+}
+
+.btn-cart-view{
+    border:1px solid var(--border);
+    background:var(--accent-light);
+    color:var(--primary);
+}
+
+.btn-telegram{
+    background:var(--accent);
+    color:white;
+    border:0;
+    box-shadow:0 5px 15px rgba(2,132,199,.3);
+}
+
+.btn-order-img{
+    width:16px;
+    height:16px;
+    object-fit:contain;
+}
+
+/* =========================
+   MODALS
+========================= */
+
+.modal-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(15,23,42,.65);
+    z-index:200;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    backdrop-filter:blur(5px);
+}
+
+.modal-overlay.active{
+    display:flex;
+}
+
+.modal-content{
+    width:min(500px,94%);
+    max-height:90vh;
+    overflow-y:auto;
+    background:var(--white);
+    color:var(--primary);
+    border-radius:20px;
+    padding:22px;
+    box-shadow:0 20px 60px rgba(0,0,0,.25);
+}
+
+.modal-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding-bottom:13px;
+    border-bottom:1px solid var(--border);
+    margin-bottom:13px;
+}
+
+.modal-title{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-size:15px;
+    font-weight:900;
+}
+
+.modal-title-img{
+    width:20px;
+    height:20px;
+    object-fit:contain;
+}
+
+.btn-close{
+    width:30px;
+    height:30px;
+    border:0;
+    border-radius:50%;
+    background:var(--accent-light);
+    color:var(--primary);
+}
+
+#cart-list{
+    max-height:300px;
+    overflow-y:auto;
+}
+
+.cart-item{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    border-bottom:1px solid var(--border);
+    padding:12px 0;
+}
+
+.item-info{
+    font-size:11px;
+    font-weight:800;
+}
+
+.item-sub{
+    color:var(--muted);
+    font-size:9px;
+    margin-top:3px;
+}
+
+.qty-controls{
+    display:flex;
+    align-items:center;
+    gap:5px;
+}
+
+.btn-qty{
+    width:27px;
+    height:27px;
+    border:1px solid var(--border);
+    background:var(--accent-light);
+    color:var(--accent);
+    border-radius:7px;
+    font-weight:900;
+}
+
+.btn-delete-item{
+    width:27px;
+    height:27px;
+    border:1px solid #fca5a5;
+    background:#fef2f2;
+    color:#ef4444;
+    border-radius:7px;
+}
+
+.empty-msg{
+    text-align:center;
+    color:var(--muted);
+    padding:30px 0;
+    font-size:11px;
+}
+
+.summary-box{
+    border-top:1px solid var(--border);
+    padding-top:12px;
+    display:none;
+    flex-direction:column;
+    gap:7px;
+}
+
+.summary-row{
+    display:flex;
+    justify-content:space-between;
+    font-size:11px;
+    color:var(--muted);
+}
+
+.delivery-fee-label{
+    display:flex;
+    align-items:center;
+    gap:5px;
+}
+
+.delivery-img-icon{
+    width:18px;
+    height:18px;
+    object-fit:contain;
+}
+
+.modal-footer{
+    border-top:1px solid var(--border);
+    padding-top:13px;
+    margin-top:10px;
+    display:none;
+    flex-direction:column;
+    gap:10px;
+}
+
+.modal-total-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.modal-total-label{
+    font-size:10px;
+    color:var(--muted);
+    font-weight:800;
+}
+
+.modal-total-amount{
+    color:var(--accent);
+    font-size:18px;
+    font-weight:900;
+    display:flex;
+    align-items:center;
+    gap:4px;
+}
+
+.btn-modal-telegram{
+    width:100%;
+    padding:12px;
+    border:0;
+    border-radius:10px;
+    background:var(--accent);
+    color:white;
+    font-size:12px;
+    font-weight:800;
+}
+
+/* =========================
+   FORM
+========================= */
+
+.checkout-form{
+    display:flex;
+    flex-direction:column;
+    gap:11px;
+}
+
+.form-group{
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+}
+
+.form-label{
+    font-size:10px;
+    font-weight:800;
+}
+
+.form-input{
+    width:100%;
+    padding:11px 12px;
+    border:1px solid var(--border);
+    background:var(--soft);
+    color:var(--primary);
+    border-radius:9px;
+    outline:none;
+}
+
+.form-input:focus{
+    border-color:var(--accent);
+}
+
+.form-input.error{
+    border-color:#ef4444;
+}
+
+/* =========================
+   TOAST
+========================= */
+
+.toast-notification{
+    position:fixed;
+    bottom:95px;
+    left:50%;
+    transform:translateX(-50%) translateY(80px);
+    z-index:500;
+    background:#111827;
+    color:white;
+    padding:10px 17px;
+    border-radius:25px;
+    font-size:10px;
+    font-weight:800;
+    opacity:0;
+    transition:.3s;
+    pointer-events:none;
+}
+
+.toast-notification.show{
+    opacity:1;
+    transform:translateX(-50%) translateY(0);
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:800px){
+
+    .top-bar{
+        height:30px;
+        gap:20px;
+        font-size:8px;
+    }
+
+    .top-item:nth-child(2){
+        display:none;
+    }
+
+    .main-nav{
+        height:62px;
+    }
+
+    .nav-inner{
+        width:94%;
+    }
+
+    .logo-area{
+        min-width:auto;
+    }
+
+    .logo{
+        font-size:23px;
+    }
+
+    .logo-small{
+        font-size:6px;
+        margin-left:20px;
+        margin-top:5px;
+    }
+
+    .desktop-menu{
+        display:none;
+    }
+
+    .nav-actions{
+        gap:2px;
+    }
+
+    .nav-action{
+        width:33px;
+        height:33px;
+        font-size:15px;
+    }
+
+    .mobile-menu{
+        display:flex;
+    }
+
+    .hero-slide{
+        height:420px;
+    }
+
+    .hero-title{
+        font-size:42px;
+    }
+
+    .hero-label{
+        font-size:9px;
+        letter-spacing:4px;
+    }
+
+    .hero-khmer{
+        font-size:11px;
+    }
+
+    .categories-section{
+        padding:30px 0 35px;
+    }
+
+    .category-icons{
+        grid-template-columns:repeat(3,1fr);
+        gap:22px 10px;
+    }
+
+    .category-circle{
+        width:62px;
+        height:62px;
+        font-size:25px;
+    }
+
+    .category-name{
+        font-size:11px;
+        margin-top:8px;
+    }
+
+    .section{
+        width:94%;
+        padding-bottom:40px;
+    }
+
+    .section-title{
+        font-size:26px;
+    }
+
+    .section-label{
+        font-size:9px;
+        letter-spacing:3px;
+    }
+
+    .view-all{
+        font-size:9px;
+    }
+
+    .gender-tabs{
+        width:100%;
+    }
+
+    .product-grid{
+        grid-template-columns:repeat(2,1fr);
+        gap:15px 10px;
+    }
+
+    .product-title{
+        font-size:11px;
+        min-height:34px;
+    }
+
+    .product-desc{
+        font-size:8px;
+    }
+
+    .price{
+        font-size:14px;
+    }
+
+    .old-price{
+        font-size:9px;
+    }
+
+    .promo-grid{
+        grid-template-columns:1fr;
+    }
+
+    .promo{
+        height:190px;
+    }
+
+    .promo-content{
+        left:20px;
+    }
+
+    .promo-content h3{
+        font-size:25px;
+    }
+
+    .services{
+        grid-template-columns:repeat(2,1fr);
+        gap:20px 5px;
+    }
+
+    .service{
+        border-right:0;
+    }
+
+    .footer-inner{
+        grid-template-columns:1fr 1fr;
+        gap:35px 20px;
+    }
+
+    .footer-inner > div:first-child{
+        grid-column:1/-1;
+    }
+
+    .footer-bottom{
+        flex-direction:column;
+        gap:8px;
+    }
+
+    .cart-checkout-bar{
+        bottom:8px;
+        border-radius:15px;
+    }
+
+    .bar-content{
+        gap:7px;
+    }
+
+    .btn-cart-view,
+    .btn-telegram{
+        padding:0 10px;
+        font-size:9px;
+    }
+
+    .total-price{
+        font-size:15px;
+    }
+
+}
+
+@media(max-width:420px){
+
+    .top-item:nth-child(3){
+        display:none;
+    }
+
+    .hero-slide{
+        height:350px;
+    }
+
+    .hero-title{
+        font-size:36px;
+    }
+
+    .hero-button{
+        padding:11px 22px;
+    }
+
+    .category-circle{
+        width:57px;
+        height:57px;
+    }
+
+    .product-image{
+        aspect-ratio:3/4;
+    }
+
+    .btn-cart-view{
+        display:none;
+    }
+
+    .footer-inner{
+        grid-template-columns:1fr;
+    }
+
+}
+
+</style>
 </head>
+
 <body>
 
-    <nav>
-        <div class="logo">Oneday<span>.</span></div>
-        <div class="nav-right">
-            <button class="guide-top-btn" onclick="toggleGuideModal()">
-                <img src="images/IMG_5832.png" alt="Guide" class="nav-icon-img">
-                <span data-key="guide_btn_text">របៀបកុម្មង់</span>
+<!-- =====================================================
+     TOP BAR
+===================================================== -->
+
+<div class="top-bar">
+
+    <div class="top-item">
+        🚚
+        <span>Free shipping on orders over $30</span>
+    </div>
+
+    <div class="top-item">
+        ✂️
+        <span>Imported from Taiwan & Korea</span>
+    </div>
+
+    <div class="top-item">
+        ☎️
+        <span>Customer support: 096 123 4567</span>
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     NAVIGATION
+===================================================== -->
+
+<nav class="main-nav">
+
+<div class="nav-inner">
+
+    <div class="logo-area">
+        <div class="logo">
+            Oneday<span>.</span>
+        </div>
+
+        <span class="logo-small">
+            CLOTHING
+        </span>
+    </div>
+
+
+    <ul class="desktop-menu">
+
+        <li>
+            <button onclick="window.scrollTo({top:0,behavior:'smooth'})">
+                Home
             </button>
-            
-            <button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleTheme()">
-                <img id="themeImg" src="images/IMG_5830.png" alt="Theme Toggle">
+        </li>
+
+        <li>
+            <button onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">
+                Shop
+            </button>
+        </li>
+
+        <li>
+            <button onclick="selectMainCategory('men')">
+                Men⌄
+            </button>
+        </li>
+
+        <li>
+            <button onclick="selectMainCategory('women')">
+                Women⌄
+            </button>
+        </li>
+
+        <li>
+            <button>
+                About Us
+            </button>
+        </li>
+
+        <li>
+            <button>
+                Contact
+            </button>
+        </li>
+
+    </ul>
+
+
+    <div class="nav-actions">
+
+        <button class="nav-action">
+            ⌕
+        </button>
+
+        <button
+            class="nav-action"
+            onclick="toggleGuideModal()">
+            ♙
+        </button>
+
+        <button
+            class="nav-action cart-nav"
+            onclick="toggleCartModal()">
+
+            🛍
+
+            <span
+                class="cart-count"
+                id="cart-count">
+                0
+            </span>
+
+        </button>
+
+        <button
+            class="nav-action"
+            onclick="toggleTheme()">
+
+            ☼
+
+        </button>
+
+    </div>
+
+</div>
+
+</nav>
+
+
+<!-- =====================================================
+     HERO
+===================================================== -->
+
+<section class="hero">
+
+<div
+    class="hero-slider"
+    id="coverSlider"
+    onscroll="updateCoverDots()">
+
+
+    <div class="hero-slide">
+
+        <video
+            class="hero-media"
+            autoplay
+            loop
+            muted
+            playsinline
+            preload="metadata"
+            controlslist="nodownload">
+
+            <source
+                src="videos/VID_20260905221119531.mp4"
+                type="video/mp4">
+
+        </video>
+
+        <div class="hero-overlay"></div>
+
+        <div class="hero-content">
+
+            <div class="hero-label">
+                NEW COLLECTION
+            </div>
+
+            <div class="hero-title">
+                Style for<br>
+                Everyday
+            </div>
+
+            <div class="hero-khmer">
+                សម្លៀកបំពាក់ទាន់សម័យ សម្រាប់ជីវិតប្រចាំថ្ងៃ
+            </div>
+
+            <button
+                class="hero-button"
+                onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">
+
+                Shop Now&nbsp; →
+
             </button>
 
-            <div class="lang-select-wrapper">
-                <img id="langFlagImg" src="images/IMG_5833.png" alt="Language Flag" class="lang-flag-img">
-                <select class="lang-select" id="langSelect" onchange="changeLanguage(this.value)">
-                    <option value="km">KH</option>
-                    <option value="en">EN</option>
-                    <option value="zh">中文</option>
-                </select>
+        </div>
+
+    </div>
+
+
+    <div class="hero-slide">
+
+        <video
+            class="hero-media"
+            autoplay
+            loop
+            muted
+            playsinline
+            preload="metadata">
+
+            <source
+                src="videos/gemini_generated_video_1CCC7921.mp4"
+                type="video/mp4">
+
+        </video>
+
+        <div class="hero-overlay"></div>
+
+        <div class="hero-content">
+
+            <div class="hero-label">
+                ONE STYLE · ONE DAY
             </div>
 
-            <button class="cart-btn" id="cartButton" onclick="toggleCartModal()">
-                <img src="images/IMG_5827.png" alt="Cart" class="nav-icon-img">
-                <span id="cart-count">0</span>
+            <div class="hero-title">
+                Simple.<br>
+                Confident.
+            </div>
+
+            <div class="hero-khmer">
+                Premium everyday clothing by Oneday.
+            </div>
+
+            <button
+                class="hero-button"
+                onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">
+
+                Explore Collection&nbsp; →
+
             </button>
-        </div>
-    </nav>
 
-    <div class="cover-container">
-        <div class="cover-slider" id="coverSlider" onscroll="updateCoverDots()">
-            <div class="cover-slide-item">
-                <div class="cover-image-box">
-                    <video autoplay loop muted playsinline preload="metadata" controlslist="nodownload" oncontextmenu="return false;">
-                        <source src="videos/VID_20260905221119531.mp4" type="video/mp4">
-                    </video>
-                </div>
-            </div>
-            <div class="cover-slide-item">
-                <div class="cover-image-box">
-                    <video autoplay loop muted playsinline preload="metadata" controlslist="nodownload" oncontextmenu="return false;">
-                        <source src="videos/gemini_generated_video_1CCC7921.mp4" type="video/mp4">
-                    </video>
-                </div>
-            </div>
         </div>
-        <div class="cover-dots" id="coverDots">
-            <div class="cover-dot active"></div>
-            <div class="cover-dot"></div>
-        </div>
-        <div class="cover-info">
-            <div class="sub-title">Simple · Modern · Confident</div>
-            <div class="main-title" data-key="cover_title">BUILD YOUR DREAM STYLE</div>
-        </div>
+
     </div>
 
-    <div class="menu-wrapper">
-        <div class="categories">
-            <button class="cat-btn active" onclick="selectMainCategory('men', this)" data-key="cat_men">បុរស</button>
-            <button class="cat-btn" onclick="selectMainCategory('women', this)" data-key="cat_women">នារី</button>
+</div>
+
+
+<div class="hero-arrows">
+
+    <button
+        class="hero-arrow"
+        onclick="moveHero(-1)">
+        ←
+    </button>
+
+    <button
+        class="hero-arrow"
+        onclick="moveHero(1)">
+        →
+    </button>
+
+</div>
+
+
+<div
+    class="hero-dots"
+    id="coverDots">
+
+    <div class="hero-dot active"></div>
+    <div class="hero-dot"></div>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     CATEGORY ICONS
+===================================================== -->
+
+<section class="categories-section">
+
+<div class="category-icons">
+
+    <button
+        class="category-icon"
+        onclick="filterByType('tops')">
+
+        <div class="category-circle">
+            👕
         </div>
 
-        <div class="sub-categories active" id="sub-men">
-            <button class="sub-btn active" onclick="selectSubCategory('men', 'all', this)" data-key="sub_all">ទាំងអស់</button>
-            <button class="sub-btn" onclick="selectSubCategory('men', 'tops', this)" data-key="cat_tops">អាវ</button>
-            <button class="sub-btn" onclick="selectSubCategory('men', 'pants', this)" data-key="cat_pants">ខោ</button>
-            <button class="sub-btn" onclick="selectSubCategory('men', 'outerwear', this)" data-key="cat_outerwear">អាវក្រៅ</button>
+        <div class="category-name">
+            T-Shirts
         </div>
 
-        <div class="sub-categories" id="sub-women">
-            <button class="sub-btn active" onclick="selectSubCategory('women', 'all', this)" data-key="sub_all">ទាំងអស់</button>
-            <button class="sub-btn" onclick="selectSubCategory('women', 'tops', this)" data-key="cat_tops">អាវ</button>
-            <button class="sub-btn" onclick="selectSubCategory('women', 'pants', this)" data-key="cat_pants">ខោ</button>
-            <button class="sub-btn" onclick="selectSubCategory('women', 'outerwear', this)" data-key="cat_outerwear">អាវក្រៅ</button>
+    </button>
+
+
+    <button
+        class="category-icon"
+        onclick="filterByType('tops')">
+
+        <div class="category-circle">
+            👔
         </div>
+
+        <div class="category-name">
+            Shirts
+        </div>
+
+    </button>
+
+
+    <button
+        class="category-icon"
+        onclick="filterByType('tops')">
+
+        <div class="category-circle">
+            👕
+        </div>
+
+        <div class="category-name">
+            Polo
+        </div>
+
+    </button>
+
+
+    <button
+        class="category-icon"
+        onclick="filterByType('pants')">
+
+        <div class="category-circle">
+            👖
+        </div>
+
+        <div class="category-name">
+            Pants
+        </div>
+
+    </button>
+
+
+    <button
+        class="category-icon"
+        onclick="filterByType('outerwear')">
+
+        <div class="category-circle">
+            🧥
+        </div>
+
+        <div class="category-name">
+            Outerwear
+        </div>
+
+    </button>
+
+
+    <button
+        class="category-icon">
+
+        <div class="category-circle">
+            🧢
+        </div>
+
+        <div class="category-name">
+            Accessories
+        </div>
+
+    </button>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     PRODUCTS
+===================================================== -->
+
+<section
+    class="section"
+    id="products">
+
+
+<div class="section-header">
+
+    <div>
+
+        <div class="section-label">
+            BEST SELLERS
+        </div>
+
+        <div class="section-title">
+            Popular Right Now
+        </div>
+
     </div>
 
-    <div class="container">
-        <div class="card" id="prod-1" data-gender="men" data-type="tops">
-            <span class="badge">Ref: 1</span>
-            <div class="img-box">
-                <video autoplay loop muted playsinline preload="metadata" controlslist="nodownload" oncontextmenu="return false;">
-                    <source src="videos/Man_walking_in_fashion_studio_202608272139.mp4" type="video/mp4">
-                </video>
-            </div>
-            <div>
-                <div class="prod-title" data-key="p1_title">T-Shirt Polo Collab OneDay</div>
-                <div class="prod-desc" data-key="p1_desc">អាវយឺត Polo រចនាម៉ូដទាន់សម័យ ងាយពាក់</div>
-                <div class="price-box">
-                    <img src="images/IMG_5837.png" alt="Price Icon" class="price-icon">
-                    <div class="price">$15.00</div>
-                </div>
-            </div>
-            <div>
-                <div class="size-header"><div class="size-label" data-key="select_size">SIZE</div></div>
-                <div class="size-grid">
-                    <button class="size-btn" onclick="selectSize(this, 'prod-1', 'Ref: 1')">S</button>
-                    <button class="size-btn active" onclick="selectSize(this, 'prod-1', 'Ref: 1')">M</button>
-                    <button class="size-btn" onclick="selectSize(this, 'prod-1', 'Ref: 1')">L</button>
-                    <button class="size-btn" onclick="selectSize(this, 'prod-1', 'Ref: 1')">XL</button>
-                    <button class="size-btn" onclick="selectSize(this, 'prod-1', 'Ref: 1')">XXL</button>
-                </div>
-                <div class="stock-hint-box" id="stock-hint-prod-1"><span id="stock-text-prod-1">ស្តុកនៅសល់: </span><span>...</span></div>
-                <button class="btn-add" onclick="addToCart('p1_title', 15.00, 'prod-1', 'Ref: 1', event)">+ <span data-key="add_to_cart">ដាក់ចូលកន្ត្រក</span></button>
-            </div>
-        </div>
+    <button class="view-all">
+        View All Products&nbsp; →
+    </button>
 
-        <div class="card" id="prod-4" data-gender="men" data-type="tops">
-            <span class="badge">Ref: 2</span>
-            <div class="img-box">
-                <video autoplay loop muted playsinline preload="metadata" controlslist="nodownload" oncontextmenu="return false;">
-                    <source src="videos/Model_walking_in_fashion_studio_202608272237.mp4" type="video/mp4">
-                </video>
-            </div>
-            <div>
-                <div class="prod-title" data-key="p4_title">Olive Green Mandarin Collar Long-Sleeve Shirt</div>
-                <div class="prod-desc" data-key="p4_desc">អាវដៃវែងកាតគៀនពណ៌បៃតងអូលីវ ស្អាតប្រណិត</div>
-                <div class="price-box">
-                    <img src="images/IMG_5837.png" alt="Price Icon" class="price-icon">
-                    <div class="price">$6.00</div>
-                </div>
-            </div>
-            <div>
-                <div class="size-header"><div class="size-label" data-key="select_size">SIZE</div></div>
-                <div class="size-grid">
-                    <button class="size-btn" onclick="selectSize(this, 'prod-4', 'Ref: 2')">S</button>
-                    <button class="size-btn active" onclick="selectSize(this, 'prod-4', 'Ref: 2')">M</button>
-                    <button class="size-btn" onclick="selectSize(this, 'prod-4', 'Ref: 2')">L</button>
-                    <button class="size-btn" onclick="selectSize(this, 'prod-4', 'Ref: 2')">XL</button>
-                    <button class="size-btn" onclick="selectSize(this, 'prod-4', 'Ref: 2')">XXL</button>
-                </div>
-                <div class="stock-hint-box" id="stock-hint-prod-4"><span id="stock-text-prod-4">ស្តុកនៅសល់: </span><span>...</span></div>
-                <button class="btn-add" onclick="addToCart('p4_title', 6.00, 'prod-4', 'Ref: 2', event)">+ <span data-key="add_to_cart">ដាក់ចូលកន្ត្រក</span></button>
-            </div>
-        </div>
+</div>
 
-        <div class="card" id="prod-2" data-gender="men" data-type="tops">
-            <span class="badge">Ref: 3</span>
-            <div class="img-box">
-                <video autoplay loop muted playsinline preload="metadata" controlslist="nodownload" oncontextmenu="return false;">
-                    <source src="videos/Male_model_walking_in_studio_202608271814.mp4" type="video/mp4">
-                </video>
-            </div>
-            <div>
-                <div class="prod-title" data-key="p2_title">Outfit Smart Casual (Full Set)</div>
-                <div class="prod-desc" data-key="p2_desc">ឈុតសម្លៀកបំពាក់ Smart Casual ទាន់សម័យ</div>
-                <div class="price-box">
-                    <img src="images/IMG_5837.png" alt="Price Icon" class="price-icon">
-                    <div class="price">$20.00</div>
-                </div>
-            </div>
-            <div>
-                <div class="size-header"><div class="size-label" data-key="select_size">SIZE</div></div>
-                <div class="size-grid">
-                    <button class="size-btn" onclick="selectSize(this, 'prod-2', 'Ref: 3')">S</button>
-                    <button class="size-btn active" onclick="selectSize(this, 'prod-2', 'Ref: 3')">M</button>
-                    <button class="size-btn" onclick="selectSize(this, 'prod-2', 'Ref: 3')">L</button>
-                    <button class="size-btn" onclick="selectSize(this, 'prod-2', 'Ref: 3')">XL</button>
-                    <button class="size-btn" onclick="selectSize(this, 'prod-2', 'Ref: 3')">XXL</button>
-                </div>
-                <div class="stock-hint-box" id="stock-hint-prod-2"><span id="stock-text-prod-2">ស្តុកនៅសល់: </span><span>...</span></div>
-                <button class="btn-add" onclick="addToCart('p2_title', 20.00, 'prod-2', 'Ref: 3', event)">+ <span data-key="add_to_cart">ដាក់ចូលកន្ត្រក</span></button>
-            </div>
-        </div>
 
-        <div class="card" id="prod-5" data-gender="women" data-type="tops">
-            <span class="badge">Ref: 4</span>
-            <div class="img-box">
-                <video autoplay loop muted playsinline preload="metadata" controlslist="nodownload" oncontextmenu="return false;">
-                    <source src="videos/Woman_modeling_shirt_360_rotation_202609061421.mp4" type="video/mp4">
-                </video>
-            </div>
-            <div>
-                <div class="prod-title" data-key="p5_title">Plaid Sailor Collar Blouse</div>
-                <div class="prod-desc" data-key="p5_desc">អាវនារី ករសាឡាប្រណិត ស្អាតទាន់សម័យ</div>
-                <div class="price-box">
-                    <img src="images/IMG_5837.png" alt="Price Icon" class="price-icon">
-                    <div class="price">$7.00</div>
-                </div>
-            </div>
-            <div>
-                <div class="size-header"><div class="size-label" data-key="select_size">SIZE</div></div>
-                <div class="size-grid">
-                    <button class="size-btn" onclick="selectSize(this, 'prod-5', 'Ref: 4')">S</button>
-                    <button class="size-btn active" onclick="selectSize(this, 'prod-5', 'Ref: 4')">M</button>
-                    <button class="size-btn" onclick="selectSize(this, 'prod-5', 'Ref: 4')">L</button>
-                    <button class="size-btn" onclick="selectSize(this, 'prod-5', 'Ref: 4')">XL</button>
-                    <button class="size-btn" onclick="selectSize(this, 'prod-5', 'Ref: 4')">XXL</button>
-                </div>
-                <div class="stock-hint-box" id="stock-hint-prod-5"><span id="stock-text-prod-5">ស្តុកនៅសល់: </span><span>...</span></div>
-                <button class="btn-add" onclick="addToCart('p5_title', 7.00, 'prod-5', 'Ref: 4', event)">+ <span data-key="add_to_cart">ដាក់ចូលកន្ត្រក</span></button>
-            </div>
-        </div>
+<!-- FILTER -->
+
+<div class="filter-area">
+
+    <div class="gender-tabs">
+
+        <button
+            id="menTab"
+            class="gender-tab active"
+            onclick="selectMainCategory('men',this)">
+
+            បុរស
+
+        </button>
+
+        <button
+            id="womenTab"
+            class="gender-tab"
+            onclick="selectMainCategory('women',this)">
+
+            នារី
+
+        </button>
+
     </div>
 
-    <div class="cart-checkout-bar">
-        <div class="bar-content">
-            <div style="cursor: pointer;" onclick="toggleCartModal()">
-                <div class="total-label"><span data-key="total_label">សរុប</span> (<span id="items-count">0</span> <span data-key="items_unit">មុខ</span>)</div>
-                <div class="total-price">
-                    <img src="images/IMG_5837.png" alt="Price Icon" class="price-icon">
-                    <span id="total-price">$0.00</span>
-                </div>
+
+    <div
+        class="sub-categories"
+        id="sub-men">
+
+        <button
+            class="sub-btn active"
+            onclick="selectSubCategory('men','all',this)">
+            ទាំងអស់
+        </button>
+
+        <button
+            class="sub-btn"
+            onclick="selectSubCategory('men','tops',this)">
+            អាវ
+        </button>
+
+        <button
+            class="sub-btn"
+            onclick="selectSubCategory('men','pants',this)">
+            ខោ
+        </button>
+
+        <button
+            class="sub-btn"
+            onclick="selectSubCategory('men','outerwear',this)">
+            អាវក្រៅ
+        </button>
+
+    </div>
+
+
+    <div
+        class="sub-categories"
+        id="sub-women"
+        style="display:none">
+
+        <button
+            class="sub-btn active"
+            onclick="selectSubCategory('women','all',this)">
+            ទាំងអស់
+        </button>
+
+        <button
+            class="sub-btn"
+            onclick="selectSubCategory('women','tops',this)">
+            អាវ
+        </button>
+
+        <button
+            class="sub-btn"
+            onclick="selectSubCategory('women','pants',this)">
+            ខោ
+        </button>
+
+        <button
+            class="sub-btn"
+            onclick="selectSubCategory('women','outerwear',this)">
+            អាវក្រៅ
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- PRODUCT GRID -->
+
+<div class="product-grid">
+
+
+<!-- PRODUCT 1 -->
+
+<div
+    class="product-card"
+    id="prod-1"
+    data-gender="men"
+    data-type="tops">
+
+    <div class="product-image">
+
+        <span class="product-badge">
+            Hot
+        </span>
+
+        <button class="product-heart">
+            ♡
+        </button>
+
+        <video
+            autoplay
+            loop
+            muted
+            playsinline
+            preload="metadata">
+
+            <source
+                src="videos/Man_walking_in_fashion_studio_202608272139.mp4"
+                type="video/mp4">
+
+        </video>
+
+    </div>
+
+
+    <div class="product-info">
+
+        <div
+            class="product-title"
+            data-key="p1_title">
+
+            T-Shirt Polo Collab OneDay
+
+        </div>
+
+        <div
+            class="product-desc"
+            data-key="p1_desc">
+
+            Cotton 100% | Unisex
+
+        </div>
+
+        <div class="price-line">
+
+            <span class="price">
+                $15.00
+            </span>
+
+            <span class="old-price">
+                $19.00
+            </span>
+
+        </div>
+
+
+        <div class="color-dots">
+
+            <span class="color-dot"
+                style="background:#111827"></span>
+
+            <span class="color-dot"
+                style="background:white"></span>
+
+            <span class="color-dot"
+                style="background:#64748b"></span>
+
+        </div>
+
+
+        <div class="size-grid">
+
+            <button
+                class="size-btn"
+                onclick="selectSize(this,'prod-1','Ref: 1')">
+                S
+            </button>
+
+            <button
+                class="size-btn active"
+                onclick="selectSize(this,'prod-1','Ref: 1')">
+                M
+            </button>
+
+            <button
+                class="size-btn"
+                onclick="selectSize(this,'prod-1','Ref: 1')">
+                L
+            </button>
+
+            <button
+                class="size-btn"
+                onclick="selectSize(this,'prod-1','Ref: 1')">
+                XL
+            </button>
+
+        </div>
+
+
+        <div
+            class="stock-hint-box"
+            id="stock-hint-prod-1">
+
+            <span id="stock-text-prod-1">
+                ស្តុកនៅសល់:
+            </span>
+
+            <span>
+                ...
+            </span>
+
+        </div>
+
+
+        <button
+            class="add-btn"
+            onclick="addToCart('p1_title',15,'prod-1','Ref: 1',event)">
+
+            + Add to Cart
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- PRODUCT 2 -->
+
+<div
+    class="product-card"
+    id="prod-4"
+    data-gender="men"
+    data-type="tops">
+
+    <div class="product-image">
+
+        <span class="product-badge">
+            New
+        </span>
+
+        <button class="product-heart">
+            ♡
+        </button>
+
+        <video
+            autoplay
+            loop
+            muted
+            playsinline
+            preload="metadata">
+
+            <source
+                src="videos/Model_walking_in_fashion_studio_202608272237.mp4"
+                type="video/mp4">
+
+        </video>
+
+    </div>
+
+
+    <div class="product-info">
+
+        <div
+            class="product-title"
+            data-key="p4_title">
+
+            Olive Green Mandarin Collar Long-Sleeve Shirt
+
+        </div>
+
+        <div
+            class="product-desc"
+            data-key="p4_desc">
+
+            Premium Cotton | Men
+
+        </div>
+
+        <div class="price-line">
+
+            <span class="price">
+                $6.00
+            </span>
+
+            <span class="old-price">
+                $9.00
+            </span>
+
+        </div>
+
+
+        <div class="color-dots">
+
+            <span class="color-dot"
+                style="background:#556b2f"></span>
+
+            <span class="color-dot"
+                style="background:#111827"></span>
+
+        </div>
+
+
+        <div class="size-grid">
+
+            <button
+                class="size-btn"
+                onclick="selectSize(this,'prod-4','Ref: 2')">
+                S
+            </button>
+
+            <button
+                class="size-btn active"
+                onclick="selectSize(this,'prod-4','Ref: 2')">
+                M
+            </button>
+
+            <button
+                class="size-btn"
+                onclick="selectSize(this,'prod-4','Ref: 2')">
+                L
+            </button>
+
+            <button
+                class="size-btn"
+                onclick="selectSize(this,'prod-4','Ref: 2')">
+                XL
+            </button>
+
+        </div>
+
+
+        <div
+            class="stock-hint-box"
+            id="stock-hint-prod-4">
+
+            <span id="stock-text-prod-4">
+                ស្តុកនៅសល់:
+            </span>
+
+            <span>
+                ...
+            </span>
+
+        </div>
+
+
+        <button
+            class="add-btn"
+            onclick="addToCart('p4_title',6,'prod-4','Ref: 2',event)">
+
+            + Add to Cart
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- PRODUCT 3 -->
+
+<div
+    class="product-card"
+    id="prod-2"
+    data-gender="men"
+    data-type="tops">
+
+    <div class="product-image">
+
+        <span class="product-badge">
+            Best Seller
+        </span>
+
+        <button class="product-heart">
+            ♡
+        </button>
+
+        <video
+            autoplay
+            loop
+            muted
+            playsinline
+            preload="metadata">
+
+            <source
+                src="videos/Male_model_walking_in_studio_202608271814.mp4"
+                type="video/mp4">
+
+        </video>
+
+    </div>
+
+
+    <div class="product-info">
+
+        <div
+            class="product-title"
+            data-key="p2_title">
+
+            Outfit Smart Casual (Full Set)
+
+        </div>
+
+        <div
+            class="product-desc"
+            data-key="p2_desc">
+
+            Cotton Pique | Men
+
+        </div>
+
+        <div class="price-line">
+
+            <span class="price">
+                $20.00
+            </span>
+
+            <span class="old-price">
+                $25.00
+            </span>
+
+        </div>
+
+
+        <div class="color-dots">
+
+            <span class="color-dot"
+                style="background:#556b2f"></span>
+
+            <span class="color-dot"
+                style="background:#1e293b"></span>
+
+            <span class="color-dot"
+                style="background:#334155"></span>
+
+        </div>
+
+
+        <div class="size-grid">
+
+            <button
+                class="size-btn"
+                onclick="selectSize(this,'prod-2','Ref: 3')">
+                S
+            </button>
+
+            <button
+                class="size-btn active"
+                onclick="selectSize(this,'prod-2','Ref: 3')">
+                M
+            </button>
+
+            <button
+                class="size-btn"
+                onclick="selectSize(this,'prod-2','Ref: 3')">
+                L
+            </button>
+
+            <button
+                class="size-btn"
+                onclick="selectSize(this,'prod-2','Ref: 3')">
+                XL
+            </button>
+
+        </div>
+
+
+        <div
+            class="stock-hint-box"
+            id="stock-hint-prod-2">
+
+            <span id="stock-text-prod-2">
+                ស្តុកនៅសល់:
+            </span>
+
+            <span>
+                ...
+            </span>
+
+        </div>
+
+
+        <button
+            class="add-btn"
+            onclick="addToCart('p2_title',20,'prod-2','Ref: 3',event)">
+
+            + Add to Cart
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- PRODUCT 4 -->
+
+<div
+    class="product-card"
+    id="prod-5"
+    data-gender="women"
+    data-type="tops">
+
+    <div class="product-image">
+
+        <span class="product-badge">
+            New
+        </span>
+
+        <button class="product-heart">
+            ♡
+        </button>
+
+        <video
+            autoplay
+            loop
+            muted
+            playsinline
+            preload="metadata">
+
+            <source
+                src="videos/Woman_modeling_shirt_360_rotation_202609061421.mp4"
+                type="video/mp4">
+
+        </video>
+
+    </div>
+
+
+    <div class="product-info">
+
+        <div
+            class="product-title"
+            data-key="p5_title">
+
+            Plaid Sailor Collar Blouse
+
+        </div>
+
+        <div
+            class="product-desc"
+            data-key="p5_desc">
+
+            Premium Cotton | Women
+
+        </div>
+
+        <div class="price-line">
+
+            <span class="price">
+                $7.00
+            </span>
+
+            <span class="old-price">
+                $10.00
+            </span>
+
+        </div>
+
+
+        <div class="color-dots">
+
+            <span class="color-dot"
+                style="background:#e5e7eb"></span>
+
+            <span class="color-dot"
+                style="background:#1e293b"></span>
+
+        </div>
+
+
+        <div class="size-grid">
+
+            <button
+                class="size-btn"
+                onclick="selectSize(this,'prod-5','Ref: 4')">
+                S
+            </button>
+
+            <button
+                class="size-btn active"
+                onclick="selectSize(this,'prod-5','Ref: 4')">
+                M
+            </button>
+
+            <button
+                class="size-btn"
+                onclick="selectSize(this,'prod-5','Ref: 4')">
+                L
+            </button>
+
+            <button
+                class="size-btn"
+                onclick="selectSize(this,'prod-5','Ref: 4')">
+                XL
+            </button>
+
+        </div>
+
+
+        <div
+            class="stock-hint-box"
+            id="stock-hint-prod-5">
+
+            <span id="stock-text-prod-5">
+                ស្តុកនៅសល់:
+            </span>
+
+            <span>
+                ...
+            </span>
+
+        </div>
+
+
+        <button
+            class="add-btn"
+            onclick="addToCart('p5_title',7,'prod-5','Ref: 4',event)">
+
+            + Add to Cart
+
+        </button>
+
+    </div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     PROMOTIONAL BANNERS
+===================================================== -->
+
+<section class="section">
+
+<div class="promo-grid">
+
+    <div class="promo">
+
+        <video
+            autoplay
+            loop
+            muted
+            playsinline>
+
+            <source
+                src="videos/VID_20260905221119531.mp4"
+                type="video/mp4">
+
+        </video>
+
+        <div class="promo-overlay"></div>
+
+        <div class="promo-content">
+
+            <h3>
+                Quality Fabric<br>
+                for Better Comfort
+            </h3>
+
+            <p>
+                Soft &nbsp;/&nbsp; Breathable &nbsp;/&nbsp; Durable
+            </p>
+
+            <button class="promo-button">
+                Explore Collection →
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <div class="promo">
+
+        <video
+            autoplay
+            loop
+            muted
+            playsinline>
+
+            <source
+                src="videos/gemini_generated_video_1CCC7921.mp4"
+                type="video/mp4">
+
+        </video>
+
+        <div class="promo-overlay"></div>
+
+        <div class="promo-content">
+
+            <h3>
+                New Arrivals
+            </h3>
+
+            <p>
+                Fresh Styles · Latest Trends
+            </p>
+
+            <button class="promo-button">
+                Shop Now →
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     SERVICE STRIP
+===================================================== -->
+
+<section class="service-strip">
+
+<div class="services">
+
+    <div class="service">
+
+        <div class="service-icon">
+            🚚
+        </div>
+
+        <div>
+            <div class="service-title">
+                Free Shipping
             </div>
-            <div class="bar-buttons">
-                <button onclick="toggleCartModal()" class="btn-cart-view">
-                    <img src="images/IMG_5827.png" alt="Cart" style="width: 14px; height: 14px; object-fit: contain;">
-                    <span data-key="btn_view_cart">មើលកន្ត្រក</span>
+
+            <div class="service-text">
+                On orders over $30
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="service">
+
+        <div class="service-icon">
+            🛡️
+        </div>
+
+        <div>
+            <div class="service-title">
+                Secure Payment
+            </div>
+
+            <div class="service-text">
+                100% safe & reliable
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="service">
+
+        <div class="service-icon">
+            🎧
+        </div>
+
+        <div>
+            <div class="service-title">
+                Customer Support
+            </div>
+
+            <div class="service-text">
+                7 days a week
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="service">
+
+        <div class="service-icon">
+            📦
+        </div>
+
+        <div>
+            <div class="service-title">
+                Easy Returns
+            </div>
+
+            <div class="service-text">
+                Within 7 days
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer>
+
+<div class="footer-inner">
+
+
+<div>
+
+    <div class="footer-logo">
+        Oneday<span>.</span>
+    </div>
+
+    <span class="footer-small">
+        CLOTHING
+    </span>
+
+    <p class="footer-description">
+        Imported from Taiwan and Korea.
+        We bring you the best quality clothing
+        for your everyday style.
+    </p>
+
+    <div class="footer-social">
+
+        <div class="social">f</div>
+        <div class="social">◎</div>
+        <div class="social">➤</div>
+        <div class="social">♪</div>
+
+    </div>
+
+</div>
+
+
+<div>
+
+    <div class="footer-heading">
+        Quick Links
+    </div>
+
+    <ul class="footer-links">
+
+        <li>Home</li>
+        <li>Shop</li>
+        <li>Men</li>
+        <li>Women</li>
+        <li>About Us</li>
+        <li>Contact</li>
+
+    </ul>
+
+</div>
+
+
+<div>
+
+    <div class="footer-heading">
+        Categories
+    </div>
+
+    <ul class="footer-links">
+
+        <li>T-Shirts</li>
+        <li>Shirts</li>
+        <li>Polo</li>
+        <li>Pants</li>
+        <li>Outerwear</li>
+        <li>Accessories</li>
+
+    </ul>
+
+</div>
+
+
+<div>
+
+    <div class="footer-heading">
+        Contact Us
+    </div>
+
+    <div class="footer-contact">
+
+        ☎ 096 123 4567<br>
+
+        ✉ oneday.clothing@gmail.com<br>
+
+        📍 Phnom Penh, Cambodia
+
+    </div>
+
+
+    <div class="footer-heading"
+         style="margin-top:18px">
+
+        Subscribe to our newsletter
+
+    </div>
+
+    <div class="newsletter">
+
+        <input
+            type="email"
+            placeholder="Your email address">
+
+        <button>
+            →
+        </button>
+
+    </div>
+
+</div>
+
+
+</div>
+
+
+<div class="footer-bottom">
+
+    <span>
+        © 2026 Oneday Clothing. All rights reserved.
+    </span>
+
+    <span>
+        Terms & Conditions &nbsp; | &nbsp; Privacy Policy
+    </span>
+
+</div>
+
+</footer>
+
+
+<!-- =====================================================
+     FIXED CART
+===================================================== -->
+
+<div class="cart-checkout-bar">
+
+<div class="bar-content">
+
+    <div
+        onclick="toggleCartModal()"
+        style="cursor:pointer">
+
+        <div class="total-label">
+            សរុប
+            (<span id="items-count">0</span> មុខ)
+        </div>
+
+        <div class="total-price">
+            $<span id="total-price">0.00</span>
+        </div>
+
+    </div>
+
+
+    <div class="bar-buttons">
+
+        <button
+            onclick="toggleCartModal()"
+            class="btn-cart-view">
+
+            🛍
+            មើលកន្ត្រក
+
+        </button>
+
+
+        <button
+            onclick="prepareOrder()"
+            class="btn-telegram">
+
+            <img
+                src="images/IMG_5838.png"
+                class="btn-order-img">
+
+            Order Now
+
+        </button>
+
+    </div>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     GUIDE MODAL
+===================================================== -->
+
+<div
+    class="modal-overlay"
+    id="guideModal"
+    onclick="handleModalClick(event,'guideModal')">
+
+<div class="modal-content">
+
+    <div class="modal-header">
+
+        <div class="modal-title">
+            📋
+            របៀបកុម្មង់ទំនិញ
+        </div>
+
+        <button
+            class="btn-close"
+            onclick="closeModal('guideModal')">
+            ✕
+        </button>
+
+    </div>
+
+    <div
+        class="guide-step"
+        style="font-size:12px;line-height:2">
+
+        ១. ជ្រើសរើសទំហំ (Size) និងចុច
+        "Add to Cart"។
+
+        <br>
+
+        ២. ចុចលើកន្ត្រក ដើម្បីពិនិត្យទំនិញ។
+
+        <br>
+
+        ៣. ចុច "Order Now" ហើយបំពេញ
+        ឈ្មោះ លេខទូរស័ព្ទ និងទីតាំង។
+
+        <br>
+
+        ៤. បញ្ជូន Order ទៅកាន់ Telegram
+        របស់ហាងជាការស្រេច!
+
+    </div>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     CART MODAL
+===================================================== -->
+
+<div
+    class="modal-overlay"
+    id="cartModal"
+    onclick="handleModalClick(event,'cartModal')">
+
+<div class="modal-content">
+
+    <div class="modal-header">
+
+        <div class="modal-title">
+            🛍
+            ទំនិញក្នុងកន្ត្រក
+        </div>
+
+        <button
+            class="btn-close"
+            onclick="closeModal('cartModal')">
+            ✕
+        </button>
+
+    </div>
+
+
+    <div id="cart-list">
+
+        <div class="empty-msg">
+            មិនទាន់មានទំនិញក្នុងកន្ត្រកទេ
+        </div>
+
+    </div>
+
+
+    <div
+        class="summary-box"
+        id="summary-box">
+
+        <div class="summary-row">
+
+            <span>
+                តម្លៃទំនិញ
+            </span>
+
+            <span id="subtotal-amount">
+                $0.00
+            </span>
+
+        </div>
+
+
+        <div class="summary-row">
+
+            <span class="delivery-fee-label">
+                🚚
+                ថ្លៃដឹក
+            </span>
+
+            <span>
+                $2.00
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div
+        class="modal-footer"
+        id="modal-footer">
+
+        <div class="modal-total-row">
+
+            <span class="modal-total-label">
+                តម្លៃសរុប
+            </span>
+
+            <div class="modal-total-amount">
+
+                $<span id="modal-total-price">
+                    0.00
+                </span>
+
+            </div>
+
+        </div>
+
+        <button
+            onclick="prepareOrder()"
+            class="btn-modal-telegram">
+
+            Order Now
+
+        </button>
+
+    </div>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     CHECKOUT MODAL
+===================================================== -->
+
+<div
+    class="modal-overlay"
+    id="checkoutModal"
+    onclick="handleModalClick(event,'checkoutModal')">
+
+<div class="modal-content">
+
+    <div class="modal-header">
+
+        <div class="modal-title">
+            🧾
+            ព័ត៌មានសម្រាប់ការកុម្មង់
+        </div>
+
+        <button
+            class="btn-close"
+            onclick="closeModal('checkoutModal')">
+            ✕
+        </button>
+
+    </div>
+
+
+    <div class="checkout-form">
+
+        <div class="form-group">
+
+            <label class="form-label">
+                ឈ្មោះរបស់អ្នក
+            </label>
+
+            <input
+                type="text"
+                id="custName"
+                class="form-input"
+                placeholder="បំពេញឈ្មោះ..."
+                oninput="clearError(this);saveUserInfo()">
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label class="form-label">
+                លេខទូរស័ព្ទ
+            </label>
+
+            <input
+                type="tel"
+                id="custPhone"
+                class="form-input"
+                placeholder="012345678"
+                oninput="clearError(this);saveUserInfo()">
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label class="form-label">
+                ទីតាំងទទួលទំនិញ
+            </label>
+
+            <input
+                type="text"
+                id="custAddress"
+                class="form-input"
+                placeholder="ផ្ទះ... ផ្លូវ..."
+                oninput="clearError(this);saveUserInfo()">
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label class="form-label">
+                ទីតាំងលើ Map
+            </label>
+
+            <div style="display:flex;gap:6px">
+
+                <input
+                    type="text"
+                    id="custMapUrl"
+                    class="form-input"
+                    placeholder="ជ្រើសរើសទីតាំងលើ Map..."
+                    readonly
+                    onclick="openMapModal()">
+
+                <button
+                    onclick="openMapModal()"
+                    style="
+                    border:1px solid var(--border);
+                    background:var(--accent-light);
+                    color:var(--accent);
+                    border-radius:9px;
+                    padding:0 12px;
+                    font-weight:800">
+
+                    🗺️
+
                 </button>
-                <button onclick="prepareOrder()" class="btn-telegram">
-                    <img src="images/IMG_5838.png" alt="Order Icon" class="btn-order-img">
-                    <span data-key="btn_order_now">Order Now</span>
-                </button>
+
             </div>
+
         </div>
+
     </div>
 
-    <!-- Modals -->
-    <div class="modal-overlay" id="guideModal" onclick="handleModalClick(event, 'guideModal')">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="modal-title">
-                    <img src="images/IMG_5832.png" alt="Guide" class="modal-title-img">
-                    <span data-key="guide_title">របៀបកុម្មង់ទំនិញ</span>
-                </div>
-                <button class="btn-close" onclick="closeModal('guideModal')">✕</button>
+
+    <div
+        class="modal-footer"
+        style="display:flex">
+
+        <div class="modal-total-row">
+
+            <span class="modal-total-label">
+                TOTAL
+            </span>
+
+            <div class="modal-total-amount">
+
+                $<span id="checkout-total-price">
+                    0.00
+                </span>
+
             </div>
-            <div style="padding: 10px 0; display: flex; flex-direction: column; gap: 8px;">
-                <div class="guide-step" data-key="guide_step1">១. ជ្រើសរើសទំហំ (Size) និងចុចប៊ូតុង "ដាក់ចូលកន្ត្រក" លើទំនិញដែលអ្នកពេញចិត្ត។</div>
-                <div class="guide-step" data-key="guide_step2">២. ចុចលើរូបកន្ត្រក ឬប៊ូតុង "មើលកន្ត្រក" ដើម្បីត្រួតពិនិត្យទំនិញដែលបានជ្រើសរើស។</div>
-                <div class="guide-step" data-key="guide_step3">៣. ចុចប៊ូតុង "Order Now" រួចបំពេញ ឈ្មោះ លេខទូរស័ព្ទ និងទីតាំងរបស់អ្នក។</div>
-                <div class="guide-step" data-key="guide_step4">៤. ចុចបញ្ជូនសារទៅកាន់ Telegram ហាងជាការស្រេច!</div>
-            </div>
+
         </div>
+
+
+        <button
+            onclick="openTelegram()"
+            class="btn-modal-telegram">
+
+            Order via Telegram →
+
+        </button>
+
     </div>
 
-    <div class="modal-overlay" id="cartModal" onclick="handleModalClick(event, 'cartModal')">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="modal-title">
-                    <img src="images/IMG_5827.png" alt="Cart" class="modal-title-img">
-                    <span data-key="cart_title">ទំនិញក្នុងកន្ត្រករបស់អ្នក</span>
-                </div>
-                <button class="btn-close" onclick="closeModal('cartModal')">✕</button>
-            </div>
-            
-            <div id="cart-list"><div class="empty-msg" data-key="empty_cart">មិនទាន់មានទំនិញក្នុងកន្ត្រកទេ</div></div>
+</div>
 
-            <div class="summary-box" id="summary-box" style="display: none;">
-                <div class="summary-row"><span data-key="subtotal_label">តម្លៃទំនិញ</span><span id="subtotal-amount">$0.00</span></div>
-                <div class="summary-row">
-                    <span class="delivery-fee-label">
-                        <img src="images/IMG_5831.png" alt="Delivery Fee" class="delivery-img-icon">
-                        <span data-key="delivery_label">ថ្លៃដឹក (Delivery Fee)</span>
-                    </span>
-                    <span>$2.00</span>
-                </div>
-            </div>
+</div>
 
-            <div class="modal-footer" id="modal-footer" style="display: none;">
-                <div class="modal-total-row">
-                    <span class="modal-total-label" data-key="total_label">តម្លៃសរុប</span>
-                    <div class="modal-total-amount">
-                        <img src="images/IMG_5837.png" alt="Price Icon" class="price-icon">
-                        <span id="modal-total-price">$0.00</span>
-                    </div>
-                </div>
-            </div>
+
+<!-- =====================================================
+     MAP MODAL
+===================================================== -->
+
+<div
+    class="modal-overlay"
+    id="mapPickerModal"
+    style="z-index:300"
+    onclick="handleModalClick(event,'mapPickerModal')">
+
+<div
+    class="modal-content"
+    style="height:85vh;display:flex;flex-direction:column">
+
+    <div class="modal-header">
+
+        <div class="modal-title">
+            🗺️ ជ្រើសរើសទីតាំង
         </div>
+
+        <button
+            class="btn-close"
+            onclick="closeModal('mapPickerModal')">
+            ✕
+        </button>
+
     </div>
 
-    <div class="modal-overlay" id="checkoutModal" onclick="handleModalClick(event, 'checkoutModal')">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="modal-title">
-                    <img src="images/IMG_5839.png" alt="Customer Info Icon" class="modal-title-img">
-                    <span data-key="checkout_title">ព័ត៌មានសម្រាប់ការកុម្មង់</span>
-                </div>
-                <button class="btn-close" onclick="closeModal('checkoutModal')">✕</button>
-            </div>
-            
-            <div class="checkout-form active">
-                <div class="form-group">
-                    <label class="form-label" data-key="label_name">ឈ្មោះរបស់អ្នក (Name)</label>
-                    <input type="text" id="custName" class="form-input" placeholder="បំពេញឈ្មោះ..." oninput="clearError(this); saveUserInfo();">
-                </div>
-                <div class="form-group">
-                    <label class="form-label" data-key="label_phone">លេខទូរស័ព្ទ (Phone Number)</label>
-                    <input type="tel" id="custPhone" class="form-input" placeholder="បំពេញលេខទូរស័ព្ទ (ឧ. 012345678)..." oninput="clearError(this); saveUserInfo();">
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label" data-key="label_address">ទីតាំងទទួលទំនិញ (Delivery Location)</label>
-                    <input type="text" id="custAddress" class="form-input" placeholder="បំពេញអាសយដ្ឋាន (ឧ. ផ្ទះ..., ផ្លូវ...)" oninput="clearError(this); saveUserInfo();">
-                </div>
 
-                <div class="form-group">
-                    <label class="form-label">ទីតាំងលើ Map (Optional)</label>
-                    <div style="display: flex; gap: 6px;">
-                        <input type="text" id="custMapUrl" class="form-input" placeholder="ជ្រើសរើសទីតាំងលើ Map (បើមាន)..." readonly style="cursor: pointer;" onclick="openMapModal()">
-                        <button type="button" onclick="openMapModal()" style="background: var(--accent-light); color: var(--accent); border: 1px solid var(--border-color); padding: 0 10px; border-radius: 10px; font-weight:800; font-size:11px; cursor:pointer; white-space:nowrap; display:flex; align-items:center; gap:4px;">
-                            🗺️ Select Map
-                        </button>
-                    </div>
-                </div>
-            </div>
+    <div
+        style="
+        flex:1;
+        min-height:0;
+        border-radius:12px;
+        overflow:hidden;
+        border:1px solid var(--border)">
 
-            <div class="modal-footer" style="display: flex; margin-top: 15px;">
-                <div class="modal-total-row">
-                    <span class="modal-total-label" data-key="total_label">តម្លៃសរុប</span>
-                    <div class="modal-total-amount">
-                        <img src="images/IMG_5837.png" alt="Price Icon" class="price-icon">
-                        <span id="checkout-total-price">$0.00</span>
-                    </div>
-                </div>
-                <button onclick="openTelegram()" class="btn-modal-telegram">
-                    <img src="images/IMG_5838.png" alt="Order Icon" class="btn-order-img">
-                    <span data-key="btn_order_now">Order Now</span>
-                </button>
-            </div>
+        <div
+            id="freeMap"
+            style="width:100%;height:100%">
         </div>
+
     </div>
 
-    <!-- Modal OpenStreetMap Picker -->
-    <div class="modal-overlay" id="mapPickerModal" style="z-index: 300;" onclick="handleModalClick(event, 'mapPickerModal')">
-        <div class="modal-content" style="height: 85vh; padding: 16px; display: flex; flex-direction: column;">
-            <div class="modal-header">
-                <div class="modal-title">
-                    <span>🗺️ ជ្រើសរើសទីតាំងលើ OpenStreetMap</span>
-                </div>
-                <button class="btn-close" onclick="closeModal('mapPickerModal')">✕</button>
-            </div>
-            
-            <div style="position: relative; flex-grow: 1; border-radius: 16px; overflow: hidden; border: 1px solid var(--border-color);">
-                <div id="freeMap" style="width: 100%; height: 100%;"></div>
-            </div>
 
-            <div style="margin-top: 12px;">
-                <button onclick="confirmFreeLocation()" class="btn-modal-telegram">
-                    បញ្ជាក់ទីតាំងនេះ
-                </button>
-            </div>
-        </div>
-    </div>
+    <button
+        onclick="confirmFreeLocation()"
+        class="btn-modal-telegram"
+        style="margin-top:12px">
 
-    <!-- Toast Notification Overlay -->
-    <div id="toastNotification" class="toast-notification">
-        <span>🛒</span>
-        <span id="toastMessage">បានដាក់ចូលកន្ត្រក!</span>
-    </div>
+        បញ្ជាក់ទីតាំងនេះ
 
-    <script>
-        // Global Configuration
-        const TELEGRAM_USERNAME = "OneDayClothingAgent";
-        const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRvkD0AmmidUi0GfyOh0wAz0jdASv2Yt8bGIHznpGTQ3fkTnI7wc6w5D58-BanK0Nb3KAsqnM3He_Xn/pub?output=csv";
-        const deliveryFee = 2.00;
+    </button>
 
-        let stockData = {};
-        let currentLang = 'km';
-        let cart = {};
-        let currentGender = 'men';
-        let currentType = 'all';
+</div>
 
-        let freeMapObj = null;
-        let freeMarker = null;
-        let currentPos = { lat: 11.5564, lng: 104.9282 };
+</div>
 
-        const langFlags = {
-            km: 'images/IMG_5833.png',
-            en: 'images/IMG_5835.png',
-            zh: 'images/IMG_5834.png'
-        };
 
-        const translations = {
-            km: {
-                cover_title: "BUILD YOUR DREAM STYLE", cat_men: "បុរស", cat_women: "នារី", cat_tops: "អាវ", cat_pants: "ខោ", cat_outerwear: "អាវក្រៅ", sub_all: "ទាំងអស់",
-                p1_title: "T-Shirt Polo Collab OneDay", p1_desc: "អាវយឺត Polo រចនាម៉ូដទាន់សម័យ ងាយពាក់",
-                p2_title: "Outfit Smart Casual (Full Set)", p2_desc: "ឈុតសម្លៀកបំពាក់ Smart Casual ទាន់សម័យ",
-                p4_title: "Olive Green Mandarin Collar Long-Sleeve Shirt", p4_desc: "អាវដៃវែងកាតគៀនពណ៌បៃតងអូលីវ ស្អាតប្រណិត",
-                p5_title: "Plaid Sailor Collar Blouse", p5_desc: "អាវនារី ករសាឡាប្រណិត ស្អាតទាន់សម័យ",
-                select_size: "SIZE", add_to_cart: "ដាក់ចូលកន្ត្រក", total_label: "តម្លៃសរុប", subtotal_label: "តម្លៃទំនិញ", delivery_label: "ថ្លៃដឹក (Delivery Fee)",
-                items_unit: "មុខ", btn_order_now: "Order Now", btn_view_cart: "មើលកន្ត្រក", cart_title: "ទំនិញក្នុងកន្ត្រករបស់អ្នក", empty_cart: "មិនទាន់មានទំនិញក្នុងកន្ត្រកទេ",
-                checkout_title: "ព័ត៌មានសម្រាប់ការកុម្មង់",
-                guide_btn_text: "របៀបកុម្មង់", guide_title: "របៀបកុម្មង់ទំនិញ",
-                guide_step1: "១. ជ្រើសរើសទំហំ (Size) និងចុចប៊ូតុង \"ដាក់ចូលកន្ត្រក\" លើទំនិញដែលអ្នកពេញចិត្ត។",
-                guide_step2: "២. ចុចលើរូបកន្ត្រក ឬប៊ូតុង \"មើលកន្ត្រក\" ដើម្បីត្រួតពិនិត្យទំនិញដែលបានជ្រើសរើស។",
-                guide_step3: "៣. ចុចប៊ូតុង \"Order Now\" រួចបំពេញ ឈ្មោះ លេខទូរស័ព្ទ និងទីតាំងរបស់អ្នក។",
-                guide_step4: "៤. ចុចបញ្ជូនសារទៅកាន់ Telegram ហាងជាការស្រេច!",
-                label_name: "ឈ្មោះរបស់អ្នក (Name)", label_phone: "លេខទូរស័ព្ទ (Phone Number)", label_address: "ទីតាំងទទួលទំនិញ (Delivery Location)",
-                alert_fill: "សូមបំពេញឈ្មោះ លេខទូរស័ព្ទ និងទីតាំងឱ្យបានត្រឹមត្រូវ!",
-                alert_phone_invalid: "សូមបញ្ចូលលេខទូរស័ព្ទឱ្យបានត្រឹមត្រូវ (យ៉ាងតិច 8ខ្ទង់)!",
-                toast_added: "បានដាក់ចូលកន្ត្រកជោគជ័យ!"
-            },
-            en: {
-                cover_title: "BUILD YOUR DREAM STYLE", cat_men: "Men", cat_women: "Women", cat_tops: "Tops", cat_pants: "Pants", cat_outerwear: "Outerwear", sub_all: "All",
-                p1_title: "T-Shirt Polo Collab OneDay", p1_desc: "Collab Edition Polo T-Shirt, simple & stylish.",
-                p2_title: "Outfit Smart Casual (Full Set)", p2_desc: "Smart Casual Outfit - Modern & Simple Style.",
-                p4_title: "Olive Green Mandarin Collar Long-Sleeve Shirt", p4_desc: "Olive green mandarin collar long-sleeve shirt, premium style.",
-                p5_title: "Plaid Sailor Collar Blouse", p5_desc: "Plaid sailor collar blouse, stylish and elegant.",
-                select_size: "SIZE", add_to_cart: "Add to Cart", total_label: "Total Amount", subtotal_label: "Subtotal", delivery_label: "Delivery Fee",
-                items_unit: "items", btn_order_now: "Order Now", btn_view_cart: "View Cart", cart_title: "Your Shopping Cart", empty_cart: "Your cart is currently empty",
-                checkout_title: "Checkout Information",
-                guide_btn_text: "How to Order", guide_title: "How to Order",
-                guide_step1: "1. Select your size and click \"Add to Cart\" on your favorite items.",
-                guide_step2: "2. Click the cart icon or \"View Cart\" button to review your items.",
-                guide_step3: "3. Click \"Order Now\" and fill in your name, phone number, and location.",
-                guide_step4: "4. Send the order message directly to our Telegram!",
-                label_name: "Your Name", label_phone: "Phone Number", label_address: "Delivery Location",
-                alert_fill: "Please fill in your name, phone number, and location!",
-                alert_phone_invalid: "Please enter a valid phone number (at least 8 digits)!",
-                toast_added: "Added to cart successfully!"
-            },
-            zh: {
-                cover_title: "打造您的理想风格", cat_men: "男装", cat_women: "女装", cat_tops: "上衣", cat_pants: "裤子", cat_outerwear: "外套", sub_all: "全部",
-                p1_title: "OneDay 联名款 Polo 衫", p1_desc: "联名款 Polo 衫，简约时尚百搭。",
-                p2_title: "商务休闲套装 (全套)", p2_desc: "商务休闲套装，时尚简约。",
-                p4_title: "橄榄绿立领长袖衬衫", p4_desc: "橄榄绿立领长袖衬衫，高级时尚剪裁。",
-                p5_title: "格子海军领衬衫", p5_desc: "格纹海军领女式上衣，时尚优雅。",
-                select_size: "尺码", add_to_cart: "加入购物车", total_label: "总金额", subtotal_label: "商品小计", delivery_label: "配送费 (Delivery Fee)",
-                items_unit: "件", btn_order_now: "Order Now", btn_view_cart: "查看购物车", cart_title: "您的购物车", empty_cart: "购物车是空的",
-                checkout_title: "结账信息",
-                guide_btn_text: "如何购买", guide_title: "如何购买",
-                guide_step1: "1. 选择尺码并点击您喜欢的商品上的“加入购物车”。",
-                guide_step2: "2. 点击购物车图标或“查看购物车”按钮检查所选商品。",
-                guide_step3: "3. 点击“Order Now”并填写您的姓名、电话和地址。",
-                guide_step4: "4. 将订单发送至我们的电报客服即可！",
-                label_name: "您的姓名", label_phone: "联系电话", label_address: "收货地址",
-                alert_fill: "请填写您的姓名、电话和收货地址！",
-                alert_phone_invalid: "请输入有效的电话号码（至少8位数）！",
-                toast_added: "已成功加入购物车！"
-            }
-        };
+<!-- =====================================================
+     TOAST
+===================================================== -->
 
-        function checkAutoTheme() {
-            let options = { timeZone: 'Asia/Phnom_Penh', hour: 'numeric', hour12: false };
-            let cambodiaHour = parseInt(new Intl.DateTimeFormat([], options).format(new Date()));
-            
-            if (cambodiaHour >= 19 || cambodiaHour < 6) {
-                setTheme(true);
-            } else {
-                setTheme(false);
-            }
-        }
+<div
+    id="toastNotification"
+    class="toast-notification">
 
-        function setTheme(isDark) {
-            let img = document.getElementById('themeImg');
-            if (isDark) {
-                document.body.classList.add('dark-mode');
-                if (img) img.src = 'images/IMG_5829.png'; 
-            } else {
-                document.body.classList.remove('dark-mode');
-                if (img) img.src = 'images/IMG_5830.png'; 
-            }
-        }
+    🛒
+    <span id="toastMessage">
+        បានដាក់ចូលកន្ត្រក!
+    </span>
 
-        function toggleTheme() {
-            let isDark = document.body.classList.contains('dark-mode');
-            setTheme(!isDark);
-        }
+</div>
 
-        function changeLanguage(lang) {
-            currentLang = lang;
-            
-            let flagImg = document.getElementById('langFlagImg');
-            if (flagImg && langFlags[lang]) {
-                flagImg.src = langFlags[lang];
-            }
 
-            const elements = document.querySelectorAll('[data-key]');
-            elements.forEach(el => {
-                const key = el.getAttribute('data-key');
-                if (translations[lang] && translations[lang][key]) {
-                    el.innerText = translations[lang][key];
-                }
-            });
-            renderCart();
-        }
+<script>
 
-        function updateCoverDots() {
-            const slider = document.getElementById('coverSlider');
-            const dots = document.getElementById('coverDots').children;
-            const scrollLeft = slider.scrollLeft;
-            const slideWidth = slider.clientWidth;
-            const currentIndex = Math.round(scrollLeft / slideWidth);
-            
-            for (let i = 0; i < dots.length; i++) {
-                if (i === currentIndex) {
-                    dots[i].classList.add('active');
-                } else {
-                    dots[i].classList.remove('active');
-                }
-            }
-        }
+/* =====================================================
+   CONFIG
+===================================================== */
 
-        function openModal(modalId) {
-            document.getElementById(modalId).classList.add('active');
-        }
+const TELEGRAM_USERNAME = "OneDayClothingAgent";
 
-        function closeModal(modalId) {
-            document.getElementById(modalId).classList.remove('active');
-        }
+const csvUrl =
+"https://docs.google.com/spreadsheets/d/e/2PACX-1vRvkD0AmmidUi0GfyOh0wAz0jdASv2Yt8bGIHznpGTQ3fkTnI7wc6w5D58-BanK0Nb3KAsqnM3He_Xn/pub?output=csv";
 
-        function handleModalClick(event, modalId) {
-            if (event.target.id === modalId) {
-                closeModal(modalId);
-            }
-        }
+const deliveryFee = 2.00;
 
-        function toggleCartModal() { 
-            let modal = document.getElementById('cartModal');
-            if (modal.classList.contains('active')) {
-                closeModal('cartModal');
-            } else {
-                openModal('cartModal');
-            }
-        }
+let stockData = {};
+let cart = {};
+let currentGender = "men";
+let currentType = "all";
 
-        function toggleGuideModal() {
-            let modal = document.getElementById('guideModal');
-            if (modal.classList.contains('active')) {
-                closeModal('guideModal');
-            } else {
-                openModal('guideModal');
-            }
-        }
+let freeMapObj = null;
+let freeMarker = null;
 
-        function showToast(msg) {
-            const toast = document.getElementById('toastNotification');
-            const toastMsg = document.getElementById('toastMessage');
-            if (toast && toastMsg) {
-                toastMsg.innerText = msg;
-                toast.classList.add('show');
-                setTimeout(() => {
-                    toast.classList.remove('show');
-                }, 2000);
-            }
-        }
+let currentPos = {
+    lat:11.5564,
+    lng:104.9282
+};
 
-        function prepareOrder() {
-            if (Object.keys(cart).length === 0) {
-                alert(translations[currentLang].empty_cart);
-                return;
-            }
-            closeModal('cartModal');
-            openModal('checkoutModal');
-            loadUserInfo();
-        }
 
-        function openMapModal() {
-            openModal('mapPickerModal');
-            setTimeout(() => {
-                if (!freeMapObj && window.L) {
-                    freeMapObj = L.map('freeMap').setView([currentPos.lat, currentPos.lng], 15);
-                    
-                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                        maxZoom: 19,
-                        attribution: '© OpenStreetMap'
-                    }).addTo(freeMapObj);
+/* =====================================================
+   HERO
+===================================================== */
 
-                    freeMarker = L.marker([currentPos.lat, currentPos.lng], { draggable: true }).addTo(freeMapObj);
+function moveHero(direction){
 
-                    freeMapObj.on('click', function(e) {
-                        currentPos = { lat: e.latlng.lat, lng: e.latlng.lng };
-                        freeMarker.setLatLng(e.latlng);
-                    });
+    const slider =
+        document.getElementById("coverSlider");
 
-                    freeMarker.on('dragend', function(e) {
-                        let position = freeMarker.getLatLng();
-                        currentPos = { lat: position.lat, lng: position.lng };
-                    });
-                } else if (freeMapObj) {
-                    freeMapObj.invalidateSize();
-                }
-            }, 300);
-        }
+    const width =
+        slider.clientWidth;
 
-        function confirmFreeLocation() {
-            let mapUrl = `https://www.openstreetmap.org/?mlat=${currentPos.lat.toFixed(6)}&mlon=${currentPos.lng.toFixed(6)}#map=16/${currentPos.lat.toFixed(6)}/${currentPos.lng.toFixed(6)}`;
-            document.getElementById('custMapUrl').value = mapUrl;
-            closeModal('mapPickerModal');
-        }
+    slider.scrollBy({
+        left:direction * width,
+        behavior:"smooth"
+    });
 
-        async function loadCSVData() {
-            try {
-                let response = await fetch(csvUrl + "&t=" + new Date().getTime());
-                let data = await response.text();
-                let rows = data.split('\n');
-                
-                stockData = {};
-                for (let i = 1; i < rows.length; i++) {
-                    let cols = rows[i].split(',');
-                    if (cols.length >= 4) {
-                        let ref = cols[0].trim().replace(/^["']|["']$/g, '').toUpperCase();
-                        let size = cols[2].trim().replace(/^["']|["']$/g, '').toUpperCase();
-                        let stockVal = cols[3].trim().replace(/^["']|["']$/g, '');
-                        
-                        if (ref && size) {
-                            stockData[`${ref}_${size}`] = stockVal === '.' ? '.' : (parseInt(stockVal) || 0);
-                        }
-                    }
-                }
-            } catch (error) {
-                console.error("Error fetching live stock:", error);
-            }
-        }
+}
 
-        async function fetchLiveStock(cardId, refText, selectedSize) {
-            let stockBox = document.getElementById(`stock-hint-${cardId}`);
-            let textSpan = document.getElementById(`stock-text-${cardId}`);
-            let numSpan = stockBox ? stockBox.querySelector('span:last-child') : null;
-            
-            if (Object.keys(stockData).length === 0) {
-                if (numSpan) numSpan.innerText = "...";
-                await loadCSVData();
-            }
+function updateCoverDots(){
 
-            let cleanRef = refText.replace('Ref: ', '').trim().toUpperCase();
-            let cleanSize = selectedSize.trim().toUpperCase();
-            let stockKey = `${cleanRef}_${cleanSize}`;
-            let currentStock = stockData[stockKey] !== undefined ? stockData[stockKey] : 0;
-            
-            if (stockBox && textSpan && numSpan) {
-                if (currentStock === '.') {
-                    textSpan.style.display = "none";
-                    numSpan.innerText = "";
-                } else {
-                    textSpan.style.display = "inline";
-                    textSpan.innerText = "ស្តុកនៅសល់: ";
-                    numSpan.innerText = currentStock > 0 ? `${currentStock} (មានក្នុងស្តុក)` : "អស់ស្តុក (Out of stock)";
-                    numSpan.style.color = currentStock > 0 ? "var(--accent)" : "#ef4444";
-                }
-            }
-        }
+    const slider =
+        document.getElementById("coverSlider");
 
-        function selectSize(element, cardId, refText) {
-            let buttons = element.parentElement.getElementsByClassName('size-btn');
-            for (let btn of buttons) btn.classList.remove('active');
-            element.classList.add('active');
-            
-            let selectedSize = element.innerText;
-            fetchLiveStock(cardId, refText, selectedSize);
-        }
+    const dots =
+        document.getElementById("coverDots").children;
 
-        function selectMainCategory(gender, element) {
-            currentGender = gender;
-            currentType = 'all';
+    const index =
+        Math.round(
+            slider.scrollLeft /
+            slider.clientWidth
+        );
 
-            let catButtons = document.querySelectorAll('.categories .cat-btn');
-            catButtons.forEach(btn => btn.classList.remove('active'));
-            if (element) {
-                element.classList.add('active');
-            }
+    [...dots].forEach((dot,i)=>{
 
-            document.getElementById('sub-men').classList.remove('active');
-            document.getElementById('sub-women').classList.remove('active');
+        dot.classList.toggle(
+            "active",
+            i === index
+        );
 
-            if (gender === 'men') {
-                document.getElementById('sub-men').classList.add('active');
-                resetSubActive('sub-men');
-            } else if (gender === 'women') {
-                document.getElementById('sub-women').classList.add('active');
-                resetSubActive('sub-women');
-            }
+    });
 
-            filterProducts();
-        }
+}
 
-        function selectSubCategory(gender, type, element) {
-            currentGender = gender;
-            currentType = type;
 
-            let subContainer = element.parentElement;
-            let buttons = subContainer.getElementsByClassName('sub-btn');
-            for (let btn of buttons) btn.classList.remove('active');
-            element.classList.add('active');
+/* =====================================================
+   THEME
+===================================================== */
 
-            filterProducts();
-        }
+function checkAutoTheme(){
 
-        function resetSubActive(subId) {
-            let subContainer = document.getElementById(subId);
-            let buttons = subContainer.getElementsByClassName('sub-btn');
-            for (let btn of buttons) btn.classList.remove('active');
-            buttons[0].classList.add('active');
-        }
+    const options = {
+        timeZone:"Asia/Phnom_Penh",
+        hour:"numeric",
+        hour12:false
+    };
 
-        function filterProducts() {
-            let cards = document.querySelectorAll('.container .card');
-            cards.forEach(card => {
-                let cardGender = card.getAttribute('data-gender');
-                let cardType = card.getAttribute('data-type');
+    const hour =
+        parseInt(
+            new Intl.DateTimeFormat(
+                [],
+                options
+            ).format(new Date())
+        );
 
-                if (cardGender === currentGender) {
-                    if (currentType === 'all' || cardType === currentType) {
-                        card.style.display = 'flex';
-                    } else {
-                        card.style.display = 'none';
-                    }
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-        }
+    if(hour >= 19 || hour < 6){
+        document.body.classList.add("dark-mode");
+    }
 
-        document.addEventListener('DOMContentLoaded', async function() {
-            checkAutoTheme();
-            filterProducts();
-            await loadCSVData();
-            fetchLiveStock('prod-1', 'Ref: 1', 'M');
-            fetchLiveStock('prod-4', 'Ref: 2', 'M');
-            fetchLiveStock('prod-2', 'Ref: 3', 'M');
-            fetchLiveStock('prod-5', 'Ref: 4', 'M');
-            loadUserInfo();
+}
+
+function toggleTheme(){
+
+    document.body.classList.toggle(
+        "dark-mode"
+    );
+
+}
+
+
+/* =====================================================
+   MODALS
+===================================================== */
+
+function openModal(id){
+
+    const modal =
+        document.getElementById(id);
+
+    if(modal){
+        modal.classList.add("active");
+    }
+
+}
+
+function closeModal(id){
+
+    const modal =
+        document.getElementById(id);
+
+    if(modal){
+        modal.classList.remove("active");
+    }
+
+}
+
+function handleModalClick(event,id){
+
+    if(event.target.id === id){
+        closeModal(id);
+    }
+
+}
+
+function toggleCartModal(){
+
+    const modal =
+        document.getElementById("cartModal");
+
+    modal.classList.toggle("active");
+
+}
+
+function toggleGuideModal(){
+
+    const modal =
+        document.getElementById("guideModal");
+
+    modal.classList.toggle("active");
+
+}
+
+
+/* =====================================================
+   FILTER
+===================================================== */
+
+function selectMainCategory(gender,element){
+
+    currentGender = gender;
+    currentType = "all";
+
+    document
+        .querySelectorAll(".gender-tab")
+        .forEach(btn =>
+            btn.classList.remove("active")
+        );
+
+    if(element){
+        element.classList.add("active");
+    }else{
+
+        const id =
+            gender === "men"
+            ? "menTab"
+            : "womenTab";
+
+        document
+            .getElementById(id)
+            ?.classList.add("active");
+
+    }
+
+
+    const men =
+        document.getElementById("sub-men");
+
+    const women =
+        document.getElementById("sub-women");
+
+
+    men.style.display =
+        gender === "men"
+        ? "flex"
+        : "none";
+
+    women.style.display =
+        gender === "women"
+        ? "flex"
+        : "none";
+
+
+    resetSubActive(
+        gender === "men"
+        ? "sub-men"
+        : "sub-women"
+    );
+
+    filterProducts();
+
+}
+
+function selectSubCategory(
+    gender,
+    type,
+    element
+){
+
+    currentGender = gender;
+    currentType = type;
+
+    element
+        .parentElement
+        .querySelectorAll(".sub-btn")
+        .forEach(btn =>
+            btn.classList.remove("active")
+        );
+
+    element.classList.add("active");
+
+    filterProducts();
+
+}
+
+function resetSubActive(id){
+
+    const box =
+        document.getElementById(id);
+
+    if(!box) return;
+
+    box
+        .querySelectorAll(".sub-btn")
+        .forEach(btn =>
+            btn.classList.remove("active")
+        );
+
+    box
+        .querySelector(".sub-btn")
+        ?.classList.add("active");
+
+}
+
+function filterProducts(){
+
+    document
+        .querySelectorAll(".product-card")
+        .forEach(card=>{
+
+            const gender =
+                card.dataset.gender;
+
+            const type =
+                card.dataset.type;
+
+            const show =
+                gender === currentGender &&
+                (
+                    currentType === "all" ||
+                    type === currentType
+                );
+
+            card.style.display =
+                show ? "" : "none";
+
         });
 
-        function playFlyAnimation(event, cardId) {
-            let card = document.getElementById(cardId);
-            let imgBox = card.querySelector('.img-box video, .img-box img');
-            let cartBtn = document.getElementById('cartButton');
+}
 
-            if (!imgBox || !cartBtn) return;
+function filterByType(type){
 
-            let isVideo = imgBox.tagName.toLowerCase() === 'video';
-            let flyer = document.createElement(isVideo ? 'video' : 'img');
-            flyer.src = imgBox.currentSrc || imgBox.src;
-            flyer.className = 'fly-item';
-            
-            let rect = imgBox.getBoundingClientRect();
-            flyer.style.top = rect.top + 'px';
-            flyer.style.left = rect.left + 'px';
-            document.body.appendChild(flyer);
+    selectSubCategory(
+        currentGender,
+        type,
+        document.querySelector(
+            currentGender === "men"
+            ? "#sub-men .sub-btn:nth-child(2)"
+            : "#sub-women .sub-btn:nth-child(2)"
+        )
+    );
 
-            let cartRect = cartBtn.getBoundingClientRect();
+    document
+        .getElementById("products")
+        .scrollIntoView({
+            behavior:"smooth"
+        });
 
-            setTimeout(() => {
-                flyer.style.top = (cartRect.top + 5) + 'px';
-                flyer.style.left = (cartRect.left + 5) + 'px';
-                flyer.style.width = '20px';
-                flyer.style.height = '20px';
-                flyer.style.opacity = '0.5';
-            }, 50);
+}
 
-            setTimeout(() => {
-                flyer.remove();
-            }, 850);
+
+/* =====================================================
+   STOCK
+===================================================== */
+
+async function loadCSVData(){
+
+    try{
+
+        const response =
+            await fetch(
+                csvUrl +
+                "&t=" +
+                Date.now()
+            );
+
+        const data =
+            await response.text();
+
+        const rows =
+            data.split("\n");
+
+        stockData = {};
+
+        for(let i=1;i<rows.length;i++){
+
+            const cols =
+                rows[i].split(",");
+
+            if(cols.length < 4)
+                continue;
+
+            const ref =
+                cols[0]
+                .trim()
+                .replace(/^["']|["']$/g,"")
+                .toUpperCase();
+
+            const size =
+                cols[2]
+                .trim()
+                .replace(/^["']|["']$/g,"")
+                .toUpperCase();
+
+            const stock =
+                cols[3]
+                .trim()
+                .replace(/^["']|["']$/g,"");
+
+            if(ref && size){
+
+                stockData[
+                    `${ref}_${size}`
+                ] =
+                    stock === "."
+                    ? "."
+                    : (
+                        parseInt(stock) || 0
+                    );
+
+            }
+
         }
 
-        async function addToCart(titleKey, price, cardId, refText, event) {
-            let card = document.getElementById(cardId);
-            let activeSizeBtn = card.querySelector('.size-btn.active');
-            let selectedSize = activeSizeBtn ? activeSizeBtn.innerText : 'M';
-            let stockKey = `${refText.replace('Ref: ', '').trim().toUpperCase()}_${selectedSize.trim().toUpperCase()}`;
+    }catch(error){
 
-            await fetchLiveStock(cardId, refText, selectedSize);
+        console.error(
+            "Stock error:",
+            error
+        );
 
-            let currentStock = stockData[stockKey] !== undefined ? stockData[stockKey] : 0;
-            let currentQtyInCart = cart[stockKey] ? cart[stockKey].qty : 0;
+    }
 
-            if (currentStock !== '.') {
-                if (currentStock === 0 || (currentQtyInCart + 1) > currentStock) {
-                    alert(`សូមអភ័យទោស! ទំនិញនេះ (${refText} - Size ${selectedSize}) ទិញបានតែ ${currentStock} ប៉ុណ្ណោះ ព្រោះក្នុងស្តុកមានតែ ${currentStock}។`);
-                    return;
+}
+
+
+async function fetchLiveStock(
+    cardId,
+    refText,
+    selectedSize
+){
+
+    const stockBox =
+        document.getElementById(
+            `stock-hint-${cardId}`
+        );
+
+    const textSpan =
+        document.getElementById(
+            `stock-text-${cardId}`
+        );
+
+    const numSpan =
+        stockBox
+        ?.querySelector(
+            "span:last-child"
+        );
+
+
+    if(Object.keys(stockData).length === 0){
+
+        if(numSpan)
+            numSpan.innerText = "...";
+
+        await loadCSVData();
+
+    }
+
+
+    const cleanRef =
+        refText
+        .replace("Ref: ","")
+        .trim()
+        .toUpperCase();
+
+    const cleanSize =
+        selectedSize
+        .trim()
+        .toUpperCase();
+
+    const key =
+        `${cleanRef}_${cleanSize}`;
+
+    const stock =
+        stockData[key] !== undefined
+        ? stockData[key]
+        : 0;
+
+
+    if(stockBox && textSpan && numSpan){
+
+        if(stock === "."){
+
+            textSpan.style.display =
+                "none";
+
+            numSpan.innerText = "";
+
+        }else{
+
+            textSpan.style.display =
+                "inline";
+
+            textSpan.innerText =
+                "ស្តុកនៅសល់: ";
+
+            numSpan.innerText =
+                stock > 0
+                ? `${stock} (មានក្នុងស្តុក)`
+                : "អស់ស្តុក";
+
+            numSpan.style.color =
+                stock > 0
+                ? "var(--accent)"
+                : "#ef4444";
+
+        }
+
+    }
+
+}
+
+
+function selectSize(
+    element,
+    cardId,
+    refText
+){
+
+    element
+        .parentElement
+        .querySelectorAll(".size-btn")
+        .forEach(btn =>
+            btn.classList.remove("active")
+        );
+
+    element.classList.add("active");
+
+    fetchLiveStock(
+        cardId,
+        refText,
+        element.innerText
+    );
+
+}
+
+
+/* =====================================================
+   CART
+===================================================== */
+
+function showToast(message){
+
+    const toast =
+        document.getElementById(
+            "toastNotification"
+        );
+
+    document.getElementById(
+        "toastMessage"
+    ).innerText = message;
+
+    toast.classList.add("show");
+
+    setTimeout(()=>{
+        toast.classList.remove("show");
+    },2000);
+
+}
+
+
+function playFlyAnimation(
+    event,
+    cardId
+){
+
+    const card =
+        document.getElementById(cardId);
+
+    const source =
+        card?.querySelector(
+            ".product-image video,.product-image img"
+        );
+
+    const target =
+        document.querySelector(
+            ".cart-nav"
+        );
+
+    if(!source || !target)
+        return;
+
+
+    const rect =
+        source.getBoundingClientRect();
+
+    const targetRect =
+        target.getBoundingClientRect();
+
+
+    const flyer =
+        source.cloneNode(true);
+
+    flyer.style.position =
+        "fixed";
+
+    flyer.style.zIndex =
+        "1000";
+
+    flyer.style.top =
+        rect.top + "px";
+
+    flyer.style.left =
+        rect.left + "px";
+
+    flyer.style.width =
+        rect.width + "px";
+
+    flyer.style.height =
+        rect.height + "px";
+
+    flyer.style.objectFit =
+        "cover";
+
+    flyer.style.borderRadius =
+        "10px";
+
+    flyer.style.pointerEvents =
+        "none";
+
+    flyer.style.transition =
+        "all .7s ease";
+
+    document.body.appendChild(
+        flyer
+    );
+
+
+    setTimeout(()=>{
+
+        flyer.style.top =
+            targetRect.top + "px";
+
+        flyer.style.left =
+            targetRect.left + "px";
+
+        flyer.style.width =
+            "25px";
+
+        flyer.style.height =
+            "25px";
+
+        flyer.style.opacity =
+            "0";
+
+    },50);
+
+
+    setTimeout(()=>{
+        flyer.remove();
+    },800);
+
+}
+
+
+async function addToCart(
+    titleKey,
+    price,
+    cardId,
+    refText,
+    event
+){
+
+    const card =
+        document.getElementById(cardId);
+
+    const sizeBtn =
+        card.querySelector(
+            ".size-btn.active"
+        );
+
+    const size =
+        sizeBtn
+        ? sizeBtn.innerText
+        : "M";
+
+
+    const key =
+        `${refText
+            .replace("Ref: ","")
+            .trim()
+            .toUpperCase()}_${size
+                .trim()
+                .toUpperCase()}`;
+
+
+    await fetchLiveStock(
+        cardId,
+        refText,
+        size
+    );
+
+
+    const stock =
+        stockData[key] !== undefined
+        ? stockData[key]
+        : 0;
+
+    const qty =
+        cart[key]
+        ? cart[key].qty
+        : 0;
+
+
+    if(stock !== "."){
+
+        if(
+            stock === 0 ||
+            qty + 1 > stock
+        ){
+
+            alert(
+                `សូមអភ័យទោស! ${refText} Size ${size} អស់ស្តុក ឬមានចំនួនតិចជាងនេះ។`
+            );
+
+            return;
+
+        }
+
+    }
+
+
+    playFlyAnimation(
+        event,
+        cardId
+    );
+
+
+    if(cart[key]){
+
+        cart[key].qty++;
+
+    }else{
+
+        cart[key] = {
+            titleKey,
+            price,
+            size,
+            ref:refText,
+            qty:1
+        };
+
+    }
+
+
+    renderCart();
+
+    showToast(
+        "បានដាក់ចូលកន្ត្រកជោគជ័យ!"
+    );
+
+}
+
+
+function changeQty(
+    key,
+    delta
+){
+
+    if(!cart[key])
+        return;
+
+
+    const newQty =
+        cart[key].qty + delta;
+
+    const stock =
+        stockData[key] !== undefined
+        ? stockData[key]
+        : 0;
+
+
+    if(
+        delta > 0 &&
+        stock !== "." &&
+        newQty > stock
+    ){
+
+        alert(
+            `ទំនិញនេះមានត្រឹម ${stock} ប៉ុណ្ណោះ។`
+        );
+
+        return;
+
+    }
+
+
+    cart[key].qty =
+        newQty;
+
+
+    if(cart[key].qty <= 0)
+        delete cart[key];
+
+
+    renderCart();
+
+}
+
+
+function deleteCartItem(key){
+
+    delete cart[key];
+
+    renderCart();
+
+}
+
+
+/* =====================================================
+   CART RENDER
+===================================================== */
+
+function renderCart(){
+
+    const list =
+        document.getElementById(
+            "cart-list"
+        );
+
+    const summary =
+        document.getElementById(
+            "summary-box"
+        );
+
+    const footer =
+        document.getElementById(
+            "modal-footer"
+        );
+
+
+    let totalItems = 0;
+    let subtotal = 0;
+
+
+    const sizeOrder = {
+        S:1,
+        M:2,
+        L:3,
+        XL:4,
+        XXL:5
+    };
+
+
+    const keys =
+        Object.keys(cart).sort(
+            (a,b)=>{
+
+                const A = cart[a];
+                const B = cart[b];
+
+                const refA =
+                    parseInt(
+                        A.ref.replace(/\D/g,"")
+                    ) || 0;
+
+                const refB =
+                    parseInt(
+                        B.ref.replace(/\D/g,"")
+                    ) || 0;
+
+                if(refA !== refB)
+                    return refA-refB;
+
+                return (
+                    sizeOrder[A.size] || 99
+                ) - (
+                    sizeOrder[B.size] || 99
+                );
+
+            }
+        );
+
+
+    let html = "";
+
+
+    keys.forEach(key=>{
+
+        const item =
+            cart[key];
+
+        const itemTotal =
+            item.price *
+            item.qty;
+
+        totalItems +=
+            item.qty;
+
+        subtotal +=
+            itemTotal;
+
+
+        html += `
+
+        <div class="cart-item">
+
+            <div>
+
+                <div class="item-info">
+                    [${item.ref}]
+                    ${item.titleKey}
+                </div>
+
+                <div class="item-sub">
+                    Size: ${item.size}
+                    × ${item.qty}
+                    —
+                    $${itemTotal.toFixed(2)}
+                </div>
+
+            </div>
+
+            <div class="qty-controls">
+
+                <button
+                    class="btn-qty"
+                    onclick="changeQty('${key}',-1)">
+                    -
+                </button>
+
+                <span>
+                    ${item.qty}
+                </span>
+
+                <button
+                    class="btn-qty"
+                    onclick="changeQty('${key}',1)">
+                    +
+                </button>
+
+                <button
+                    class="btn-delete-item"
+                    onclick="deleteCartItem('${key}')">
+                    🗑
+                </button>
+
+            </div>
+
+        </div>
+
+        `;
+
+    });
+
+
+    if(keys.length === 0){
+
+        list.innerHTML =
+            `<div class="empty-msg">
+                មិនទាន់មានទំនិញក្នុងកន្ត្រកទេ
+            </div>`;
+
+        summary.style.display =
+            "none";
+
+        footer.style.display =
+            "none";
+
+    }else{
+
+        list.innerHTML =
+            html;
+
+        summary.style.display =
+            "flex";
+
+        footer.style.display =
+            "flex";
+
+    }
+
+
+    const grandTotal =
+        subtotal > 0
+        ? subtotal + deliveryFee
+        : 0;
+
+
+    document.getElementById(
+        "cart-count"
+    ).innerText =
+        totalItems;
+
+    document.getElementById(
+        "items-count"
+    ).innerText =
+        totalItems;
+
+    document.getElementById(
+        "subtotal-amount"
+    ).innerText =
+        "$" + subtotal.toFixed(2);
+
+    document.getElementById(
+        "total-price"
+    ).innerText =
+        grandTotal.toFixed(2);
+
+    document.getElementById(
+        "modal-total-price"
+    ).innerText =
+        grandTotal.toFixed(2);
+
+    document.getElementById(
+        "checkout-total-price"
+    ).innerText =
+        grandTotal.toFixed(2);
+
+}
+
+
+/* =====================================================
+   CUSTOMER INFO
+===================================================== */
+
+function clearError(input){
+
+    input.classList.remove(
+        "error"
+    );
+
+}
+
+
+function saveUserInfo(){
+
+    const name =
+        document.getElementById(
+            "custName"
+        )?.value.trim() || "";
+
+    const phone =
+        document.getElementById(
+            "custPhone"
+        )?.value.trim() || "";
+
+    const address =
+        document.getElementById(
+            "custAddress"
+        )?.value.trim() || "";
+
+
+    localStorage.setItem(
+        "oneday_cust_name",
+        name
+    );
+
+    localStorage.setItem(
+        "oneday_cust_phone",
+        phone
+    );
+
+    localStorage.setItem(
+        "oneday_cust_address",
+        address
+    );
+
+}
+
+
+function loadUserInfo(){
+
+    const name =
+        localStorage.getItem(
+            "oneday_cust_name"
+        );
+
+    const phone =
+        localStorage.getItem(
+            "oneday_cust_phone"
+        );
+
+    const address =
+        localStorage.getItem(
+            "oneday_cust_address"
+        );
+
+
+    if(name)
+        document.getElementById(
+            "custName"
+        ).value = name;
+
+    if(phone)
+        document.getElementById(
+            "custPhone"
+        ).value = phone;
+
+    if(address)
+        document.getElementById(
+            "custAddress"
+        ).value = address;
+
+}
+
+
+/* =====================================================
+   CHECKOUT
+===================================================== */
+
+function prepareOrder(){
+
+    if(
+        Object.keys(cart).length === 0
+    ){
+
+        alert(
+            "មិនទាន់មានទំនិញក្នុងកន្ត្រកទេ"
+        );
+
+        return;
+
+    }
+
+
+    closeModal("cartModal");
+
+    loadUserInfo();
+
+    openModal("checkoutModal");
+
+}
+
+
+function openTelegram(){
+
+    if(
+        Object.keys(cart).length === 0
+    ){
+
+        alert(
+            "មិនទាន់មានទំនិញក្នុងកន្ត្រកទេ"
+        );
+
+        return;
+
+    }
+
+
+    const nameInput =
+        document.getElementById(
+            "custName"
+        );
+
+    const phoneInput =
+        document.getElementById(
+            "custPhone"
+        );
+
+    const addressInput =
+        document.getElementById(
+            "custAddress"
+        );
+
+    const mapInput =
+        document.getElementById(
+            "custMapUrl"
+        );
+
+
+    const name =
+        nameInput.value.trim();
+
+    const phone =
+        phoneInput.value.trim();
+
+    const address =
+        addressInput.value.trim();
+
+    const mapUrl =
+        mapInput
+        ? mapInput.value.trim()
+        : "";
+
+
+    let error = false;
+
+
+    if(!name){
+
+        nameInput.classList.add(
+            "error"
+        );
+
+        error = true;
+
+    }
+
+
+    if(!phone){
+
+        phoneInput.classList.add(
+            "error"
+        );
+
+        error = true;
+
+    }
+
+
+    if(!address){
+
+        addressInput.classList.add(
+            "error"
+        );
+
+        error = true;
+
+    }
+
+
+    if(error){
+
+        alert(
+            "សូមបំពេញឈ្មោះ លេខទូរស័ព្ទ និងទីតាំង!"
+        );
+
+        return;
+
+    }
+
+
+    const cleanPhone =
+        phone.replace(
+            /[^0-9]/g,
+            ""
+        );
+
+
+    if(cleanPhone.length < 8){
+
+        phoneInput.classList.add(
+            "error"
+        );
+
+        alert(
+            "សូមបញ្ចូលលេខទូរស័ព្ទឱ្យបានត្រឹមត្រូវ!"
+        );
+
+        return;
+
+    }
+
+
+    saveUserInfo();
+
+
+    let message =
+        "🛍️ Oneday Clothing — Order\n\n";
+
+
+    message +=
+        "👤 ព័ត៌មានអតិថិជន\n";
+
+    message +=
+        `• ឈ្មោះ: ${name}\n`;
+
+    message +=
+        `• លេខទូរស័ព្ទ: ${phone}\n`;
+
+    message +=
+        `• អាសយដ្ឋាន: ${address}\n`;
+
+
+    if(mapUrl){
+
+        message +=
+            `• ទីតាំង Map: ${mapUrl}\n`;
+
+    }
+
+
+    message +=
+        "\n📦 ទំនិញ\n";
+
+
+    let subtotal = 0;
+    let index = 1;
+
+
+    Object.keys(cart)
+    .forEach(key=>{
+
+        const item =
+            cart[key];
+
+        const total =
+            item.price *
+            item.qty;
+
+        subtotal += total;
+
+
+        message +=
+            `${index}. [${item.ref}] ${item.titleKey}\n`;
+
+        message +=
+            `   Size: ${item.size} × ${item.qty} — $${total.toFixed(2)}\n`;
+
+        index++;
+
+    });
+
+
+    const grandTotal =
+        subtotal + deliveryFee;
+
+
+    message +=
+        `\n💰 សរុប\n`;
+
+    message +=
+        `• តម្លៃទំនិញ: $${subtotal.toFixed(2)}\n`;
+
+    message +=
+        `• ថ្លៃដឹកជញ្ជូន: $${deliveryFee.toFixed(2)}\n`;
+
+    message +=
+        `• សរុបទាំងអស់: $${grandTotal.toFixed(2)}`;
+
+
+    window.location.href =
+        `https://t.me/${TELEGRAM_USERNAME}?text=${encodeURIComponent(message)}`;
+
+}
+
+
+/* =====================================================
+   OPENSTREETMAP
+===================================================== */
+
+function openMapModal(){
+
+    openModal(
+        "mapPickerModal"
+    );
+
+
+    setTimeout(()=>{
+
+        if(!freeMapObj && window.L){
+
+            freeMapObj =
+                L.map(
+                    "freeMap"
+                ).setView(
+                    [
+                        currentPos.lat,
+                        currentPos.lng
+                    ],
+                    15
+                );
+
+
+            L.tileLayer(
+                "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {
+                    maxZoom:19,
+                    attribution:
+                        "© OpenStreetMap"
                 }
-            }
+            ).addTo(
+                freeMapObj
+            );
 
-            playFlyAnimation(event, cardId);
 
-            if (cart[stockKey]) {
-                cart[stockKey].qty += 1;
-            } else {
-                cart[stockKey] = { titleKey: titleKey, price: price, size: selectedSize, ref: refText, qty: 1 };
-            }
-
-            renderCart();
-            showToast(translations[currentLang].toast_added || "បានដាក់ចូលកន្ត្រកជោគជ័យ!");
-        }
-
-        function changeQty(itemKey, delta) {
-            if (cart[itemKey]) {
-                let newQty = cart[itemKey].qty + delta;
-                let availableStock = stockData[itemKey] !== undefined ? stockData[itemKey] : 0;
-
-                if (availableStock !== '.') {
-                    if (delta > 0 && newQty > availableStock) {
-                        alert(`សូមអភ័យទោស! ទំនិញនេះទិញបានតែ ${availableStock} ប៉ុណ្ណោះ ព្រោះក្នុងស្តុកមានតែ ${availableStock}។`);
-                        return;
+            freeMarker =
+                L.marker(
+                    [
+                        currentPos.lat,
+                        currentPos.lng
+                    ],
+                    {
+                        draggable:true
                     }
+                ).addTo(
+                    freeMapObj
+                );
+
+
+            freeMapObj.on(
+                "click",
+                function(e){
+
+                    currentPos = {
+                        lat:e.latlng.lat,
+                        lng:e.latlng.lng
+                    };
+
+                    freeMarker.setLatLng(
+                        e.latlng
+                    );
+
                 }
+            );
 
-                cart[itemKey].qty = newQty;
-                if (cart[itemKey].qty <= 0) delete cart[itemKey];
-            }
-            renderCart();
+
+            freeMarker.on(
+                "dragend",
+                function(){
+
+                    const pos =
+                        freeMarker.getLatLng();
+
+                    currentPos = {
+                        lat:pos.lat,
+                        lng:pos.lng
+                    };
+
+                }
+            );
+
+        }else if(freeMapObj){
+
+            freeMapObj.invalidateSize();
+
         }
 
-        function deleteCartItem(itemKey) {
-            if (cart[itemKey]) {
-                delete cart[itemKey];
-                renderCart();
-            }
-        }
+    },300);
 
-        function clearError(inputElement) {
-            inputElement.classList.remove('error');
-        }
+}
 
-        function saveUserInfo() {
-            let name = document.getElementById('custName').value.trim();
-            let phone = document.getElementById('custPhone').value.trim();
-            let address = document.getElementById('custAddress').value.trim();
 
-            localStorage.setItem('oneday_cust_name', name);
-            localStorage.setItem('oneday_cust_phone', phone);
-            localStorage.setItem('oneday_cust_address', address);
-        }
+function confirmFreeLocation(){
 
-        function loadUserInfo() {
-            let name = localStorage.getItem('oneday_cust_name');
-            let phone = localStorage.getItem('oneday_cust_phone');
-            let address = localStorage.getItem('oneday_cust_address');
+    const url =
+        `https://www.openstreetmap.org/?mlat=${currentPos.lat.toFixed(6)}&mlon=${currentPos.lng.toFixed(6)}#map=16/${currentPos.lat.toFixed(6)}/${currentPos.lng.toFixed(6)}`;
 
-            if (name) document.getElementById('custName').value = name;
-            if (phone) document.getElementById('custPhone').value = phone;
-            if (address) document.getElementById('custAddress').value = address;
-        }
 
-        function renderCart() {
-            let cartList = document.getElementById('cart-list');
-            let modalFooter = document.getElementById('modal-footer');
-            let summaryBox = document.getElementById('summary-box');
-            let totalItems = 0;
-            let subtotalPrice = 0;
-            let itemsHtml = '';
+    document.getElementById(
+        "custMapUrl"
+    ).value = url;
 
-            const sizeOrder = { 'S': 1, 'M': 2, 'L': 3, 'XL': 4, 'XXL': 5 };
-            
-            let sortedKeys = Object.keys(cart).sort((a, b) => {
-                let itemA = cart[a];
-                let itemB = cart[b];
-                
-                let refA = parseInt(itemA.ref.replace(/\D/g, '')) || 0;
-                let refB = parseInt(itemB.ref.replace(/\D/g, '')) || 0;
-                if (refA !== refB) return refA - refB;
 
-                let orderA = sizeOrder[itemA.size] || 99;
-                let orderB = sizeOrder[itemB.size] || 99;
-                return orderA - orderB;
-            });
+    closeModal(
+        "mapPickerModal"
+    );
 
-            for (let key of sortedKeys) {
-                let item = cart[key];
-                let itemTotal = item.price * item.qty;
-                totalItems += item.qty;
-                subtotalPrice += itemTotal;
-                let localizedTitle = translations[currentLang][item.titleKey] || item.titleKey;
+}
 
-                let refDisplay = item.ref ? `[${item.ref}] ` : '';
 
-                itemsHtml += `
-                    <div class="cart-item">
-                        <div>
-                            <div class="item-info">${refDisplay}${localizedTitle}</div>
-                            <div class="item-sub">Size: ${item.size} | $${item.price.toFixed(2)}</div>
-                        </div>
-                        <div class="qty-controls">
-                            <button class="btn-qty" onclick="changeQty('${key}', -1)">-</button>
-                            <span style="font-weight:800; font-size:12px;">${item.qty}</span>
-                            <button class="btn-qty" onclick="changeQty('${key}', 1)">+</button>
-                            <button class="btn-delete-item" onclick="deleteCartItem('${key}')" title="Delete">🗑️</button>
-                        </div>
-                    </div>
-                `;
-            }
+/* =====================================================
+   INITIALIZE
+===================================================== */
 
-            if (Object.keys(cart).length === 0) {
-                cartList.innerHTML = `<div class="empty-msg">${translations[currentLang].empty_cart}</div>`;
-                modalFooter.style.display = 'none';
-                summaryBox.style.display = 'none';
-            } else {
-                cartList.innerHTML = itemsHtml;
-                modalFooter.style.display = 'flex';
-                summaryBox.style.display = 'flex';
-            }
+document.addEventListener(
+    "DOMContentLoaded",
+    async function(){
 
-            let grandTotal = subtotalPrice > 0 ? subtotalPrice + deliveryFee : 0;
+        checkAutoTheme();
 
-            document.getElementById('cart-count').innerText = totalItems;
-            document.getElementById('items-count').innerText = totalItems;
-            document.getElementById('subtotal-amount').innerText = '$' + subtotalPrice.toFixed(2);
-            document.getElementById('total-price').innerText = '$' + grandTotal.toFixed(2);
-            document.getElementById('modal-total-price').innerText = '$' + grandTotal.toFixed(2);
-            document.getElementById('checkout-total-price').innerText = '$' + grandTotal.toFixed(2);
-        }
+        filterProducts();
 
-        function openTelegram() {
-            if (Object.keys(cart).length === 0) {
-                alert(translations[currentLang].empty_cart);
-                return;
-            }
+        await loadCSVData();
 
-            let nameInput = document.getElementById('custName');
-            let phoneInput = document.getElementById('custPhone');
-            let addressInput = document.getElementById('custAddress');
-            let mapUrlInput = document.getElementById('custMapUrl');
 
-            let name = nameInput.value.trim();
-            let phone = phoneInput.value.trim();
-            let address = addressInput.value.trim();
-            let mapUrl = mapUrlInput ? mapUrlInput.value.trim() : '';
+        fetchLiveStock(
+            "prod-1",
+            "Ref: 1",
+            "M"
+        );
 
-            let hasError = false;
-            if (!name) { nameInput.classList.add('error'); hasError = true; }
-            if (!phone) { phoneInput.classList.add('error'); hasError = true; }
-            if (!address) { addressInput.classList.add('error'); hasError = true; }
+        fetchLiveStock(
+            "prod-4",
+            "Ref: 2",
+            "M"
+        );
 
-            if (hasError) {
-                alert(translations[currentLang].alert_fill);
-                return;
-            }
+        fetchLiveStock(
+            "prod-2",
+            "Ref: 3",
+            "M"
+        );
 
-            let cleanPhone = phone.replace(/[^0-9]/g, '');
-            if (cleanPhone.length < 8) {
-                phoneInput.classList.add('error');
-                alert(translations[currentLang].alert_phone_invalid);
-                return;
-            }
+        fetchLiveStock(
+            "prod-5",
+            "Ref: 4",
+            "M"
+        );
 
-            saveUserInfo();
 
-            let message = "🛍️ Oneday Clothing — Order\n\n";
-            message += "👤 ព័ត៌មានអតិថិជន\n";
-            message += `• ឈ្មោះ: ${name}\n`;
-            message += `• លេខទូរស័ព្ទ: ${phone}\n`;
-            message += `• អាសយដ្ឋាន: ${address}\n`;
-            if (mapUrl) {
-                message += `• ទីតាំង Map: ${mapUrl}\n`;
-            }
-            message += "\n📦 ទំនិញ\n";
+        loadUserInfo();
 
-            let index = 1;
-            let subtotalPrice = 0;
+        renderCart();
 
-            const sizeOrder = { 'S': 1, 'M': 2, 'L': 3, 'XL': 4, 'XXL': 5 };
-            let sortedKeys = Object.keys(cart).sort((a, b) => {
-                let itemA = cart[a];
-                let itemB = cart[b];
-                let refA = parseInt(itemA.ref.replace(/\D/g, '')) || 0;
-                let refB = parseInt(itemB.ref.replace(/\D/g, '')) || 0;
-                if (refA !== refB) return refA - refB;
-                return (sizeOrder[itemA.size] || 99) - (sizeOrder[itemB.size] || 99);
-            });
+    }
+);
 
-            for (let key of sortedKeys) {
-                let item = cart[key];
-                let itemTotal = item.price * item.qty;
-                subtotalPrice += itemTotal;
-                let localizedTitle = translations[currentLang][item.titleKey] || item.titleKey;
-                
-                let refPart = item.ref ? `[${item.ref}] ` : '';
-                message += `${index}. ${refPart}${localizedTitle}\n`;
-                message += `    Size: ${item.size} × ${item.qty} — $${itemTotal.toFixed(2)}\n`;
-                index++;
-            }
+</script>
 
-            let grandTotal = subtotalPrice + deliveryFee;
-
-            message += `\n💰 សរុប\n`;
-            message += `• តម្លៃទំនិញ: $${subtotalPrice.toFixed(2)}\n`;
-            message += `• ថ្លៃដឹកជញ្ជូន: $${deliveryFee.toFixed(2)}\n`;
-            message += `• សរុបទាំងអស់: $${grandTotal.toFixed(2)}`;
-
-            window.location.href = `https://t.me/${TELEGRAM_USERNAME}?text=${encodeURIComponent(message)}`;
-        }
-    </script>
 </body>
 </html>
