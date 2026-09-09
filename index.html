@@ -1237,16 +1237,19 @@
             message += `• ថ្លៃដឹកជញ្ជូន: $${deliveryFee.toFixed(2)}\n`;
             message += `• សរុបទាំងអស់: $${grandTotal.toFixed(2)}`;
 
-            // Link ផ្លូវការ t.me/share/url
-            let targetUrl = `https://t.me/share/url?url=${encodeURIComponent("https://t.me/" + TELEGRAM_USERNAME)}&text=${encodeURIComponent(message)}`;
+            // ១. ចម្លងសារ Order ចូលក្នុង Clipboard ស្វ័យប្រវត្តិ
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(message);
+            }
 
-            // បើក Link ដោយមិនមានការស្ទះលើទូរស័ព្ទដៃ
-            if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.openTelegramLink) {
-                window.Telegram.WebApp.openTelegramLink(targetUrl);
-            } else if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.openLink) {
-                window.Telegram.WebApp.openLink(targetUrl);
+            // ២. ផ្លោះចូលទៅ Chat @OneDayClothingAgent ដោយផ្ទាល់
+            let directUrl = `https://t.me/${TELEGRAM_USERNAME}`;
+
+            if (tg && tg.openTelegramLink) {
+                tg.openTelegramLink(directUrl);
+                tg.close();
             } else {
-                window.open(targetUrl, '_blank');
+                window.location.href = directUrl;
             }
         }
     </script>
