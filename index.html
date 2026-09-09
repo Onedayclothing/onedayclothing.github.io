@@ -7,6 +7,9 @@
     
     <link href="https://fonts.googleapis.com/css2?family=Content:wght@400;700&family=Kantumruy+Pro:wght@400;600;700;800&display=swap" rel="stylesheet">
     
+    <!-- Telegram Web App SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
     <!-- OpenStreetMap (Leaflet.js) CSS & JS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -657,6 +660,16 @@
     </div>
 
     <script>
+        // Telegram Web App Initialization
+        if (window.Telegram && window.Telegram.WebApp) {
+            window.Telegram.WebApp.ready();
+            if (window.Telegram.WebApp.requestFullscreen) {
+                window.Telegram.WebApp.requestFullscreen();
+            } else {
+                window.Telegram.WebApp.expand();
+            }
+        }
+
         // Global Configuration
         const TELEGRAM_USERNAME = "OneDayClothingAgent";
         const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRvkD0AmmidUi0GfyOh0wAz0jdASv2Yt8bGIHznpGTQ3fkTnI7wc6w5D58-BanK0Nb3KAsqnM3He_Xn/pub?output=csv";
