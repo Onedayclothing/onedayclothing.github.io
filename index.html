@@ -1237,14 +1237,16 @@
             message += `• ថ្លៃដឹកជញ្ជូន: $${deliveryFee.toFixed(2)}\n`;
             message += `• សរុបទាំងអស់: $${grandTotal.toFixed(2)}`;
 
-            let targetUrl = `https://t.me/${TELEGRAM_USERNAME}?text=${encodeURIComponent(message)}`;
+            // Link ផ្លូវការ t.me/share/url
+            let targetUrl = `https://t.me/share/url?url=${encodeURIComponent("https://t.me/" + TELEGRAM_USERNAME)}&text=${encodeURIComponent(message)}`;
 
-            // បើក Link ទៅកាន់ @OneDayClothingAgent ដោយផ្ទាល់ និងបិទ Mini App ភ្លាមៗ
-            if (tg && tg.openTelegramLink) {
-                tg.openTelegramLink(targetUrl);
-                tg.close();
+            // បើក Link ដោយមិនមានការស្ទះលើទូរស័ព្ទដៃ
+            if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.openTelegramLink) {
+                window.Telegram.WebApp.openTelegramLink(targetUrl);
+            } else if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.openLink) {
+                window.Telegram.WebApp.openLink(targetUrl);
             } else {
-                window.location.href = targetUrl;
+                window.open(targetUrl, '_blank');
             }
         }
     </script>
