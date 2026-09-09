@@ -1237,32 +1237,13 @@
             message += `• ថ្លៃដឹកជញ្ជូន: $${deliveryFee.toFixed(2)}\n`;
             message += `• សរុបទាំងអស់: $${grandTotal.toFixed(2)}`;
 
-            // ១. Copy សារ Order ចូល Clipboard ស្វ័យប្រវត្តិ
-            try {
-                if (navigator.clipboard && navigator.clipboard.writeText) {
-                    navigator.clipboard.writeText(message);
-                } else {
-                    let textArea = document.createElement("textarea");
-                    textArea.value = message;
-                    document.body.appendChild(textArea);
-                    textArea.select();
-                    document.execCommand("copy");
-                    document.body.removeChild(textArea);
-                }
-            } catch (err) {
-                console.log("Copy error: ", err);
-            }
-
-            // ២. ជូនដំណឹងដល់អតិថិជនឱ្យ Paste ចូល Chat 
-            alert("📋 ព័ត៌មានកុម្មង់ត្រូវបាន Copy រួចរាល់!\nសូមចុច Paste (បិទភ្ជាប់) ចូលក្នុង Chat ដើម្បីផ្ញើទៅកាន់ Seller។");
-
-            // ៣. ផ្លោះ Direct ចូល Chat @OneDayClothingAgent
-            let directUrl = `https://t.me/${TELEGRAM_USERNAME}`;
+            // ប្រើ Telegram Share URL ដើម្បីឱ្យ Text ចូលក្នុង Message Box ស្វ័យប្រវត្តិ
+            let shareUrl = `https://t.me/share/url?url=&text=${encodeURIComponent(message)}`;
 
             if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.openTelegramLink) {
-                window.Telegram.WebApp.openTelegramLink(directUrl);
+                window.Telegram.WebApp.openTelegramLink(shareUrl);
             } else {
-                window.location.href = directUrl;
+                window.location.href = shareUrl;
             }
         }
     </script>
