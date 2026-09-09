@@ -1237,12 +1237,14 @@
             message += `• ថ្លៃដឹកជញ្ជូន: $${deliveryFee.toFixed(2)}\n`;
             message += `• សរុបទាំងអស់: $${grandTotal.toFixed(2)}`;
 
-            // --- បញ្ជូន Order តាម Telegram Mini App Native SDK ---
-            if (tg && tg.initData) {
-                tg.sendData(message);
+            let targetUrl = `https://t.me/${TELEGRAM_USERNAME}?text=${encodeURIComponent(message)}`;
+
+            // បើក Link ទៅកាន់ @OneDayClothingAgent ដោយផ្ទាល់ និងបិទ Mini App ភ្លាមៗ
+            if (tg && tg.openTelegramLink) {
+                tg.openTelegramLink(targetUrl);
                 tg.close();
             } else {
-                window.location.href = `https://t.me/${TELEGRAM_USERNAME}?text=${encodeURIComponent(message)}`;
+                window.location.href = targetUrl;
             }
         }
     </script>
