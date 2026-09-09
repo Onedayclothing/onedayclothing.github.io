@@ -1190,15 +1190,16 @@
 
             saveUserInfo();
 
-            let message = "👤 **ព័ត៌មានអតិថិជន**\n";
+            let message = "🛍️ Oneday Clothing — Order\n\n";
+            message += "👤 ព័ត៌មានអតិថិជន\n";
             message += `• ឈ្មោះ: ${name}\n`;
             message += `• លេខទូរស័ព្ទ: ${phone}\n`;
             message += `• អាសយដ្ឋាន: ${address}\n`;
             if (mapUrl) {
                 let cleanCoords = mapUrl.replace(/\s+/g, '');
-                message += `• Google Maps: https://www.google.com/maps?q=${cleanCoords}\n`;
+                message += `• Link Google Maps: https://www.google.com/maps?q=${cleanCoords}\n`;
             }
-            message += "\n📦 **ទំនិញកុម្មង់**\n";
+            message += "\n📦 ទំនិញ\n";
 
             let index = 1;
             let subtotalPrice = 0;
@@ -1225,17 +1226,18 @@
 
             let grandTotal = subtotalPrice + deliveryFee;
 
-            message += `\n💰 **សរុប**\n`;
-            message += `• ទំនិញ: $${subtotalPrice.toFixed(2)}\n`;
-            message += `• ថ្លៃដឹក: $${deliveryFee.toFixed(2)}\n`;
+            message += `\n💰 សរុប\n`;
+            message += `• តម្លៃទំនិញ: $${subtotalPrice.toFixed(2)}\n`;
+            message += `• ថ្លៃដឹកជញ្ជូន: $${deliveryFee.toFixed(2)}\n`;
             message += `• សរុបទាំងអស់: $${grandTotal.toFixed(2)}`;
 
-            // ផ្ញើសារ Order ចូល Bot ស្វ័យប្រវត្តិ រួចបិទ Mini App
-            if (window.Telegram && window.Telegram.WebApp) {
-                window.Telegram.WebApp.sendData(message);
-                window.Telegram.WebApp.close();
+            const BOT_USERNAME = "OnedayAgentBOT";
+            let telegramUrl = `https://t.me/${BOT_USERNAME}?text=${encodeURIComponent(message)}`;
+
+            if (tg && tg.openTelegramLink) {
+                tg.openTelegramLink(telegramUrl);
             } else {
-                alert("សូមបើក Mini App នេះចេញពី Telegram!");
+                window.open(telegramUrl, '_blank');
             }
         }
     </script>
