@@ -626,7 +626,7 @@
         </div>
     </div>
 
-    <!-- Modal OpenStreetMap Picker (Whoo Dark Style) -->
+    <!-- Modal OpenStreetMap Picker -->
     <div class="modal-overlay" id="mapPickerModal" style="z-index: 300;" onclick="handleModalClick(event, 'mapPickerModal')">
         <div class="modal-content" style="height: 85vh; padding: 16px; display: flex; flex-direction: column;">
             <div class="modal-header">
@@ -639,7 +639,6 @@
             <div style="position: relative; flex-grow: 1; border-radius: 16px; overflow: hidden; border: 1px solid var(--border-color);">
                 <div id="freeMap" style="width: 100%; height: 100%;"></div>
                 
-                <!-- ប៊ូតុង GPS/Location (Auto Pin) -->
                 <button type="button" onclick="locateUserGPS()" style="position: absolute; bottom: 20px; right: 15px; z-index: 1000; background: #ffffff; color: #0284c7; border: none; width: 44px; height: 44px; border-radius: 50%; box-shadow: 0 4px 12px rgba(0,0,0,0.3); font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center;">
                     🎯
                 </button>
@@ -660,11 +659,8 @@
     </div>
 
     <script>
-        // Telegram Web App SDK Object Initialization
         const tg = window.Telegram ? window.Telegram.WebApp : null;
 
-        // Global Configuration
-        const TELEGRAM_USERNAME = "OneDayClothingAgent";
         const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRvkD0AmmidUi0GfyOh0wAz0jdASv2Yt8bGIHznpGTQ3fkTnI7wc6w5D58-BanK0Nb3KAsqnM3He_Xn/pub?output=csv";
         const deliveryFee = 2.00;
 
@@ -744,7 +740,6 @@
             }
         };
 
-        // Video Lazy Loading Observer
         function setupVideoObserver() {
             const videos = document.querySelectorAll('video');
             const observer = new IntersectionObserver((entries) => {
@@ -1195,17 +1190,15 @@
 
             saveUserInfo();
 
-            let message = "🛍️ Oneday Clothing — Order\n\n";
-            message += "👤 ព័ត៌មានអតិថិជន\n";
+            let message = "👤 **ព័ត៌មានអតិថិជន**\n";
             message += `• ឈ្មោះ: ${name}\n`;
             message += `• លេខទូរស័ព្ទ: ${phone}\n`;
             message += `• អាសយដ្ឋាន: ${address}\n`;
             if (mapUrl) {
                 let cleanCoords = mapUrl.replace(/\s+/g, '');
-                message += `• ទីតាំង Map: ${mapUrl}\n`;
-                message += `• Link Google Maps: https://www.google.com/maps?q=${cleanCoords}\n`;
+                message += `• Google Maps: https://www.google.com/maps?q=${cleanCoords}\n`;
             }
-            message += "\n📦 ទំនិញ\n";
+            message += "\n📦 **ទំនិញកុម្មង់**\n";
 
             let index = 1;
             let subtotalPrice = 0;
@@ -1232,18 +1225,17 @@
 
             let grandTotal = subtotalPrice + deliveryFee;
 
-            message += `\n💰 សរុប\n`;
-            message += `• តម្លៃទំនិញ: $${subtotalPrice.toFixed(2)}\n`;
-            message += `• ថ្លៃដឹកជញ្ជូន: $${deliveryFee.toFixed(2)}\n`;
+            message += `\n💰 **សរុប**\n`;
+            message += `• ទំនិញ: $${subtotalPrice.toFixed(2)}\n`;
+            message += `• ថ្លៃដឹក: $${deliveryFee.toFixed(2)}\n`;
             message += `• សរុបទាំងអស់: $${grandTotal.toFixed(2)}`;
 
-            // ប្រើ Telegram Share URL ដើម្បីឱ្យ Text ចូលក្នុង Message Box ស្វ័យប្រវត្តិ
-            let shareUrl = `https://t.me/share/url?url=&text=${encodeURIComponent(message)}`;
-
-            if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.openTelegramLink) {
-                window.Telegram.WebApp.openTelegramLink(shareUrl);
+            // ផ្ញើសារ Order ចូល Bot ស្វ័យប្រវត្តិ រួចបិទ Mini App
+            if (window.Telegram && window.Telegram.WebApp) {
+                window.Telegram.WebApp.sendData(message);
+                window.Telegram.WebApp.close();
             } else {
-                window.location.href = shareUrl;
+                alert("សូមបើក Mini App នេះចេញពី Telegram!");
             }
         }
     </script>
