@@ -170,7 +170,7 @@
         }
 
         .cover-container { width: 100%; background: var(--card-bg); border-bottom: 1px solid var(--border-color); margin-bottom: 16px; position: relative; }
-        .cover-slider { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; -ms-overflow-style: none; }
+        .cover-slider { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; -ms-overflow-style: none; scroll-behavior: smooth; }
         .cover-slider::-webkit-scrollbar { display: none; }
         .cover-slide-item { flex: 0 0 100%; width: 100%; scroll-snap-align: start; }
         
@@ -295,6 +295,18 @@
         .toast-notification.show {
             transform: translateX(-50%) translateY(0);
             opacity: 1;
+        }
+
+        .fly-item {
+            position: fixed;
+            z-index: 9999;
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 50%;
+            pointer-events: none;
+            transition: all 0.8s cubic-bezier(0.2, 1, 0.3, 1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
     </style>
 </head>
@@ -492,6 +504,66 @@
                 <button class="btn-add" onclick="addToCart('p5_title', 7.00, 'prod-5', 'Ref: 4', event)">+ <span data-key="add_to_cart">ដាក់ចូលកន្ត្រក</span></button>
             </div>
         </div>
+
+        <!-- NEW PRODUCT 1: Men Tops (Ref: 5) -->
+        <div class="card" id="prod-6" data-gender="men" data-type="tops">
+            <span class="badge">Ref: 5</span>
+            <div class="img-box">
+                <video loop muted playsinline webkit-playsinline preload="none" controlslist="nodownload" disablepictureinpicture oncontextmenu="return false;">
+                    <source src="videos/Fashion_commercial_video_production_20260911003050.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div>
+                <div class="prod-title" data-key="p6_title">Striped Crew Neck T-Shirt</div>
+                <div class="prod-desc" data-key="p6_desc">អាវយឺតដៃខ្លី Casual សាមញ្ញ មានករបើកមូល និងមានម៉ូដឆ្នូតទទឹងពណ៌ត្នោតស្រាលលាយស</div>
+                <div class="price-box">
+                    <img src="images/IMG_5837.png" alt="Price Icon" class="price-icon">
+                    <div class="price">$12.00</div>
+                </div>
+            </div>
+            <div>
+                <div class="size-header"><div class="size-label" data-key="select_size">SIZE</div></div>
+                <div class="size-grid">
+                    <button class="size-btn" onclick="selectSize(this, 'prod-6', 'Ref: 5')">S</button>
+                    <button class="size-btn active" onclick="selectSize(this, 'prod-6', 'Ref: 5')">M</button>
+                    <button class="size-btn" onclick="selectSize(this, 'prod-6', 'Ref: 5')">L</button>
+                    <button class="size-btn" onclick="selectSize(this, 'prod-6', 'Ref: 5')">XL</button>
+                    <button class="size-btn" onclick="selectSize(this, 'prod-6', 'Ref: 5')">XXL</button>
+                </div>
+                <div class="stock-hint-box" id="stock-hint-prod-6"><span id="stock-text-prod-6">ស្តុកនៅសល់: </span><span>...</span></div>
+                <button class="btn-add" onclick="addToCart('p6_title', 12.00, 'prod-6', 'Ref: 5', event)">+ <span data-key="add_to_cart">ដាក់ចូលកន្ត្រក</span></button>
+            </div>
+        </div>
+
+        <!-- NEW PRODUCT 2: Men Tops (Ref: 6) -->
+        <div class="card" id="prod-7" data-gender="men" data-type="tops">
+            <span class="badge">Ref: 6</span>
+            <div class="img-box">
+                <video loop muted playsinline webkit-playsinline preload="none" controlslist="nodownload" disablepictureinpicture oncontextmenu="return false;">
+                    <source src="videos/Fashion_model_commercial_video_20260911003817.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div>
+                <div class="prod-title" data-key="p7_title">Vertical Striped Button-Up Shirt</div>
+                <div class="prod-desc" data-key="p7_desc">អាវដៃវែងក្រឡាមូដឆ្នូតត្រង់ សម្រាប់ធ្វើការ ទៅរៀន</div>
+                <div class="price-box">
+                    <img src="images/IMG_5837.png" alt="Price Icon" class="price-icon">
+                    <div class="price">$18.00</div>
+                </div>
+            </div>
+            <div>
+                <div class="size-header"><div class="size-label" data-key="select_size">SIZE</div></div>
+                <div class="size-grid">
+                    <button class="size-btn" onclick="selectSize(this, 'prod-7', 'Ref: 6')">S</button>
+                    <button class="size-btn active" onclick="selectSize(this, 'prod-7', 'Ref: 6')">M</button>
+                    <button class="size-btn" onclick="selectSize(this, 'prod-7', 'Ref: 6')">L</button>
+                    <button class="size-btn" onclick="selectSize(this, 'prod-7', 'Ref: 6')">XL</button>
+                    <button class="size-btn" onclick="selectSize(this, 'prod-7', 'Ref: 6')">XXL</button>
+                </div>
+                <div class="stock-hint-box" id="stock-hint-prod-7"><span id="stock-text-prod-7">ស្តុកនៅសល់: </span><span>...</span></div>
+                <button class="btn-add" onclick="addToCart('p7_title', 18.00, 'prod-7', 'Ref: 6', event)">+ <span data-key="add_to_cart">ដាក់ចូលកន្ត្រក</span></button>
+            </div>
+        </div>
     </div>
 
     <div class="cart-checkout-bar">
@@ -684,6 +756,8 @@
                 p2_title: "Outfit Smart Casual (Full Set)", p2_desc: "ឈុតសម្លៀកបំពាក់ Smart Casual ទាន់សម័យ",
                 p4_title: "Olive Green Mandarin Collar Long-Sleeve Shirt", p4_desc: "អាវដៃវែងកាតគៀនពណ៌បៃតងអូលីវ ស្អាតប្រណិត",
                 p5_title: "Plaid Sailor Collar Blouse", p5_desc: "អាវនារី ករសាឡាប្រណិត ស្អាតទាន់សម័យ",
+                p6_title: "Striped Crew Neck T-Shirt", p6_desc: "អាវយឺតដៃខ្លី Casual សាមញ្ញ មានករបើកមូល និងមានម៉ូដឆ្នូតទទឹងពណ៌ត្នោតស្រាលលាយស",
+                p7_title: "Vertical Striped Button-Up Shirt", p7_desc: "អាវដៃវែងក្រឡាមូដឆ្នូតត្រង់ សម្រាប់ធ្វើការ ទៅរៀន",
                 select_size: "SIZE", add_to_cart: "ដាក់ចូលកន្ត្រក", total_label: "តម្លៃសរុប", subtotal_label: "តម្លៃទំនិញ", delivery_label: "ថ្លៃដឹក (Delivery Fee)",
                 items_unit: "មុខ", btn_order_now: "Order Now", btn_view_cart: "មើលកន្ត្រក", cart_title: "ទំនិញក្នុងកន្ត្រករបស់អ្នក", empty_cart: "មិនទាន់មានទំនិញក្នុងកន្ត្រកទេ",
                 checkout_title: "ព័ត៌មានសម្រាប់ការកុម្មង់",
@@ -703,6 +777,8 @@
                 p2_title: "Outfit Smart Casual (Full Set)", p2_desc: "Smart Casual Outfit - Modern & Simple Style.",
                 p4_title: "Olive Green Mandarin Collar Long-Sleeve Shirt", p4_desc: "Olive green mandarin collar long-sleeve shirt, premium style.",
                 p5_title: "Plaid Sailor Collar Blouse", p5_desc: "Plaid sailor collar blouse, stylish and elegant.",
+                p6_title: "Striped Crew Neck T-Shirt", p6_desc: "Casual short-sleeve crew neck t-shirt with light brown and white stripes.",
+                p7_title: "Vertical Striped Button-Up Shirt", p7_desc: "Long-sleeve vertical striped shirt for work or school.",
                 select_size: "SIZE", add_to_cart: "Add to Cart", total_label: "Total Amount", subtotal_label: "Subtotal", delivery_label: "Delivery Fee",
                 items_unit: "items", btn_order_now: "Order Now", btn_view_cart: "View Cart", cart_title: "Your Shopping Cart", empty_cart: "Your cart is currently empty",
                 checkout_title: "Checkout Information",
@@ -722,6 +798,8 @@
                 p2_title: "商务休闲套装 (全套)", p2_desc: "商务休闲套装，时尚简约。",
                 p4_title: "橄榄绿立领长袖衬衫", p4_desc: "橄榄绿立领长袖衬衫，高级时尚剪裁。",
                 p5_title: "格子海军领衬衫", p5_desc: "格纹海军领女式上衣，时尚优雅。",
+                p6_title: "条纹圆领短袖 T 恤", p6_desc: "休闲圆领短袖 T 恤，浅棕色与白色横条纹设计。",
+                p7_title: "竖条纹长袖衬衫", p7_desc: "经典竖条纹长袖衬衫，适合上班与日常穿搭。",
                 select_size: "尺码", add_to_cart: "加入购物车", total_label: "总金额", subtotal_label: "商品小计", delivery_label: "配送费 (Delivery Fee)",
                 items_unit: "件", btn_order_now: "Order Now", btn_view_cart: "查看购物车", cart_title: "您的购物车", empty_cart: "购物车是空的",
                 checkout_title: "结账信息",
@@ -1070,6 +1148,8 @@
             fetchLiveStock('prod-4', 'Ref: 2', 'M');
             fetchLiveStock('prod-2', 'Ref: 3', 'M');
             fetchLiveStock('prod-5', 'Ref: 4', 'M');
+            fetchLiveStock('prod-6', 'Ref: 5', 'M');
+            fetchLiveStock('prod-7', 'Ref: 6', 'M');
             loadUserInfo();
         });
 
