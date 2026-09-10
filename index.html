@@ -272,7 +272,6 @@
 
         .guide-step { font-size: 12px; line-height: 1.8; color: var(--primary); margin-bottom: 8px; font-weight: 600; }
 
-        /* Toast Popup Notification */
         .toast-notification {
             position: fixed;
             bottom: 75px;
@@ -636,7 +635,6 @@
             <div style="position: relative; flex-grow: 1; border-radius: 16px; overflow: hidden; border: 1px solid var(--border-color);">
                 <div id="freeMap" style="width: 100%; height: 100%;"></div>
                 
-                <!-- ប៊ូតុង GPS/Location (Auto Pin) -->
                 <button type="button" onclick="locateUserGPS()" style="position: absolute; bottom: 20px; right: 15px; z-index: 1000; background: #ffffff; color: #0284c7; border: none; width: 44px; height: 44px; border-radius: 50%; box-shadow: 0 4px 12px rgba(0,0,0,0.3); font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center;">
                     🎯
                 </button>
@@ -663,6 +661,7 @@
         const deliveryFee = 2.00;
 
         let stockData = {};
+        let priceData = {};
         let currentLang = 'km';
         let cart = {};
         let currentGender = 'men';
@@ -738,7 +737,6 @@
             }
         };
 
-        // Video Lazy Loading Observer
         function setupVideoObserver() {
             const videos = document.querySelectorAll('video');
             const observer = new IntersectionObserver((entries) => {
@@ -876,7 +874,6 @@
                 if (!freeMapObj && window.L) {
                     freeMapObj = L.map('freeMap', { zoomControl: false }).setView([currentPos.lat, currentPos.lng], 15);
                     
-                    // Whoo Dark Theme Map (CartoDB Dark Matter)
                     L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
                         maxZoom: 19,
                         subdomains: 'abcd',
@@ -897,7 +894,6 @@
                         currentPos = { lat: position.lat, lng: position.lng };
                     });
 
-                    // Auto GPS ដំបូង
                     locateUserGPS();
                 } else if (freeMapObj) {
                     freeMapObj.invalidateSize();
@@ -905,7 +901,6 @@
             }, 300);
         }
 
-        // Auto Pin GPS Function
         function locateUserGPS() {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition((position) => {
@@ -925,13 +920,13 @@
             }
         }
 
-        // ប្ដូរទម្រង់ជា 11.544660, 104.900068
         function confirmFreeLocation() {
             let coordsText = `${currentPos.lat.toFixed(6)}, ${currentPos.lng.toFixed(6)}`;
             document.getElementById('custMapUrl').value = coordsText;
             closeModal('mapPickerModal');
         }
 
+        // Fetch Live CSV Data for Stock & Price
         async function loadCSVData() {
             try {
                 let response = await fetch(csvUrl + "&t=" + new Date().getTime());
@@ -939,20 +934,25 @@
                 let rows = data.split('\n');
                 
                 stockData = {};
+                priceData = {};
+
                 for (let i = 1; i < rows.length; i++) {
                     let cols = rows[i].split(',');
-                    if (cols.length >= 4) {
+                    if (cols.length >= 5) {
                         let ref = cols[0].trim().replace(/^["']|["']$/g, '').toUpperCase();
                         let size = cols[2].trim().replace(/^["']|["']$/g, '').toUpperCase();
                         let stockVal = cols[3].trim().replace(/^["']|["']$/g, '');
+                        let priceVal = parseFloat(cols[4].trim().replace(/^["']|["']$/g, '')) || 0;
                         
                         if (ref && size) {
-                            stockData[`${ref}_${size}`] = stockVal === '.' ? '.' : (parseInt(stockVal) || 0);
+                            let key = `${ref}_${size}`;
+                            stockData[key] = stockVal === '.' ? '.' : (parseInt(stockVal) || 0);
+                            priceData[key] = priceVal;
                         }
                     }
                 }
             } catch (error) {
-                console.error("Error fetching live stock:", error);
+                console.error("Error fetching live CSV data:", error);
             }
         }
 
@@ -960,6 +960,8 @@
             let stockBox = document.getElementById(`stock-hint-${cardId}`);
             let textSpan = document.getElementById(`stock-text-${cardId}`);
             let numSpan = stockBox ? stockBox.querySelector('span:last-child') : null;
+            let card = document.getElementById(cardId);
+            let priceDisplay = card ? card.querySelector('.price') : null;
             
             if (Object.keys(stockData).length === 0) {
                 if (numSpan) numSpan.innerText = "...";
@@ -970,7 +972,12 @@
             let cleanSize = selectedSize.trim().toUpperCase();
             let stockKey = `${cleanRef}_${cleanSize}`;
             let currentStock = stockData[stockKey] !== undefined ? stockData[stockKey] : 0;
-            
+            let currentPrice = priceData[stockKey] !== undefined ? priceData[stockKey] : 0;
+
+            if (priceDisplay && currentPrice > 0) {
+                priceDisplay.innerText = `$${currentPrice.toFixed(2)}`;
+            }
+
             if (stockBox && textSpan && numSpan) {
                 if (currentStock === '.') {
                     textSpan.style.display = "none";
@@ -1098,14 +1105,17 @@
             }, 850);
         }
 
-        async function addToCart(titleKey, price, cardId, refText, event) {
+        async function addToCart(titleKey, defaultPrice, cardId, refText, event) {
             let card = document.getElementById(cardId);
             let activeSizeBtn = card.querySelector('.size-btn.active');
             let selectedSize = activeSizeBtn ? activeSizeBtn.innerText : 'M';
-            let stockKey = `${refText.replace('Ref: ', '').trim().toUpperCase()}_${selectedSize.trim().toUpperCase()}`;
+            let cleanRef = refText.replace('Ref: ', '').trim().toUpperCase();
+            let cleanSize = selectedSize.trim().toUpperCase();
+            let stockKey = `${cleanRef}_${cleanSize}`;
 
             await fetchLiveStock(cardId, refText, selectedSize);
 
+            let activePrice = priceData[stockKey] && priceData[stockKey] > 0 ? priceData[stockKey] : defaultPrice;
             let currentStock = stockData[stockKey] !== undefined ? stockData[stockKey] : 0;
             let currentQtyInCart = cart[stockKey] ? cart[stockKey].qty : 0;
 
@@ -1120,8 +1130,9 @@
 
             if (cart[stockKey]) {
                 cart[stockKey].qty += 1;
+                cart[stockKey].price = activePrice;
             } else {
-                cart[stockKey] = { titleKey: titleKey, price: price, size: selectedSize, ref: refText, qty: 1 };
+                cart[stockKey] = { titleKey: titleKey, price: activePrice, size: selectedSize, ref: refText, qty: 1 };
             }
 
             renderCart();
