@@ -694,12 +694,12 @@
         </div>
     </div>
 
-    <!-- Modal OpenStreetMap Picker (Whoo Dark Style) -->
+    <!-- Modal OpenStreetMap Picker (Carto Voyager Style restricted to Cambodia) -->
     <div class="modal-overlay" id="mapPickerModal" style="z-index: 300;" onclick="handleModalClick(event, 'mapPickerModal')">
         <div class="modal-content" style="height: 85vh; padding: 16px; display: flex; flex-direction: column;">
             <div class="modal-header">
                 <div class="modal-title">
-                    <span>📍 ជ្រើសរើសទីតាំងរបស់អ្នក</span>
+                    <span>📍 ជ្រើសរើសទីតាំងរបស់អ្នកក្នុងប្រទេសកម្ពុជា</span>
                 </div>
                 <button class="btn-close" onclick="closeModal('mapPickerModal')">✕</button>
             </div>
@@ -742,6 +742,12 @@
         let freeMapObj = null;
         let freeMarker = null;
         let currentPos = { lat: 11.5564, lng: 104.9282 };
+
+        // Cambodia Bounds definition to restrict panning/zooming strictly within Cambodia
+        const cambodiaBounds = L.latLngBounds(
+            [10.3807, 102.3323], // Southwest bounds (approximate)
+            [14.6905, 107.6284]  // Northeast bounds (approximate)
+        );
 
         const langFlags = {
             km: 'images/IMG_5833.png',
@@ -950,10 +956,17 @@
             openModal('mapPickerModal');
             setTimeout(() => {
                 if (!freeMapObj && window.L) {
-                    freeMapObj = L.map('freeMap', { zoomControl: false }).setView([currentPos.lat, currentPos.lng], 15);
+                    // Initialize Leaflet map restricted to Cambodia bounds
+                    freeMapObj = L.map('freeMap', { 
+                        zoomControl: false,
+                        maxBounds: cambodiaBounds,
+                        maxBoundsViscosity: 1.0
+                    }).setView([currentPos.lat, currentPos.lng], 13);
                     
-                    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+                    // Carto Voyager Tiles
+                    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
                         maxZoom: 19,
+                        minZoom: 7,
                         subdomains: 'abcd',
                         attribution: '&copy; <a href="https://carto.com/">CARTO</a>'
                     }).addTo(freeMapObj);
@@ -963,13 +976,19 @@
                     freeMarker = L.marker([currentPos.lat, currentPos.lng], { draggable: true }).addTo(freeMapObj);
 
                     freeMapObj.on('click', function(e) {
-                        currentPos = { lat: e.latlng.lat, lng: e.latlng.lng };
-                        freeMarker.setLatLng(e.latlng);
+                        if (cambodiaBounds.contains(e.latlng)) {
+                            currentPos = { lat: e.latlng.lat, lng: e.latlng.lng };
+                            freeMarker.setLatLng(e.latlng);
+                        }
                     });
 
                     freeMarker.on('dragend', function(e) {
                         let position = freeMarker.getLatLng();
-                        currentPos = { lat: position.lat, lng: position.lng };
+                        if (cambodiaBounds.contains(position)) {
+                            currentPos = { lat: position.lat, lng: position.lng };
+                        } else {
+                            freeMarker.setLatLng([currentPos.lat, currentPos.lng]);
+                        }
                     });
 
                     locateUserGPS();
@@ -984,11 +1003,16 @@
                 navigator.geolocation.getCurrentPosition((position) => {
                     let lat = position.coords.latitude;
                     let lng = position.coords.longitude;
-                    currentPos = { lat: lat, lng: lng };
+                    let targetLatLng = L.latLng(lat, lng);
                     
-                    if (freeMapObj && freeMarker) {
-                        freeMapObj.setView([lat, lng], 16);
-                        freeMarker.setLatLng([lat, lng]);
+                    if (cambodiaBounds.contains(targetLatLng)) {
+                        currentPos = { lat: lat, lng: lng };
+                        if (freeMapObj && freeMarker) {
+                            freeMapObj.setView([lat, lng], 15);
+                            freeMarker.setLatLng([lat, lng]);
+                        }
+                    } else {
+                        alert("ទីតាំងបច្ចុប្បន្នរបស់អ្នកនៅក្រៅប្រទេសកម្ពុជា!");
                     }
                 }, (error) => {
                     console.log("Geolocation error:", error);
