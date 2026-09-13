@@ -694,7 +694,7 @@
         </div>
     </div>
 
-    <!-- Modal OpenStreetMap Picker (Carto Voyager Style restricted to Cambodia) -->
+    <!-- Modal OpenStreetMap Picker (Carto Voyager with API Key & Cambodia Bounds) -->
     <div class="modal-overlay" id="mapPickerModal" style="z-index: 300;" onclick="handleModalClick(event, 'mapPickerModal')">
         <div class="modal-content" style="height: 85vh; padding: 16px; display: flex; flex-direction: column;">
             <div class="modal-header">
@@ -743,10 +743,10 @@
         let freeMarker = null;
         let currentPos = { lat: 11.5564, lng: 104.9282 };
 
-        // Cambodia Bounds definition to restrict panning/zooming strictly within Cambodia
+        // Cambodia geographic bounds restriction
         const cambodiaBounds = L.latLngBounds(
-            [10.3807, 102.3323], // Southwest bounds (approximate)
-            [14.6905, 107.6284]  // Northeast bounds (approximate)
+            [10.3807, 102.3323], // Southwest bounds
+            [14.6905, 107.6284]  // Northeast bounds
         );
 
         const langFlags = {
@@ -956,15 +956,14 @@
             openModal('mapPickerModal');
             setTimeout(() => {
                 if (!freeMapObj && window.L) {
-                    // Initialize Leaflet map restricted to Cambodia bounds
                     freeMapObj = L.map('freeMap', { 
                         zoomControl: false,
                         maxBounds: cambodiaBounds,
                         maxBoundsViscosity: 1.0
                     }).setView([currentPos.lat, currentPos.lng], 13);
                     
-                    // Carto Voyager Tiles
-                    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+                    // Carto Voyager Tiles with your API Key
+                    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key=cb1_3jby_1_5ff4e5e8b17be757cdfcc3c7', {
                         maxZoom: 19,
                         minZoom: 7,
                         subdomains: 'abcd',
