@@ -799,7 +799,7 @@
             closeModal('mapPickerModal');
         }
 
-        // Fetch Dynamic Products & Stock from Railway Backend API
+        // Fetch Dynamic Products & Stock from Railway Backend API with size sorting
         async function loadDynamicProducts() {
             try {
                 let response = await fetch(`${RAILWAY_API_URL}/api/products`);
@@ -812,9 +812,18 @@
                 stockData = {};
                 priceData = {};
 
+                const sizeOrder = { 'S': 1, 'M': 2, 'L': 3, 'XL': 4, 'XXL': 5 };
+
                 productsList.forEach(prod => {
                     let ref = prod.ref;
                     let sizes = prod.sizes || [];
+
+                    // តម្រៀប Size ពី S ទៅ XXL ជានិច្ច
+                    sizes.sort((a, b) => {
+                        let rankA = sizeOrder[a.size.toUpperCase()] || 99;
+                        let rankB = sizeOrder[b.size.toUpperCase()] || 99;
+                        return rankA - rankB;
+                    });
 
                     sizes.forEach(s => {
                         let cleanRef = String(ref).trim().toUpperCase();
