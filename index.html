@@ -799,7 +799,7 @@
             closeModal('mapPickerModal');
         }
 
-        // Fetch Dynamic Products & Stock from Railway Backend API with size sorting
+        // Fetch Dynamic Products & Stock from Railway Backend API with size sorting and fixed single active button
         async function loadDynamicProducts() {
             try {
                 let response = await fetch(`${RAILWAY_API_URL}/api/products`);
@@ -833,14 +833,17 @@
                         priceData[key] = parseFloat(prod.price) || 0;
                     });
 
+                    // កំណត់ Size ដើម (ឲ្យអាទិភាពលើ M បើគ្មាន M យក Size ដំបូងបង្អស់)
+                    let defaultSizeObj = sizes.find(s => s.size.toUpperCase() === 'M') || sizes[0];
+                    let defaultSizeName = defaultSizeObj ? defaultSizeObj.size.toUpperCase() : 'M';
+
                     let sizeButtonsHtml = '';
-                    sizes.forEach((s, index) => {
-                        let isActive = (s.size.toUpperCase() === 'M' || index === 0) ? 'active' : '';
+                    sizes.forEach((s) => {
+                        let isActive = (s.size.toUpperCase() === defaultSizeName) ? 'active' : '';
                         sizeButtonsHtml += `<button class="size-btn ${isActive}" onclick="selectSize(this, 'prod-${ref}', '${ref}')">${s.size}</button>`;
                     });
 
-                    let defaultSize = sizes.find(s => s.size.toUpperCase() === 'M') || sizes[0] || { size: 'M', stock_qty: 0 };
-                    let defaultKey = `${String(ref).trim().toUpperCase()}_${defaultSize.size.toUpperCase()}`;
+                    let defaultKey = `${String(ref).trim().toUpperCase()}_${defaultSizeName}`;
                     let defaultStock = stockData[defaultKey] !== undefined ? stockData[defaultKey] : 0;
                     let defaultStockText = defaultStock > 0 ? `${defaultStock} (មានក្នុងស្តុក)` : "អស់ស្តុក (Out of stock)";
                     let defaultStockColor = defaultStock > 0 ? "var(--accent)" : "#ef4444";
@@ -1227,7 +1230,6 @@
                     message += `• តម្លៃទំនិញ: $${subtotalPrice.toFixed(2)}\n`;
                     message += `• ថ្លៃដឹកជញ្ជូន: $${deliveryFee.toFixed(2)}\n`;
                     message += `• សរុបទាំងអស់: $${grandTotal.toFixed(2)}\n\n`;
-                    message += `✅ ស្តុកត្រូវបានកាត់បន្ថយស្វ័យប្រវត្តិរួចរាល់!`;
 
                     window.location.href = `https://t.me/${TELEGRAM_USERNAME}?text=${encodeURIComponent(message)}`;
                 } else {
