@@ -986,10 +986,10 @@
             closeModal('mapPickerModal');
         }
 
-        // Fetch Live Stock & Price from Railway Backend API
+        // Fetch Live Stock & Price from Railway Backend API (Updated with Full URL)
         async function loadServerStock() {
             try {
-                let response = await fetch('/api/stock');
+                let response = await fetch('https://control-stock-production-a855.up.railway.app/api/stock');
                 let data = await response.json();
                 
                 stockData = {};
@@ -1273,7 +1273,7 @@
             document.getElementById('checkout-total-price').innerText = '$' + grandTotal.toFixed(2);
         }
 
-        // Send Order to Backend API (Deducts Stock automatically & generates Telegram URL)
+        // Send Order to Backend API (Updated with Full URL)
         async function openTelegram() {
             if (Object.keys(cart).length === 0) {
                 alert(translations[currentLang].empty_cart);
@@ -1315,7 +1315,7 @@
             };
 
             try {
-                let response = await fetch('/api/order', {
+                let response = await fetch('https://control-stock-production-a855.up.railway.app/api/order', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(orderData)
