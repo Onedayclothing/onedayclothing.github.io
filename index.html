@@ -150,25 +150,6 @@
             background-size: 7px auto;
         }
 
-        .cart-btn { 
-            background: var(--accent-light); 
-            color: var(--accent); 
-            border: 1px solid var(--border-color); 
-            padding: 0 10px; 
-            height: 30px;
-            border-radius: 16px; 
-            font-size: 10px; 
-            font-weight: 600; 
-            font-family: var(--nav-font);
-            cursor: pointer; 
-            display: flex; 
-            align-items: center; 
-            gap: 4px; 
-            box-shadow: 0 2px 5px rgba(2, 132, 199, 0.1); 
-            position: relative; 
-            white-space: nowrap;
-        }
-
         .cover-container { width: 100%; background: var(--card-bg); border-bottom: 1px solid var(--border-color); margin-bottom: 16px; position: relative; }
         .cover-slider { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; -ms-overflow-style: none; scroll-behavior: smooth; }
         .cover-slider::-webkit-scrollbar { display: none; }
@@ -191,7 +172,7 @@
             max-width: 480px; 
             margin: 0 auto; 
             position: sticky;
-            top: 47px; /* ជាប់តាមពេលអូសចុះក្រោម ដោយនៅខាងក្រោម Navbar បន្តិច */
+            top: 47px;
             background: var(--bg-color); 
             z-index: 45; 
             transition: background 0.3s;
@@ -416,14 +397,14 @@
             <div>
                 <div class="size-header"><div class="size-label" data-key="select_size">SIZE</div></div>
                 <div class="size-grid">
-                    <button class="size-btn" onclick="selectSize(this, 'prod-1', 'Ref: 1')">S</button>
-                    <button class="size-btn active" onclick="selectSize(this, 'prod-1', 'Ref: 1')">M</button>
-                    <button class="size-btn" onclick="selectSize(this, 'prod-1', 'Ref: 1')">L</button>
-                    <button class="size-btn" onclick="selectSize(this, 'prod-1', 'Ref: 1')">XL</button>
-                    <button class="size-btn" onclick="selectSize(this, 'prod-1', 'Ref: 1')">XXL</button>
+                    <button class="size-btn" onclick="selectSize(this, 'prod-1', '1')">S</button>
+                    <button class="size-btn active" onclick="selectSize(this, 'prod-1', '1')">M</button>
+                    <button class="size-btn" onclick="selectSize(this, 'prod-1', '1')">L</button>
+                    <button class="size-btn" onclick="selectSize(this, 'prod-1', '1')">XL</button>
+                    <button class="size-btn" onclick="selectSize(this, 'prod-1', '1')">XXL</button>
                 </div>
                 <div class="stock-hint-box" id="stock-hint-prod-1"><span id="stock-text-prod-1">ស្តុកនៅសល់: </span><span>...</span></div>
-                <button class="btn-add" onclick="addToCart('p1_title', 15.00, 'prod-1', 'Ref: 1', event)">+ <span data-key="add_to_cart">ដាក់ចូលកន្ត្រក</span></button>
+                <button class="btn-add" onclick="addToCart('p1_title', 15.00, 'prod-1', '1', event)">+ <span data-key="add_to_cart">ដាក់ចូលកន្ត្រក</span></button>
             </div>
         </div>
 
@@ -445,14 +426,14 @@
             <div>
                 <div class="size-header"><div class="size-label" data-key="select_size">SIZE</div></div>
                 <div class="size-grid">
-                    <button class="size-btn" onclick="selectSize(this, 'prod-4', 'Ref: 2')">S</button>
-                    <button class="size-btn active" onclick="selectSize(this, 'prod-4', 'Ref: 2')">M</button>
-                    <button class="size-btn" onclick="selectSize(this, 'prod-4', 'Ref: 2')">L</button>
-                    <button class="size-btn" onclick="selectSize(this, 'prod-4', 'Ref: 2')">XL</button>
-                    <button class="size-btn" onclick="selectSize(this, 'prod-4', 'Ref: 2')">XXL</button>
+                    <button class="size-btn" onclick="selectSize(this, 'prod-4', '2')">S</button>
+                    <button class="size-btn active" onclick="selectSize(this, 'prod-4', '2')">M</button>
+                    <button class="size-btn" onclick="selectSize(this, 'prod-4', '2')">L</button>
+                    <button class="size-btn" onclick="selectSize(this, 'prod-4', '2')">XL</button>
+                    <button class="size-btn" onclick="selectSize(this, 'prod-4', '2')">XXL</button>
                 </div>
                 <div class="stock-hint-box" id="stock-hint-prod-4"><span id="stock-text-prod-4">ស្តុកនៅសល់: </span><span>...</span></div>
-                <button class="btn-add" onclick="addToCart('p4_title', 6.00, 'prod-4', 'Ref: 2', event)">+ <span data-key="add_to_cart">ដាក់ចូលកន្ត្រក</span></button>
+                <button class="btn-add" onclick="addToCart('p4_title', 6.00, 'prod-4', '2', event)">+ <span data-key="add_to_cart">ដាក់ចូលកន្ត្រក</span></button>
             </div>
         </div>
 
@@ -474,14 +455,14 @@
             <div>
                 <div class="size-header"><div class="size-label" data-key="select_size">SIZE</div></div>
                 <div class="size-grid">
-                    <button class="size-btn" onclick="selectSize(this, 'prod-2', 'Ref: 3')">S</button>
-                    <button class="size-btn active" onclick="selectSize(this, 'prod-2', 'Ref: 3')">M</button>
-                    <button class="size-btn" onclick="selectSize(this, 'prod-2', 'Ref: 3')">L</button>
-                    <button class="size-btn" onclick="selectSize(this, 'prod-2', 'Ref: 3')">XL</button>
-                    <button class="size-btn" onclick="selectSize(this, 'prod-2', 'Ref: 3')">XXL</button>
+                    <button class="size-btn" onclick="selectSize(this, 'prod-2', '3')">S</button>
+                    <button class="size-btn active" onclick="selectSize(this, 'prod-2', '3')">M</button>
+                    <button class="size-btn" onclick="selectSize(this, 'prod-2', '3')">L</button>
+                    <button class="size-btn" onclick="selectSize(this, 'prod-2', '3')">XL</button>
+                    <button class="size-btn" onclick="selectSize(this, 'prod-2', '3')">XXL</button>
                 </div>
                 <div class="stock-hint-box" id="stock-hint-prod-2"><span id="stock-text-prod-2">ស្តុកនៅសល់: </span><span>...</span></div>
-                <button class="btn-add" onclick="addToCart('p2_title', 20.00, 'prod-2', 'Ref: 3', event)">+ <span data-key="add_to_cart">ដាក់ចូលកន្ត្រក</span></button>
+                <button class="btn-add" onclick="addToCart('p2_title', 20.00, 'prod-2', '3', event)">+ <span data-key="add_to_cart">ដាក់ចូលកន្ត្រក</span></button>
             </div>
         </div>
 
@@ -503,18 +484,17 @@
             <div>
                 <div class="size-header"><div class="size-label" data-key="select_size">SIZE</div></div>
                 <div class="size-grid">
-                    <button class="size-btn" onclick="selectSize(this, 'prod-5', 'Ref: 4')">S</button>
-                    <button class="size-btn active" onclick="selectSize(this, 'prod-5', 'Ref: 4')">M</button>
-                    <button class="size-btn" onclick="selectSize(this, 'prod-5', 'Ref: 4')">L</button>
-                    <button class="size-btn" onclick="selectSize(this, 'prod-5', 'Ref: 4')">XL</button>
-                    <button class="size-btn" onclick="selectSize(this, 'prod-5', 'Ref: 4')">XXL</button>
+                    <button class="size-btn" onclick="selectSize(this, 'prod-5', '4')">S</button>
+                    <button class="size-btn active" onclick="selectSize(this, 'prod-5', '4')">M</button>
+                    <button class="size-btn" onclick="selectSize(this, 'prod-5', '4')">L</button>
+                    <button class="size-btn" onclick="selectSize(this, 'prod-5', '4')">XL</button>
+                    <button class="size-btn" onclick="selectSize(this, 'prod-5', '4')">XXL</button>
                 </div>
                 <div class="stock-hint-box" id="stock-hint-prod-5"><span id="stock-text-prod-5">ស្តុកនៅសល់: </span><span>...</span></div>
-                <button class="btn-add" onclick="addToCart('p5_title', 7.00, 'prod-5', 'Ref: 4', event)">+ <span data-key="add_to_cart">ដាក់ចូលកន្ត្រក</span></button>
+                <button class="btn-add" onclick="addToCart('p5_title', 7.00, 'prod-5', '4', event)">+ <span data-key="add_to_cart">ដាក់ចូលកន្ត្រក</span></button>
             </div>
         </div>
 
-        <!-- NEW PRODUCT 1: Men Tops (Ref: 5) -->
         <div class="card" id="prod-6" data-gender="men" data-type="tops">
             <span class="badge">Ref: 5</span>
             <div class="img-box">
@@ -533,18 +513,17 @@
             <div>
                 <div class="size-header"><div class="size-label" data-key="select_size">SIZE</div></div>
                 <div class="size-grid">
-                    <button class="size-btn" onclick="selectSize(this, 'prod-6', 'Ref: 5')">S</button>
-                    <button class="size-btn active" onclick="selectSize(this, 'prod-6', 'Ref: 5')">M</button>
-                    <button class="size-btn" onclick="selectSize(this, 'prod-6', 'Ref: 5')">L</button>
-                    <button class="size-btn" onclick="selectSize(this, 'prod-6', 'Ref: 5')">XL</button>
-                    <button class="size-btn" onclick="selectSize(this, 'prod-6', 'Ref: 5')">XXL</button>
+                    <button class="size-btn" onclick="selectSize(this, 'prod-6', '5')">S</button>
+                    <button class="size-btn active" onclick="selectSize(this, 'prod-6', '5')">M</button>
+                    <button class="size-btn" onclick="selectSize(this, 'prod-6', '5')">L</button>
+                    <button class="size-btn" onclick="selectSize(this, 'prod-6', '5')">XL</button>
+                    <button class="size-btn" onclick="selectSize(this, 'prod-6', '5')">XXL</button>
                 </div>
                 <div class="stock-hint-box" id="stock-hint-prod-6"><span id="stock-text-prod-6">ស្តុកនៅសល់: </span><span>...</span></div>
-                <button class="btn-add" onclick="addToCart('p6_title', 12.00, 'prod-6', 'Ref: 5', event)">+ <span data-key="add_to_cart">ដាក់ចូលកន្ត្រក</span></button>
+                <button class="btn-add" onclick="addToCart('p6_title', 12.00, 'prod-6', '5', event)">+ <span data-key="add_to_cart">ដាក់ចូលកន្ត្រក</span></button>
             </div>
         </div>
 
-        <!-- NEW PRODUCT 2: Men Tops (Ref: 6) -->
         <div class="card" id="prod-7" data-gender="men" data-type="tops">
             <span class="badge">Ref: 6</span>
             <div class="img-box">
@@ -563,14 +542,14 @@
             <div>
                 <div class="size-header"><div class="size-label" data-key="select_size">SIZE</div></div>
                 <div class="size-grid">
-                    <button class="size-btn" onclick="selectSize(this, 'prod-7', 'Ref: 6')">S</button>
-                    <button class="size-btn active" onclick="selectSize(this, 'prod-7', 'Ref: 6')">M</button>
-                    <button class="size-btn" onclick="selectSize(this, 'prod-7', 'Ref: 6')">L</button>
-                    <button class="size-btn" onclick="selectSize(this, 'prod-7', 'Ref: 6')">XL</button>
-                    <button class="size-btn" onclick="selectSize(this, 'prod-7', 'Ref: 6')">XXL</button>
+                    <button class="size-btn" onclick="selectSize(this, 'prod-7', '6')">S</button>
+                    <button class="size-btn active" onclick="selectSize(this, 'prod-7', '6')">M</button>
+                    <button class="size-btn" onclick="selectSize(this, 'prod-7', '6')">L</button>
+                    <button class="size-btn" onclick="selectSize(this, 'prod-7', '6')">XL</button>
+                    <button class="size-btn" onclick="selectSize(this, 'prod-7', '6')">XXL</button>
                 </div>
                 <div class="stock-hint-box" id="stock-hint-prod-7"><span id="stock-text-prod-7">ស្តុកនៅសល់: </span><span>...</span></div>
-                <button class="btn-add" onclick="addToCart('p7_title', 18.00, 'prod-7', 'Ref: 6', event)">+ <span data-key="add_to_cart">ដាក់ចូលកន្ត្រក</span></button>
+                <button class="btn-add" onclick="addToCart('p7_title', 18.00, 'prod-7', '6', event)">+ <span data-key="add_to_cart">ដាក់ចូលកន្ត្រក</span></button>
             </div>
         </div>
     </div>
@@ -703,7 +682,7 @@
         </div>
     </div>
 
-    <!-- Modal OpenStreetMap Picker (Carto Voyager with API Key & Cambodia Bounds) -->
+    <!-- Modal OpenStreetMap Picker -->
     <div class="modal-overlay" id="mapPickerModal" style="z-index: 300;" onclick="handleModalClick(event, 'mapPickerModal')">
         <div class="modal-content" style="height: 85vh; padding: 16px; display: flex; flex-direction: column;">
             <div class="modal-header">
@@ -736,9 +715,7 @@
     </div>
 
     <script>
-        // Global Configuration
         const TELEGRAM_USERNAME = "OneDayClothingAgent";
-        const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vRvkD0AmmidUi0GfyOh0wAz0jdASv2Yt8bGIHznpGTQ3fkTnI7wc6w5D58-BanK0Nb3KAsqnM3He_Xn/pub?output=csv";
         const deliveryFee = 2.00;
 
         let stockData = {};
@@ -752,10 +729,9 @@
         let freeMarker = null;
         let currentPos = { lat: 11.5564, lng: 104.9282 };
 
-        // Cambodia geographic bounds restriction
         const cambodiaBounds = L.latLngBounds(
-            [10.3807, 102.3323], // Southwest bounds
-            [14.6905, 107.6284]  // Northeast bounds
+            [10.3807, 102.3323],
+            [14.6905, 107.6284]
         );
 
         const langFlags = {
@@ -907,36 +883,20 @@
             }
         }
 
-        function openModal(modalId) {
-            document.getElementById(modalId).classList.add('active');
-        }
-
-        function closeModal(modalId) {
-            document.getElementById(modalId).classList.remove('active');
-        }
-
-        function handleModalClick(event, modalId) {
-            if (event.target.id === modalId) {
-                closeModal(modalId);
-            }
-        }
+        function openModal(modalId) { document.getElementById(modalId).classList.add('active'); }
+        function closeModal(modalId) { document.getElementById(modalId).classList.remove('active'); }
+        function handleModalClick(event, modalId) { if (event.target.id === modalId) closeModal(modalId); }
 
         function toggleCartModal() { 
             let modal = document.getElementById('cartModal');
-            if (modal.classList.contains('active')) {
-                closeModal('cartModal');
-            } else {
-                openModal('cartModal');
-            }
+            if (modal.classList.contains('active')) closeModal('cartModal');
+            else openModal('cartModal');
         }
 
         function toggleGuideModal() {
             let modal = document.getElementById('guideModal');
-            if (modal.classList.contains('active')) {
-                closeModal('guideModal');
-            } else {
-                openModal('guideModal');
-            }
+            if (modal.classList.contains('active')) closeModal('guideModal');
+            else openModal('guideModal');
         }
 
         function showToast(msg) {
@@ -945,9 +905,7 @@
             if (toast && toastMsg) {
                 toastMsg.innerText = msg;
                 toast.classList.add('show');
-                setTimeout(() => {
-                    toast.classList.remove('show');
-                }, 2000);
+                setTimeout(() => toast.classList.remove('show'), 2000);
             }
         }
 
@@ -971,16 +929,12 @@
                         maxBoundsViscosity: 1.0
                     }).setView([currentPos.lat, currentPos.lng], 13);
                     
-                    // Carto Voyager Tiles with your API Key
                     L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png?key=cb1_3jby_1_5ff4e5e8b17be757cdfcc3c7', {
-                        maxZoom: 19,
-                        minZoom: 7,
-                        subdomains: 'abcd',
-                        attribution: '&copy; <a href="https://carto.com/">CARTO</a>'
+                        maxZoom: 19, minZoom: 7, subdomains: 'abcd',
+                        attribution: '&copy; CARTO'
                     }).addTo(freeMapObj);
 
                     L.control.zoom({ position: 'topleft' }).addTo(freeMapObj);
-
                     freeMarker = L.marker([currentPos.lat, currentPos.lng], { draggable: true }).addTo(freeMapObj);
 
                     freeMapObj.on('click', function(e) {
@@ -990,7 +944,7 @@
                         }
                     });
 
-                    freeMarker.on('dragend', function(e) {
+                    freeMarker.on('dragend', function() {
                         let position = freeMarker.getLatLng();
                         if (cambodiaBounds.contains(position)) {
                             currentPos = { lat: position.lat, lng: position.lng };
@@ -1014,7 +968,7 @@
                     let targetLatLng = L.latLng(lat, lng);
                     
                     if (cambodiaBounds.contains(targetLatLng)) {
-                        currentPos = { lat: lat, lng: lng };
+                        currentPos = { lat, lng };
                         if (freeMapObj && freeMarker) {
                             freeMapObj.setView([lat, lng], 15);
                             freeMarker.setLatLng([lat, lng]);
@@ -1022,11 +976,7 @@
                     } else {
                         alert("ទីតាំងបច្ចុប្បន្នរបស់អ្នកនៅក្រៅប្រទេសកម្ពុជា!");
                     }
-                }, (error) => {
-                    console.log("Geolocation error:", error);
-                }, { enableHighAccuracy: true });
-            } else {
-                alert("ទូរស័ព្ទរបស់អ្នកមិនគាំទ្រ Geolocation ឡើយ!");
+                }, () => {}, { enableHighAccuracy: true });
             }
         }
 
@@ -1036,33 +986,24 @@
             closeModal('mapPickerModal');
         }
 
-        // Fetch Live CSV Data for Stock & Price
-        async function loadCSVData() {
+        // Fetch Live Stock & Price from Railway Backend API
+        async function loadServerStock() {
             try {
-                let response = await fetch(csvUrl + "&t=" + new Date().getTime());
-                let data = await response.text();
-                let rows = data.split('\n');
+                let response = await fetch('/api/stock');
+                let data = await response.json();
                 
                 stockData = {};
                 priceData = {};
 
-                for (let i = 1; i < rows.length; i++) {
-                    let cols = rows[i].split(',');
-                    if (cols.length >= 5) {
-                        let ref = cols[0].trim().replace(/^["']|["']$/g, '').toUpperCase();
-                        let size = cols[2].trim().replace(/^["']|["']$/g, '').toUpperCase();
-                        let stockVal = cols[3].trim().replace(/^["']|["']$/g, '');
-                        let priceVal = parseFloat(cols[4].trim().replace(/^["']|["']$/g, '')) || 0;
-                        
-                        if (ref && size) {
-                            let key = `${ref}_${size}`;
-                            stockData[key] = stockVal === '.' ? '.' : (parseInt(stockVal) || 0);
-                            priceData[key] = priceVal;
-                        }
-                    }
-                }
+                data.forEach(item => {
+                    let cleanRef = item.ref.replace(/ref:?\s*/i, '').trim().toUpperCase();
+                    let cleanSize = item.size.trim().toUpperCase();
+                    let key = `${cleanRef}_${cleanSize}`;
+                    stockData[key] = item.stock_qty;
+                    priceData[key] = parseFloat(item.price) || 0;
+                });
             } catch (error) {
-                console.error("Error fetching live CSV data:", error);
+                console.error("Error fetching live stock:", error);
             }
         }
 
@@ -1075,10 +1016,10 @@
             
             if (Object.keys(stockData).length === 0) {
                 if (numSpan) numSpan.innerText = "...";
-                await loadCSVData();
+                await loadServerStock();
             }
 
-            let cleanRef = refText.replace('Ref: ', '').trim().toUpperCase();
+            let cleanRef = refText.replace(/ref:?\s*/i, '').trim().toUpperCase();
             let cleanSize = selectedSize.trim().toUpperCase();
             let stockKey = `${cleanRef}_${cleanSize}`;
             let currentStock = stockData[stockKey] !== undefined ? stockData[stockKey] : 0;
@@ -1089,15 +1030,10 @@
             }
 
             if (stockBox && textSpan && numSpan) {
-                if (currentStock === '.') {
-                    textSpan.style.display = "none";
-                    numSpan.innerText = "";
-                } else {
-                    textSpan.style.display = "inline";
-                    textSpan.innerText = "ស្តុកនៅសល់: ";
-                    numSpan.innerText = currentStock > 0 ? `${currentStock} (មានក្នុងស្តុក)` : "អស់ស្តុក (Out of stock)";
-                    numSpan.style.color = currentStock > 0 ? "var(--accent)" : "#ef4444";
-                }
+                textSpan.style.display = "inline";
+                textSpan.innerText = "ស្តុកនៅសល់: ";
+                numSpan.innerText = currentStock > 0 ? `${currentStock} (មានក្នុងស្តុក)` : "អស់ស្តុក (Out of stock)";
+                numSpan.style.color = currentStock > 0 ? "var(--accent)" : "#ef4444";
             }
         }
 
@@ -1114,11 +1050,8 @@
             currentGender = gender;
             currentType = 'all';
 
-            let catButtons = document.querySelectorAll('.categories .cat-btn');
-            catButtons.forEach(btn => btn.classList.remove('active'));
-            if (element) {
-                element.classList.add('active');
-            }
+            document.querySelectorAll('.categories .cat-btn').forEach(btn => btn.classList.remove('active'));
+            if (element) element.classList.add('active');
 
             document.getElementById('sub-men').classList.remove('active');
             document.getElementById('sub-women').classList.remove('active');
@@ -1139,32 +1072,25 @@
             currentType = type;
 
             let subContainer = element.parentElement;
-            let buttons = subContainer.getElementsByClassName('sub-btn');
-            for (let btn of buttons) btn.classList.remove('active');
+            for (let btn of subContainer.getElementsByClassName('sub-btn')) btn.classList.remove('active');
             element.classList.add('active');
 
             filterProducts();
         }
 
         function resetSubActive(subId) {
-            let subContainer = document.getElementById(subId);
-            let buttons = subContainer.getElementsByClassName('sub-btn');
+            let buttons = document.getElementById(subId).getElementsByClassName('sub-btn');
             for (let btn of buttons) btn.classList.remove('active');
             buttons[0].classList.add('active');
         }
 
         function filterProducts() {
-            let cards = document.querySelectorAll('.container .card');
-            cards.forEach(card => {
+            document.querySelectorAll('.container .card').forEach(card => {
                 let cardGender = card.getAttribute('data-gender');
                 let cardType = card.getAttribute('data-type');
 
-                if (cardGender === currentGender) {
-                    if (currentType === 'all' || cardType === currentType) {
-                        card.style.display = 'flex';
-                    } else {
-                        card.style.display = 'none';
-                    }
+                if (cardGender === currentGender && (currentType === 'all' || cardType === currentType)) {
+                    card.style.display = 'flex';
                 } else {
                     card.style.display = 'none';
                 }
@@ -1175,13 +1101,13 @@
             checkAutoTheme();
             filterProducts();
             setupVideoObserver();
-            await loadCSVData();
-            fetchLiveStock('prod-1', 'Ref: 1', 'M');
-            fetchLiveStock('prod-4', 'Ref: 2', 'M');
-            fetchLiveStock('prod-2', 'Ref: 3', 'M');
-            fetchLiveStock('prod-5', 'Ref: 4', 'M');
-            fetchLiveStock('prod-6', 'Ref: 5', 'M');
-            fetchLiveStock('prod-7', 'Ref: 6', 'M');
+            await loadServerStock();
+            fetchLiveStock('prod-1', '1', 'M');
+            fetchLiveStock('prod-4', '2', 'M');
+            fetchLiveStock('prod-2', '3', 'M');
+            fetchLiveStock('prod-5', '4', 'M');
+            fetchLiveStock('prod-6', '5', 'M');
+            fetchLiveStock('prod-7', '6', 'M');
             loadUserInfo();
         });
 
@@ -1189,7 +1115,6 @@
             let card = document.getElementById(cardId);
             let imgBox = card.querySelector('.img-box video, .img-box img');
             let cartBtn = document.getElementById('cartButton');
-
             if (!imgBox || !cartBtn) return;
 
             let isVideo = imgBox.tagName.toLowerCase() === 'video';
@@ -1203,7 +1128,6 @@
             document.body.appendChild(flyer);
 
             let cartRect = cartBtn.getBoundingClientRect();
-
             setTimeout(() => {
                 flyer.style.top = (cartRect.top + 5) + 'px';
                 flyer.style.left = (cartRect.left + 5) + 'px';
@@ -1212,16 +1136,14 @@
                 flyer.style.opacity = '0.5';
             }, 50);
 
-            setTimeout(() => {
-                flyer.remove();
-            }, 850);
+            setTimeout(() => flyer.remove(), 850);
         }
 
         async function addToCart(titleKey, defaultPrice, cardId, refText, event) {
             let card = document.getElementById(cardId);
             let activeSizeBtn = card.querySelector('.size-btn.active');
             let selectedSize = activeSizeBtn ? activeSizeBtn.innerText : 'M';
-            let cleanRef = refText.replace('Ref: ', '').trim().toUpperCase();
+            let cleanRef = refText.trim().toUpperCase();
             let cleanSize = selectedSize.trim().toUpperCase();
             let stockKey = `${cleanRef}_${cleanSize}`;
 
@@ -1231,11 +1153,9 @@
             let currentStock = stockData[stockKey] !== undefined ? stockData[stockKey] : 0;
             let currentQtyInCart = cart[stockKey] ? cart[stockKey].qty : 0;
 
-            if (currentStock !== '.') {
-                if (currentStock === 0 || (currentQtyInCart + 1) > currentStock) {
-                    alert(`សូមអភ័យទោស! ទំនិញនេះ (${refText} - Size ${selectedSize}) ទិញបានតែ ${currentStock} ប៉ុណ្ណោះ ព្រោះក្នុងស្តុកមានតែ ${currentStock}។`);
-                    return;
-                }
+            if (currentStock === 0 || (currentQtyInCart + 1) > currentStock) {
+                alert(`សូមអភ័យទោស! ទំនិញនេះ (Ref: ${refText} - Size ${selectedSize}) ទិញបានតែ ${currentStock} ប៉ុណ្ណោះ ព្រោះក្នុងស្តុកមានតែ ${currentStock}។`);
+                return;
             }
 
             playFlyAnimation(event, cardId);
@@ -1244,11 +1164,11 @@
                 cart[stockKey].qty += 1;
                 cart[stockKey].price = activePrice;
             } else {
-                cart[stockKey] = { titleKey: titleKey, price: activePrice, size: selectedSize, ref: refText, qty: 1 };
+                cart[stockKey] = { titleKey, price: activePrice, size: selectedSize, ref: refText, qty: 1 };
             }
 
             renderCart();
-            showToast(translations[currentLang].toast_added || "បានដាក់ចូលកន្ត្រកជោគជ័យ!");
+            showToast(translations[currentLang].toast_added);
         }
 
         function changeQty(itemKey, delta) {
@@ -1256,11 +1176,9 @@
                 let newQty = cart[itemKey].qty + delta;
                 let availableStock = stockData[itemKey] !== undefined ? stockData[itemKey] : 0;
 
-                if (availableStock !== '.') {
-                    if (delta > 0 && newQty > availableStock) {
-                        alert(`សូមអភ័យទោស! ទំនិញនេះទិញបានតែ ${availableStock} ប៉ុណ្ណោះ ព្រោះក្នុងស្តុកមានតែ ${availableStock}។`);
-                        return;
-                    }
+                if (delta > 0 && newQty > availableStock) {
+                    alert(`សូមអភ័យទោស! ទំនិញនេះទិញបានតែ ${availableStock} ប៉ុណ្ណោះ ព្រោះក្នុងស្តុកមានតែ ${availableStock}។`);
+                    return;
                 }
 
                 cart[itemKey].qty = newQty;
@@ -1276,18 +1194,12 @@
             }
         }
 
-        function clearError(inputElement) {
-            inputElement.classList.remove('error');
-        }
+        function clearError(inputElement) { inputElement.classList.remove('error'); }
 
         function saveUserInfo() {
-            let name = document.getElementById('custName').value.trim();
-            let phone = document.getElementById('custPhone').value.trim();
-            let address = document.getElementById('custAddress').value.trim();
-
-            localStorage.setItem('oneday_cust_name', name);
-            localStorage.setItem('oneday_cust_phone', phone);
-            localStorage.setItem('oneday_cust_address', address);
+            localStorage.setItem('oneday_cust_name', document.getElementById('custName').value.trim());
+            localStorage.setItem('oneday_cust_phone', document.getElementById('custPhone').value.trim());
+            localStorage.setItem('oneday_cust_address', document.getElementById('custAddress').value.trim());
         }
 
         function loadUserInfo() {
@@ -1309,18 +1221,13 @@
             let itemsHtml = '';
 
             const sizeOrder = { 'S': 1, 'M': 2, 'L': 3, 'XL': 4, 'XXL': 5 };
-            
             let sortedKeys = Object.keys(cart).sort((a, b) => {
                 let itemA = cart[a];
                 let itemB = cart[b];
-                
-                let refA = parseInt(itemA.ref.replace(/\D/g, '')) || 0;
-                let refB = parseInt(itemB.ref.replace(/\D/g, '')) || 0;
+                let refA = parseInt(itemA.ref) || 0;
+                let refB = parseInt(itemB.ref) || 0;
                 if (refA !== refB) return refA - refB;
-
-                let orderA = sizeOrder[itemA.size] || 99;
-                let orderB = sizeOrder[itemB.size] || 99;
-                return orderA - orderB;
+                return (sizeOrder[itemA.size] || 99) - (sizeOrder[itemB.size] || 99);
             });
 
             for (let key of sortedKeys) {
@@ -1330,12 +1237,10 @@
                 subtotalPrice += itemTotal;
                 let localizedTitle = translations[currentLang][item.titleKey] || item.titleKey;
 
-                let refDisplay = item.ref ? `[${item.ref}] ` : '';
-
                 itemsHtml += `
                     <div class="cart-item">
                         <div>
-                            <div class="item-info">${refDisplay}${localizedTitle}</div>
+                            <div class="item-info">[Ref: ${item.ref}] ${localizedTitle}</div>
                             <div class="item-sub">Size: ${item.size} | $${item.price.toFixed(2)}</div>
                         </div>
                         <div class="qty-controls">
@@ -1368,7 +1273,8 @@
             document.getElementById('checkout-total-price').innerText = '$' + grandTotal.toFixed(2);
         }
 
-        function openTelegram() {
+        // Send Order to Backend API (Deducts Stock automatically & generates Telegram URL)
+        async function openTelegram() {
             if (Object.keys(cart).length === 0) {
                 alert(translations[currentLang].empty_cart);
                 return;
@@ -1403,51 +1309,72 @@
 
             saveUserInfo();
 
-            let message = "🛍️ Oneday Clothing — Order\n\n";
-            message += "👤 ព័ត៌មានអតិថិជន\n";
-            message += `• ឈ្មោះ: ${name}\n`;
-            message += `• លេខទូរស័ព្ទ: ${phone}\n`;
-            message += `• អាសយដ្ឋាន: ${address}\n`;
-            if (mapUrl) {
-                let cleanCoords = mapUrl.replace(/\s+/g, '');
-                message += `• ទីតាំង Map: ${mapUrl}\n`;
-                message += `• Link Google Maps: https://www.google.com/maps?q=${cleanCoords}\n`;
+            let orderData = {
+                customer: { name, phone, address, mapUrl },
+                items: cart
+            };
+
+            try {
+                let response = await fetch('/api/order', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(orderData)
+                });
+
+                let result = await response.json();
+                if (result.success) {
+                    let message = "🛍️ Oneday Clothing — New Order\n\n";
+                    message += "👤 ព័ត៌មានអតិថិជន\n";
+                    message += `• ឈ្មោះ: ${name}\n`;
+                    message += `• លេខទូរស័ព្ទ: ${phone}\n`;
+                    message += `• អាសយដ្ឋាន: ${address}\n`;
+                    if (mapUrl) {
+                        let cleanCoords = mapUrl.replace(/\s+/g, '');
+                        message += `• ទីតាំង Map: ${mapUrl}\n`;
+                        message += `• Link Google Maps: https://www.google.com/maps?q=${cleanCoords}\n`;
+                    }
+                    message += "\n📦 ទំនិញដែលបានកុម្មង់\n";
+
+                    let index = 1;
+                    let subtotalPrice = 0;
+
+                    const sizeOrder = { 'S': 1, 'M': 2, 'L': 3, 'XL': 4, 'XXL': 5 };
+                    let sortedKeys = Object.keys(cart).sort((a, b) => {
+                        let itemA = cart[a];
+                        let itemB = cart[b];
+                        let refA = parseInt(itemA.ref) || 0;
+                        let refB = parseInt(itemB.ref) || 0;
+                        if (refA !== refB) return refA - refB;
+                        return (sizeOrder[itemA.size] || 99) - (sizeOrder[itemB.size] || 99);
+                    });
+
+                    for (let key of sortedKeys) {
+                        let item = cart[key];
+                        let itemTotal = item.price * item.qty;
+                        subtotalPrice += itemTotal;
+                        let localizedTitle = translations[currentLang][item.titleKey] || item.titleKey;
+                        
+                        message += `${index}. [Ref: ${item.ref}] ${localizedTitle}\n`;
+                        message += `    Size: ${item.size} × ${item.qty} — $${itemTotal.toFixed(2)}\n`;
+                        index++;
+                    }
+
+                    let grandTotal = subtotalPrice + deliveryFee;
+
+                    message += `\n💰 សរុប\n`;
+                    message += `• តម្លៃទំនិញ: $${subtotalPrice.toFixed(2)}\n`;
+                    message += `• ថ្លៃដឹកជញ្ជូន: $${deliveryFee.toFixed(2)}\n`;
+                    message += `• សរុបទាំងអស់: $${grandTotal.toFixed(2)}\n\n`;
+                    message += `✅ ស្តុកត្រូវបានកាត់បន្ថយស្វ័យប្រវត្តិរួចរាល់!`;
+
+                    window.location.href = `https://t.me/${TELEGRAM_USERNAME}?text=${encodeURIComponent(message)}`;
+                } else {
+                    alert(result.message || "មានបញ្ហាពេលកុម្មង់ទំនិញ!");
+                }
+            } catch (error) {
+                console.error("Order error:", error);
+                alert("មិនអាចភ្ជាប់ទៅកាន់ Server លើ Railway បានទេ!");
             }
-            message += "\n📦 ទំនិញ\n";
-
-            let index = 1;
-            let subtotalPrice = 0;
-
-            const sizeOrder = { 'S': 1, 'M': 2, 'L': 3, 'XL': 4, 'XXL': 5 };
-            let sortedKeys = Object.keys(cart).sort((a, b) => {
-                let itemA = cart[a];
-                let itemB = cart[b];
-                let refA = parseInt(itemA.ref.replace(/\D/g, '')) || 0;
-                let refB = parseInt(itemB.ref.replace(/\D/g, '')) || 0;
-                if (refA !== refB) return refA - refB;
-                return (sizeOrder[itemA.size] || 99) - (sizeOrder[itemB.size] || 99);
-            });
-
-            for (let key of sortedKeys) {
-                let item = cart[key];
-                let itemTotal = item.price * item.qty;
-                subtotalPrice += itemTotal;
-                let localizedTitle = translations[currentLang][item.titleKey] || item.titleKey;
-                
-                let refPart = item.ref ? `[${item.ref}] ` : '';
-                message += `${index}. ${refPart}${localizedTitle}\n`;
-                message += `    Size: ${item.size} × ${item.qty} — $${itemTotal.toFixed(2)}\n`;
-                index++;
-            }
-
-            let grandTotal = subtotalPrice + deliveryFee;
-
-            message += `\n💰 សរុប\n`;
-            message += `• តម្លៃទំនិញ: $${subtotalPrice.toFixed(2)}\n`;
-            message += `• ថ្លៃដឹកជញ្ជូន: $${deliveryFee.toFixed(2)}\n`;
-            message += `• សរុបទាំងអស់: $${grandTotal.toFixed(2)}`;
-
-            window.location.href = `https://t.me/${TELEGRAM_USERNAME}?text=${encodeURIComponent(message)}`;
         }
     </script>
 </body>
