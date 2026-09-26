@@ -383,6 +383,9 @@
         <!-- ទំនិញនឹងត្រូវទាញយកមកបង្ហាញទីនេះស្វ័យប្រវត្តិតាមរយៈ JavaScript API -->
     </div>
 
+    <!-- Pagination Buttons Container -->
+    <div id="paginationContainer" style="display: flex; justify-content: center; align-items: center; gap: 6px; margin: 20px 0; flex-wrap: wrap;"></div>
+
     <div class="cart-checkout-bar">
         <div class="bar-content">
             <div style="cursor: pointer;" onclick="toggleCartModal()">
@@ -555,6 +558,10 @@
         let cart = {};
         let currentGender = 'men';
         let currentType = 'all';
+
+        // Pagination variables
+        let currentPage = 1;
+        const productsPerPage = 6;
 
         let freeMapObj = null;
         let freeMarker = null;
@@ -833,7 +840,6 @@
                         priceData[key] = parseFloat(prod.price) || 0;
                     });
 
-                    // កំណត់ Size ដើម (ឲ្យអាទិភាពលើ M បើគ្មាន M យក Size ដំបូងបង្អស់)
                     let defaultSizeObj = sizes.find(s => s.size.toUpperCase() === 'M') || sizes[0];
                     let defaultSizeName = defaultSizeObj ? defaultSizeObj.size.toUpperCase() : 'M';
 
@@ -924,6 +930,7 @@
         function selectMainCategory(gender, element) {
             currentGender = gender;
             currentType = 'all';
+            currentPage = 1; // Reset to page 1
 
             document.querySelectorAll('.categories .cat-btn').forEach(btn => btn.classList.remove('active'));
             if (element) element.classList.add('active');
@@ -945,6 +952,7 @@
         function selectSubCategory(gender, type, element) {
             currentGender = gender;
             currentType = type;
+            currentPage = 1; // Reset to page 1
 
             let subContainer = element.parentElement;
             for (let btn of subContainer.getElementsByClassName('sub-btn')) btn.classList.remove('active');
@@ -959,17 +967,60 @@
             buttons[0].classList.add('active');
         }
 
+        // Pagination and Filtering Logic
         function filterProducts() {
-            document.querySelectorAll('.container .card').forEach(card => {
+            let allCards = document.querySelectorAll('.container .card');
+            let matchedCards = [];
+
+            allCards.forEach(card => {
                 let cardGender = card.getAttribute('data-gender');
                 let cardType = card.getAttribute('data-type');
 
                 if (cardGender === currentGender && (currentType === 'all' || cardType === currentType)) {
+                    matchedCards.push(card);
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            let totalPages = Math.ceil(matchedCards.length / productsPerPage) || 1;
+            if (currentPage > totalPages) currentPage = totalPages;
+
+            let startIndex = (currentPage - 1) * productsPerPage;
+            let endIndex = startIndex + productsPerPage;
+
+            matchedCards.forEach((card, index) => {
+                if (index >= startIndex && index < endIndex) {
                     card.style.display = 'flex';
                 } else {
                     card.style.display = 'none';
                 }
             });
+
+            renderPaginationControls(totalPages);
+        }
+
+        function renderPaginationControls(totalPages) {
+            let paginationContainer = document.getElementById('paginationContainer');
+            if (!paginationContainer) return;
+
+            if (totalPages <= 1) {
+                paginationContainer.innerHTML = '';
+                return;
+            }
+
+            let html = '';
+            for (let i = 1; i <= totalPages; i++) {
+                let isActive = (i === currentPage) ? 'active' : '';
+                html += `<button class="page-btn ${isActive}" onclick="changePage(${i})" style="padding: 6px 12px; border-radius: 8px; border: 1px solid var(--border-color); background: ${i === currentPage ? 'var(--accent)' : 'var(--card-bg)'}; color: ${i === currentPage ? '#fff' : 'var(--primary)'}; font-weight: 800; cursor: pointer; font-size: 11px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">${i}</button>`;
+            }
+            paginationContainer.innerHTML = html;
+        }
+
+        function changePage(page) {
+            currentPage = page;
+            filterProducts();
+            window.scrollTo({ top: 350, behavior: 'smooth' });
         }
 
         document.addEventListener('DOMContentLoaded', async function() {
@@ -1175,7 +1226,6 @@
 
             saveUserInfo();
 
-            // ទាញយក Telegram User ID និង Username ស្វ័យប្រវត្តិដើម្បីផ្ញើទៅកាន់ Backend
             let tgUser = window.Telegram?.WebApp?.initDataUnsafe?.user;
             let userId = tgUser ? tgUser.id : "";
             let username = tgUser ? tgUser.username : "";
@@ -1236,7 +1286,6 @@
                     message += `• ថ្លៃដឹកជញ្ជូន: $${deliveryFee.toFixed(2)}\n`;
                     message += `• សរុបទាំងអស់: $${grandTotal.toFixed(2)}\n\n`;
 
-                    // រក្សាទម្រង់ដើមនៃការផ្ញើសារចូល DM របស់ហាងដដែល 100%
                     window.location.href = `https://t.me/${TELEGRAM_USERNAME}?text=${encodeURIComponent(message)}`;
                 } else {
                     alert(result.message || "មានបញ្ហាពេលកុម្មង់ទំនិញ!");
