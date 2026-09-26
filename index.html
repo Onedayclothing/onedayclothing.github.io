@@ -322,11 +322,6 @@
                     <option value="zh">中文</option>
                 </select>
             </div>
-
-            <button class="cart-btn" id="cartButton" onclick="toggleCartModal()">
-                <img src="images/IMG_5827.png" alt="Cart" class="nav-icon-img">
-                <span id="cart-count">0</span>
-            </button>
         </div>
     </nav>
 
@@ -1033,7 +1028,7 @@
         function playFlyAnimation(event, cardId) {
             let card = document.getElementById(cardId);
             let imgBox = card ? card.querySelector('.img-box video, .img-box img') : null;
-            let cartBtn = document.getElementById('cartButton');
+            let cartBtn = document.querySelector('.btn-cart-view');
             if (!imgBox || !cartBtn) return;
 
             let isVideo = imgBox.tagName.toLowerCase() === 'video';
@@ -1183,7 +1178,9 @@
 
             let grandTotal = subtotalPrice > 0 ? subtotalPrice + deliveryFee : 0;
 
-            document.getElementById('cart-count').innerText = totalItems;
+            let cartCountEl = document.getElementById('cart-count');
+            if (cartCountEl) cartCountEl.innerText = totalItems;
+            
             document.getElementById('items-count').innerText = totalItems;
             document.getElementById('subtotal-amount').innerText = '$' + subtotalPrice.toFixed(2);
             document.getElementById('total-price').innerText = '$' + grandTotal.toFixed(2);
