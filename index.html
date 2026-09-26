@@ -587,7 +587,10 @@
                 label_name: "ឈ្មោះរបស់អ្នក (Name)", label_phone: "លេខទូរស័ព្ទ (Phone Number)", label_address: "ទីតាំងទទួលទំនិញ (Delivery Location)",
                 alert_fill: "សូមបំពេញឈ្មោះ លេខទូរស័ព្ទ និងទីតាំងឱ្យបានត្រឹមត្រូវ!",
                 alert_phone_invalid: "សូមបញ្ចូលលេខទូរស័ព្ទឱ្យបានត្រឹមត្រូវ (យ៉ាងតិច 8ខ្ទង់)!",
-                toast_added: "បានដាក់ចូលកន្ត្រកជោគជ័យ!"
+                toast_added: "បានដាក់ចូលកន្ត្រកជោគជ័យ!",
+                stock_remaining: "ស្តុកនៅសល់: ",
+                in_stock: " (មានក្នុងស្តុក)",
+                out_of_stock: "អស់ស្តុក (Out of stock)"
             },
             en: {
                 cover_title: "BUILD YOUR DREAM STYLE", cat_men: "Men", cat_women: "Women", cat_tops: "Tops", cat_pants: "Pants", cat_outerwear: "Outerwear", sub_all: "All",
@@ -602,7 +605,10 @@
                 label_name: "Your Name", label_phone: "Phone Number", label_address: "Delivery Location",
                 alert_fill: "Please fill in your name, phone number, and location!",
                 alert_phone_invalid: "Please enter a valid phone number (at least 8 digits)!",
-                toast_added: "Added to cart successfully!"
+                toast_added: "Added to cart successfully!",
+                stock_remaining: "Stock remaining: ",
+                in_stock: " (In stock)",
+                out_of_stock: "Out of stock"
             },
             zh: {
                 cover_title: "打造您的理想风格", cat_men: "男装", cat_women: "女装", cat_tops: "上衣", cat_pants: "裤子", cat_outerwear: "外套", sub_all: "全部",
@@ -617,7 +623,10 @@
                 label_name: "您的姓名", label_phone: "联系电话", label_address: "收货地址",
                 alert_fill: "请填写您的姓名、电话和收货地址！",
                 alert_phone_invalid: "请输入有效的电话号码（至少8位数）！",
-                toast_added: "已成功加入购物车！"
+                toast_added: "已成功加入购物车！",
+                stock_remaining: "剩余库存: ",
+                in_stock: " (有货)",
+                out_of_stock: "缺货 (Out of stock)"
             }
         };
 
@@ -679,6 +688,9 @@
                     el.innerText = translations[lang][key];
                 }
             });
+
+            // Re-render products to update titles, descriptions, and texts according to the new language
+            renderProducts();
             renderCart();
         }
 
@@ -801,91 +813,97 @@
             closeModal('mapPickerModal');
         }
 
-        // Fetch Dynamic Products & Stock from Railway Backend API with size sorting and fixed single active button
+        // Fetch Dynamic Products & Stock from Railway Backend API
         async function loadDynamicProducts() {
             try {
                 let response = await fetch(`${RAILWAY_API_URL}/api/products`);
                 productsList = await response.json();
-                
-                let container = document.getElementById('productContainer');
-                if (!container) return;
-                container.innerHTML = '';
-
-                stockData = {};
-                priceData = {};
-
-                const sizeOrder = { 'S': 1, 'M': 2, 'L': 3, 'XL': 4, 'XXL': 5 };
-
-                productsList.forEach(prod => {
-                    let ref = prod.ref;
-                    let sizes = prod.sizes || [];
-
-                    // តម្រៀប Size ពី S ទៅ XXL ជានិច្ច
-                    sizes.sort((a, b) => {
-                        let rankA = sizeOrder[a.size.toUpperCase()] || 99;
-                        let rankB = sizeOrder[b.size.toUpperCase()] || 99;
-                        return rankA - rankB;
-                    });
-
-                    sizes.forEach(s => {
-                        let cleanRef = String(ref).trim().toUpperCase();
-                        let cleanSize = String(s.size).trim().toUpperCase();
-                        let key = `${cleanRef}_${cleanSize}`;
-                        stockData[key] = s.stock_qty;
-                        priceData[key] = parseFloat(prod.price) || 0;
-                    });
-
-                    let defaultSizeObj = sizes.find(s => s.size.toUpperCase() === 'M') || sizes[0];
-                    let defaultSizeName = defaultSizeObj ? defaultSizeObj.size.toUpperCase() : 'M';
-
-                    let sizeButtonsHtml = '';
-                    sizes.forEach((s) => {
-                        let isActive = (s.size.toUpperCase() === defaultSizeName) ? 'active' : '';
-                        sizeButtonsHtml += `<button class="size-btn ${isActive}" onclick="selectSize(this, 'prod-${ref}', '${ref}')">${s.size}</button>`;
-                    });
-
-                    let defaultKey = `${String(ref).trim().toUpperCase()}_${defaultSizeName}`;
-                    let defaultStock = stockData[defaultKey] !== undefined ? stockData[defaultKey] : 0;
-                    let defaultStockText = defaultStock > 0 ? `${defaultStock} (មានក្នុងស្តុក)` : "អស់ស្តុក (Out of stock)";
-                    let defaultStockColor = defaultStock > 0 ? "var(--accent)" : "#ef4444";
-
-                    let cardHtml = `
-                        <div class="card" id="prod-${ref}" data-gender="${prod.gender || 'men'}" data-type="${prod.type || 'tops'}">
-                            <span class="badge">Ref: ${ref}</span>
-                            <div class="img-box">
-                                <video loop muted playsinline webkit-playsinline preload="none" controlslist="nodownload" disablepictureinpicture oncontextmenu="return false;">
-                                    <source src="${prod.video_url || ''}" type="video/mp4">
-                                </video>
-                            </div>
-                            <div>
-                                <div class="prod-title">${prod.title_km}</div>
-                                <div class="prod-desc">${prod.desc_km || ''}</div>
-                                <div class="price-box">
-                                    <img src="images/IMG_5837.png" alt="Price Icon" class="price-icon">
-                                    <div class="price">$${parseFloat(prod.price).toFixed(2)}</div>
-                                </div>
-                            </div>
-                            <div>
-                                <div class="size-header"><div class="size-label">SIZE</div></div>
-                                <div class="size-grid">
-                                    ${sizeButtonsHtml}
-                                </div>
-                                <div class="stock-hint-box" id="stock-hint-prod-${ref}">
-                                    <span id="stock-text-prod-${ref}">ស្តុកនៅសល់: </span>
-                                    <span style="color: ${defaultStockColor}; font-weight: 900;">${defaultStockText}</span>
-                                </div>
-                                <button class="btn-add" onclick="addToCart('${prod.title_km}', ${prod.price}, 'prod-${ref}', '${ref}', event)">+ ដាក់ចូលកន្ត្រក</button>
-                            </div>
-                        </div>
-                    `;
-                    container.innerHTML += cardHtml;
-                });
-
-                setupVideoObserver();
-                filterProducts();
+                renderProducts();
             } catch (error) {
                 console.error("Error loading dynamic products:", error);
             }
+        }
+
+        function renderProducts() {
+            let container = document.getElementById('productContainer');
+            if (!container) return;
+            container.innerHTML = '';
+
+            stockData = {};
+            priceData = {};
+
+            const sizeOrder = { 'S': 1, 'M': 2, 'L': 3, 'XL': 4, 'XXL': 5 };
+
+            productsList.forEach(prod => {
+                let ref = prod.ref;
+                let sizes = prod.sizes || [];
+
+                sizes.sort((a, b) => {
+                    let rankA = sizeOrder[a.size.toUpperCase()] || 99;
+                    let rankB = sizeOrder[b.size.toUpperCase()] || 99;
+                    return rankA - rankB;
+                });
+
+                sizes.forEach(s => {
+                    let cleanRef = String(ref).trim().toUpperCase();
+                    let cleanSize = String(s.size).trim().toUpperCase();
+                    let key = `${cleanRef}_${cleanSize}`;
+                    stockData[key] = s.stock_qty;
+                    priceData[key] = parseFloat(prod.price) || 0;
+                });
+
+                let defaultSizeObj = sizes.find(s => s.size.toUpperCase() === 'M') || sizes[0];
+                let defaultSizeName = defaultSizeObj ? defaultSizeObj.size.toUpperCase() : 'M';
+
+                let sizeButtonsHtml = '';
+                sizes.forEach((s) => {
+                    let isActive = (s.size.toUpperCase() === defaultSizeName) ? 'active' : '';
+                    sizeButtonsHtml += `<button class="size-btn ${isActive}" onclick="selectSize(this, 'prod-${ref}', '${ref}')">${s.size}</button>`;
+                });
+
+                let defaultKey = `${String(ref).trim().toUpperCase()}_${defaultSizeName}`;
+                let defaultStock = stockData[defaultKey] !== undefined ? stockData[defaultKey] : 0;
+                let defaultStockText = defaultStock > 0 ? `${defaultStock}${translations[currentLang].in_stock}` : translations[currentLang].out_of_stock;
+                let defaultStockColor = defaultStock > 0 ? "var(--accent)" : "#ef4444";
+
+                // 🌐 Select title & description based on current language
+                let displayTitle = currentLang === 'en' ? (prod.title_en || prod.title_km) : currentLang === 'zh' ? (prod.title_zh || prod.title_km) : prod.title_km;
+                let displayDesc = currentLang === 'en' ? (prod.desc_en || prod.desc_km) : currentLang === 'zh' ? (prod.desc_zh || prod.desc_km) : (prod.desc_km || '');
+
+                let cardHtml = `
+                    <div class="card" id="prod-${ref}" data-gender="${prod.gender || 'men'}" data-type="${prod.type || 'tops'}">
+                        <span class="badge">Ref: ${ref}</span>
+                        <div class="img-box">
+                            <video loop muted playsinline webkit-playsinline preload="none" controlslist="nodownload" disablepictureinpicture oncontextmenu="return false;">
+                                <source src="${prod.video_url || ''}" type="video/mp4">
+                            </video>
+                        </div>
+                        <div>
+                            <div class="prod-title">${displayTitle}</div>
+                            <div class="prod-desc">${displayDesc}</div>
+                            <div class="price-box">
+                                <img src="images/IMG_5837.png" alt="Price Icon" class="price-icon">
+                                <div class="price">$${parseFloat(prod.price).toFixed(2)}</div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="size-header"><div class="size-label">${translations[currentLang].select_size}</div></div>
+                            <div class="size-grid">
+                                ${sizeButtonsHtml}
+                            </div>
+                            <div class="stock-hint-box" id="stock-hint-prod-${ref}">
+                                <span id="stock-text-prod-${ref}">${translations[currentLang].stock_remaining}</span>
+                                <span style="color: ${defaultStockColor}; font-weight: 900;">${defaultStockText}</span>
+                            </div>
+                            <button class="btn-add" onclick="addToCart(this, ${prod.price}, 'prod-${ref}', '${ref}', event)">+ ${translations[currentLang].add_to_cart}</button>
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += cardHtml;
+            });
+
+            setupVideoObserver();
+            filterProducts();
         }
 
         async function fetchLiveStock(cardId, refText, selectedSize) {
@@ -907,8 +925,8 @@
 
             if (stockBox && textSpan && numSpan) {
                 textSpan.style.display = "inline";
-                textSpan.innerText = "ស្តុកនៅសល់: ";
-                numSpan.innerText = currentStock > 0 ? `${currentStock} (មានក្នុងស្តុក)` : "អស់ស្តុក (Out of stock)";
+                textSpan.innerText = translations[currentLang].stock_remaining;
+                numSpan.innerText = currentStock > 0 ? `${currentStock}${translations[currentLang].in_stock}` : translations[currentLang].out_of_stock;
                 numSpan.style.color = currentStock > 0 ? "var(--accent)" : "#ef4444";
             }
         }
@@ -925,7 +943,7 @@
         function selectMainCategory(gender, element) {
             currentGender = gender;
             currentType = 'all';
-            currentPage = 1; // Reset to page 1
+            currentPage = 1;
 
             document.querySelectorAll('.categories .cat-btn').forEach(btn => btn.classList.remove('active'));
             if (element) element.classList.add('active');
@@ -947,7 +965,7 @@
         function selectSubCategory(gender, type, element) {
             currentGender = gender;
             currentType = type;
-            currentPage = 1; // Reset to page 1
+            currentPage = 1;
 
             let subContainer = element.parentElement;
             for (let btn of subContainer.getElementsByClassName('sub-btn')) btn.classList.remove('active');
@@ -962,7 +980,6 @@
             buttons[0].classList.add('active');
         }
 
-        // Pagination and Filtering Logic
         function filterProducts() {
             let allCards = document.querySelectorAll('.container .card');
             let matchedCards = [];
@@ -1053,8 +1070,11 @@
             setTimeout(() => flyer.remove(), 850);
         }
 
-        async function addToCart(titleKey, defaultPrice, cardId, refText, event) {
+        async function addToCart(buttonEl, defaultPrice, cardId, refText, event) {
             let card = document.getElementById(cardId);
+            let titleEl = card ? card.querySelector('.prod-title') : null;
+            let titleKey = titleEl ? titleEl.innerText : refText;
+
             let activeSizeBtn = card ? card.querySelector('.size-btn.active') : null;
             let selectedSize = activeSizeBtn ? activeSizeBtn.innerText : 'M';
             let cleanRef = String(refText).trim().toUpperCase();
